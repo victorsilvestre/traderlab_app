@@ -1,0 +1,2 @@
+{ "expo": { "name": "TraderLab", "slug": "traderlab", "scheme": "traderlab", "version": "0.1.0", "orientation": "portrait", "userInterfaceStyle": "light", "plugins": ["expo-router"] } }
+

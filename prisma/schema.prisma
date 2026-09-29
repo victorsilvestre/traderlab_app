@@ -1,0 +1,22 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+
+enum AccountMode { REAL SIMULATED }
+enum ImportStatus { UPLOADED PROCESSING READY_FOR_REVIEW PARTIALLY_CONFIRMED COMPLETED FAILED }
+enum FieldKind { BOOLEAN TEXT SINGLE_SELECT NUMBER DATE }
+enum ExecutionSide { BUY SELL }
+
+model User { id String @id @default(uuid()) email String? @unique createdAt DateTime @default(now()) identities Identity[] accounts TradingAccount[] }
+model Identity { id String @id @default(uuid()) userId String provider String subject String user User @relation(fields:[userId],references:[id]) @@unique([provider,subject]) }
+model TradingAccount { id String @id @default(uuid()) userId String name String broker String accountNumber String? mode AccountMode user User @relation(fields:[userId],references:[id]) costs CostRule[] operations Operation[] @@unique([userId,broker,accountNumber]) }
+model CostRule { id String @id @default(uuid()) accountId String assetFamily String entryPerContract Decimal @db.Decimal(12,4) exitPerContract Decimal @db.Decimal(12,4) effectiveFrom DateTime @default(now()) account TradingAccount @relation(fields:[accountId],references:[id]) }
+model Operation { id String @id @default(uuid()) accountId String ticker String assetFamily String openedAt DateTime closedAt DateTime? scalpIncluded Boolean @default(false) importedSnapshot Json? userMetadata Json? gross Decimal? @db.Decimal(14,2) costs Decimal? @db.Decimal(14,2) net Decimal? @db.Decimal(14,2) account TradingAccount @relation(fields:[accountId],references:[id]) executions Execution[] tags OperationTag[] values OperationFieldValue[] }
+model Execution { id String @id @default(uuid()) operationId String side ExecutionSide quantity Int price Decimal @db.Decimal(16,4) executedAt DateTime source String operation Operation @relation(fields:[operationId],references:[id]) }
+model ImportBatch { id String @id @default(uuid()) userId String status ImportStatus @default(UPLOADED) createdAt DateTime @default(now()) files ImportFile[] jobs ImportJob[] }
+model ImportFile { id String @id @default(uuid()) batchId String name String storagePath String fingerprint String parserVersion String batch ImportBatch @relation(fields:[batchId],references:[id]) @@unique([batchId,fingerprint]) }
+model ImportJob { id String @id @default(uuid()) batchId String status String @default("PENDING") attempts Int @default(0) payload Json? batch ImportBatch @relation(fields:[batchId],references:[id]) }
+model FieldDefinition { id String @id @default(uuid()) ownerId String? name String kind FieldKind options Json? official Boolean @default(false) archived Boolean @default(false) sortOrder Int @default(0) values OperationFieldValue[] }
+model OperationFieldValue { id String @id @default(uuid()) operationId String fieldId String value Json operation Operation @relation(fields:[operationId],references:[id]) field FieldDefinition @relation(fields:[fieldId],references:[id]) @@unique([operationId,fieldId]) }
+model TagCategory { id String @id @default(uuid()) ownerId String? name String color String official Boolean @default(false) archived Boolean @default(false) tags Tag[] }
+model Tag { id String @id @default(uuid()) categoryId String name String archived Boolean @default(false) category TagCategory @relation(fields:[categoryId],references:[id]) operations OperationTag[] @@unique([categoryId,name]) }
+model OperationTag { operationId String tagId String operation Operation @relation(fields:[operationId],references:[id]) tag Tag @relation(fields:[tagId],references:[id]) @@id([operationId,tagId]) }
