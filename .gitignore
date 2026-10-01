@@ -1,16 +1,8 @@
-node_modules/
-.pnpm-store/
-.next/
-dist/
-coverage/
-.expo/
+node_modules
+.next
+dist
+coverage
 .env
 .env.*
 !.env.example
-*.log
-
-# Arquivos de amostra podem conter dados financeiros/pessoais: manter apenas localmente.
-relatorio_profit*.csv
-lista_ordens*.csv
-research_notes/
-reports/
+.vercel

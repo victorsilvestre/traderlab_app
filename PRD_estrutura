@@ -1,0 +1,7 @@
+# Estrutura inicial do sistema
+
+- **Supabase:** banco de dados e autenticação. O sistema consulta e atualiza os dados e utiliza a autenticação para controlar o acesso dos usuários.
+- **Brevo:** envio de e-mails transacionais. O sistema aciona o envio de mensagens necessárias aos usuários.
+- **Vercel:** hospedagem e publicação da aplicação. O sistema será disponibilizado aos usuários pela plataforma.
+- **YouTube:** hospedagem e reprodução das aulas em vídeos não listados. O sistema incorpora os vídeos nas páginas das aulas.
+- **Mercado Pago:** processamento dos pagamentos. O sistema encaminha as cobranças e usa a confirmação do pagamento para atualizar o acesso ao produto.

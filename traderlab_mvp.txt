@@ -1,0 +1,70 @@
+TRADERLAB - DEFINICAO DO MVP
+
+Este arquivo define exclusivamente o que faz parte e o que nao faz parte do
+MVP (Minimum Viable Product) do TraderLab.
+
+1. O QUE FAZ PARTE DO MVP
+
+O MVP deve permitir que:
+
+- Um usuario crie sua conta e acesse a plataforma.
+- Um administrador gerencie cursos, modulos, aulas e materiais.
+- Um mentor gerencie cursos, modulos, aulas e materiais.
+- Um cliente realize um pagamento pelo Mercado Pago.
+- O sistema receba e processe a confirmacao do pagamento.
+- O acesso ao curso seja liberado corretamente.
+- O aluno assista as aulas e baixe materiais.
+- O sistema registre o progresso do aluno.
+- O acesso seja bloqueado ou atualizado conforme o status da assinatura.
+- O administrador consulte alunos, matriculas e pagamentos.
+- O aluno receba comunicacoes essenciais.
+- O sistema registre logs e aplique regras basicas de seguranca.
+
+Funcionalidades do MVP:
+
+- Cadastro, login e recuperacao de senha.
+- Perfis basicos de aluno, mentor e administrador.
+- Cursos, modulos, aulas e materiais.
+- Conteudo em rascunho e publicado.
+- Matriculas por compra, convite ou concessao manual.
+- Controle de acesso aos cursos e aulas.
+- Pagamento unico ou assinatura, conforme a decisao comercial do produto.
+- Integracao com Mercado Pago.
+- Recebimento e processamento de webhooks de pagamento.
+- Controle de status de pagamentos e matriculas.
+- Registro de progresso das aulas.
+- Retomada basica do estudo.
+- E-mails e notificacoes essenciais.
+- Painel administrativo basico.
+- Ambiente de trabalho separado para mentores e administradores.
+- Mentor com permissao para criar, editar, publicar e despublicar conteudos.
+- Mentor com permissao para cadastrar materiais e enviar notificacoes relacionadas
+  aos cursos sob sua responsabilidade.
+- Mentor com consulta ao progresso dos alunos relacionados aos seus conteudos.
+- Administrador com acesso total ao sistema, incluindo usuarios, permissoes,
+  matriculas, pagamentos, configuracoes e todas as funcoes do mentor.
+- Logs de operacoes importantes.
+- Regras basicas de autenticacao, autorizacao e seguranca.
+
+2. O QUE NAO FAZ PARTE DO MVP
+
+As funcionalidades abaixo ficam para fases posteriores:
+
+- Exercicios e avaliacoes.
+- Anotacoes.
+- Certificados.
+- Trilhas de aprendizagem.
+- Mentor IA.
+- Transcricao de videos.
+- Comunidade e comentarios.
+- Gamificacao, pontos e badges.
+- Aplicativo mobile.
+- PWA avancado.
+- API publica.
+- Afiliados.
+- Integracoes avancadas de CRM.
+- WhatsApp.
+- Lives e webinars.
+- Recomendacoes personalizadas.
+- Video protegido especializado.
+- Relatorios avancados e indicadores complexos.

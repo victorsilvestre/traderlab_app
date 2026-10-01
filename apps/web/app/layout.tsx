@@ -1,4 +1,16 @@
-import './styles.css';
-export const metadata = { title: 'TraderLab', description: 'Registro, análise e estudo do trader' };
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) { return <html lang="pt-BR"><body>{children}</body></html>; }
+import type { Metadata } from 'next';
 
+export const metadata: Metadata = {
+  title: 'TraderLab',
+  description: 'TraderLab learning platform',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}

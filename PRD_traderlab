@@ -1,0 +1,45 @@
+Admin - Gestão de Conteúdo, Usuários, Pagamentos e afins
+Dashboard - Visão Executiva (dados e relatórios)
+
+Sign-in/Sign-up
+- fluxo de login;
+- fluxo de cadastro;
+
+Permissões
+- Edição e controle de permissões do usuário;
+- Grupos de acesso e papeis;
+
+
+Pagamento Assinaturas (Mercado Pago)
+- fluxo de compra (seleção, carrinho, checkout)
+- compras realizadas
+
+Conteúdo do Aluno (Youtube)
+- Cursos (Módulos, aulas e materiais complementares)
+- Vídeos e arquivos
+- Progresso do aluno
+- Liberação programada
+- Certificados
+- Trilhas de aprendizado (conjunto de aulas)
+
+Notificações e Mensageria Online 
+- Pontuais ou em escala;
+
+Disparos de E-mail (Supabase / Brevo)
+- fluxo de login/cadastro;
+- fluxo de pagamento;
+- fluxo de aprendizado;
+
+Exercícios
+- Perguntas: Verdadeiro ou Falso;
+- Perguntas: Múltipla Escolha;
+- Perguntas: Múltipla Seleção;
+
+Anotações
+- Bloco de notas para o aluno na aula;
+
+Mentor IA
+- Perguntas e respostas a partir do conteúdo da aula;
+- Agente de IA disponível 24/7;
+
+Segurança e Privacidade

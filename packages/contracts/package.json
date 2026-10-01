@@ -1,10 +1,12 @@
 {
   "name": "@traderlab/contracts",
-  "version": "0.1.0",
+  "private": true,
   "type": "module",
-  "exports": "./src/index.ts",
-  "scripts": { "test": "vitest run", "typecheck": "tsc --noEmit" },
-  "dependencies": { "zod": "^3.24.4" },
-  "devDependencies": { "vitest": "^3.2.4", "typescript": "^5.9.3" }
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
 }
-

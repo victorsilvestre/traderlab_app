@@ -1,0 +1,736 @@
+TRADERLAB — VISÃO DE PRODUTO
+Documento consolidado de visão, funcionalidades e estrutura
+
+Versão: 1.0
+Data: 30/09/2026
+Status: Documento de consolidação para definição do produto
+
+
+======================================================================
+1. VISÃO GERAL
+======================================================================
+
+O TraderLab será uma plataforma própria de ensino e desenvolvimento de
+alunos, com área de membros, cursos, trilhas de aprendizagem, exercícios,
+certificados, comunicação, pagamentos e um Mentor IA disponível 24/7.
+
+O produto deverá permitir que administradores e professores publiquem,
+organizem e acompanhem conteúdos, enquanto os alunos estudam em uma jornada
+estruturada, acompanham seu progresso, realizam exercícios, fazem anotações
+e recebem apoio contextualizado do Mentor IA.
+
+Objetivos principais:
+
+- Entregar uma experiência de aprendizagem centralizada e profissional.
+- Controlar o acesso aos conteúdos com base em pagamentos e permissões.
+- Acompanhar o progresso e o engajamento dos alunos.
+- Automatizar comunicação, liberação de conteúdos e certificação.
+- Criar uma experiência diferenciada por meio de exercícios, anotações e IA.
+- Permitir evolução futura para comunidades, gamificação, aplicativo e novas
+  integrações.
+
+
+======================================================================
+2. PRINCIPAIS PERFIS DE USUÁRIO
+======================================================================
+
+Aluno
+- Compra ou recebe acesso a cursos.
+- Assiste às aulas e acessa materiais.
+- Acompanha seu progresso.
+- Realiza exercícios.
+- Faz anotações.
+- Consulta o Mentor IA.
+- Recebe notificações e certificados.
+
+Administrador
+- Gerencia cursos, conteúdos, usuários, pagamentos e configurações.
+- Administra permissões, grupos, relatórios e integrações.
+- Acompanha indicadores executivos.
+- Realiza todas as ações possíveis do sistema.
+- Consulta pagamentos, assinaturas, cancelamentos, reembolsos e indicadores
+  financeiros.
+
+Mentor
+- Cria e atualiza conteúdos.
+- Acompanha o desempenho dos alunos.
+- Publica notificações.
+
+
+======================================================================
+3. FUNCIONALIDADES JÁ PREVISTAS
+======================================================================
+
+3.1 Administração e gestão
+
+- Painel administrativo.
+- Gestão de conteúdo.
+- Gestão de usuários.
+- Gestão de pagamentos.
+- Gestão de permissões.
+- Grupos de acesso e papéis.
+- Dashboard com visão executiva, dados e relatórios.
+
+3.2 Autenticação
+
+- Fluxo de login.
+- Fluxo de cadastro.
+- Recuperação de senha.
+- Controle de sessão.
+- Aceite de termos de uso e política de privacidade.
+
+3.3 Pagamentos e assinaturas
+
+- Mercado Pago como processador de pagamentos.
+- Seleção de produto ou plano.
+- Carrinho.
+- Checkout.
+- Compras realizadas.
+- Controle de acesso baseado na confirmação do pagamento.
+
+3.4 Conteúdo do aluno
+
+- Cursos.
+- Módulos.
+- Aulas.
+- Materiais complementares.
+- Vídeos hospedados no YouTube.
+- Arquivos.
+- Progresso do aluno.
+- Liberação programada.
+- Certificados.
+- Trilhas de aprendizado formadas por conjuntos de aulas.
+
+3.5 Comunicação
+
+- Notificações pontuais.
+- Mensageria em escala.
+- E-mails de sistema para login e cadastro.
+- E-mails de sistema relacionados a pagamentos.
+- E-mails de sistema relacionados à jornada de aprendizado.
+
+3.6 Exercícios
+
+- Verdadeiro ou falso.
+- Múltipla escolha.
+- Múltipla seleção.
+
+3.7 Anotações
+
+- Bloco de notas do aluno dentro da aula.
+
+3.8 Mentor IA
+
+- Perguntas e respostas baseadas no conteúdo da aula.
+- Agente de IA disponível 24 horas por dia, 7 dias por semana.
+
+3.9 Segurança e privacidade
+
+- Área reservada para requisitos de segurança e privacidade.
+
+
+======================================================================
+4. ESTRUTURA DE CONTEÚDO E APRENDIZAGEM
+======================================================================
+
+Entidades principais:
+
+- Curso.
+- Trilha.
+- Módulo.
+- Aula.
+- Texto.
+- Arquivo complementar.
+- Exercício.
+- Prova.
+- Certificado.
+- Anotação.
+- Notificação.
+
+Capacidades necessárias:
+
+- Criar, editar, ordenar, duplicar e excluir cursos.
+- Criar módulos e aulas dentro de cada curso.
+- Salvar conteúdos como rascunho.
+- Publicar e despublicar conteúdos.
+- Ocultar módulos ou aulas ainda não prontos.
+- Definir aulas gratuitas ou de demonstração.
+- Organizar conteúdos por trilhas.
+- Definir pré-requisitos entre módulos ou aulas.
+- Definir aulas obrigatórias.
+- Anexar PDFs, planilhas, imagens, links e outros arquivos.
+- Reorganizar conteúdos por arrastar e soltar.
+- Controlar versão ou histórico de alterações.
+- Buscar conteúdos dentro do curso.
+
+
+======================================================================
+5. JORNADA DO ALUNO
+======================================================================
+
+Fluxo esperado:
+
+1. O usuário cria uma conta ou recebe um convite.
+2. O usuário compra um plano ou tem acesso concedido manualmente.
+3. O pagamento é confirmado pelo Mercado Pago.
+4. A matrícula é criada ou ativada.
+5. O aluno recebe e-mail ou notificação de acesso.
+6. O aluno entra em “Meus cursos”.
+7. O aluno inicia uma aula ou retoma a última posição.
+8. O sistema registra progresso, conclusão e interações.
+9. O aluno realiza exercícios e consulta o Mentor IA.
+10. Ao cumprir os requisitos, o certificado é liberado.
+
+Recursos recomendados:
+
+- Página inicial “Meus cursos”.
+- Retomar de onde parei.
+- Progresso por curso, módulo e aula.
+- Marcação de aula concluída.
+- Favoritos.
+- Histórico de acesso.
+- Busca global.
+- Anotações vinculadas à aula.
+- Visualização responsiva em computador, tablet e celular.
+- Área de ajuda e suporte.
+
+
+======================================================================
+6. MATRÍCULAS, ACESSO E PERMISSÕES
+======================================================================
+
+Tipos de acesso possíveis:
+
+- Acesso por compra única.
+- Acesso por assinatura.
+- Acesso gratuito.
+- Acesso por convite.
+- Acesso concedido manualmente.
+- Acesso por turma.
+- Acesso por pacote de cursos.
+
+Regras de acesso:
+
+- Liberação imediata após aprovação do pagamento.
+- Liberação de conteúdo em etapas ou por calendário.
+- Prazo de validade do acesso.
+- Bloqueio após cancelamento ou inadimplência.
+- Reativação após regularização do pagamento.
+- Acesso a módulos específicos.
+- Acesso condicionado à conclusão de pré-requisitos.
+- Alteração manual de matrícula por administrador.
+- Suspensão e reativação de usuários.
+
+Controles necessários:
+
+- Papéis e permissões por módulo do sistema.
+- Permissões globais e específicas por curso.
+- Controle de acesso para colaboradores.
+- Registro de alterações administrativas.
+- Limite de sessões simultâneas, se necessário.
+- Prevenção e monitoramento de compartilhamento de conta.
+
+
+======================================================================
+7. PAGAMENTOS E ASSINATURAS
+======================================================================
+
+Funcionalidades:
+
+- Catálogo de cursos e planos.
+- Seleção de produto.
+- Carrinho.
+- Checkout.
+- Pagamento único.
+- Assinatura recorrente.
+- Cupons e descontos.
+- Histórico de compras.
+- Detalhes da cobrança.
+- Status do pagamento.
+- Renovação automática.
+- Cancelamento.
+- Reembolso.
+- Chargeback.
+- Inadimplência.
+- Upgrade e downgrade de plano.
+
+Integração técnica necessária:
+
+- Webhooks do Mercado Pago.
+- Processamento idempotente dos eventos.
+- Estados de pagamento claramente definidos.
+- Registro de transações.
+- Reconciliação entre pagamento e matrícula.
+- Tratamento de pagamentos pendentes, aprovados, recusados e estornados.
+
+
+======================================================================
+8. EXERCÍCIOS E AVALIAÇÕES
+======================================================================
+
+Tipos previstos:
+
+- Verdadeiro ou falso.
+- Múltipla escolha.
+- Múltipla seleção.
+
+Funcionalidades a definir ou implementar:
+
+- Banco de questões.
+- Cadastro de alternativas.
+- Resposta correta.
+- Explicação da resposta.
+- Nota mínima.
+- Número de tentativas.
+- Embaralhamento de questões e alternativas.
+- Exercícios obrigatórios.
+- Feedback imediato ou somente ao final.
+- Histórico de tentativas.
+- Recuperação ou nova tentativa.
+- Relatório de desempenho do aluno.
+- Relatório de desempenho por questão.
+- Provas e Testes como conjunto de exercícios.
+
+
+======================================================================
+9. PROGRESSO E CERTIFICADOS
+======================================================================
+
+Progresso:
+
+- Acompanhamento por aula.
+- Acompanhamento por módulo.
+- Acompanhamento por curso.
+- Acompanhamento por trilha.
+- Retomada da posição do vídeo.
+- Registro de conclusão.
+- Percentual geral de progresso.
+- Histórico de conclusão.
+
+Certificados:
+
+- Modelo visual configurável.
+- Nome do aluno.
+- Nome do curso.
+- Carga horária.
+- Data de conclusão.
+- Assinatura ou responsável.
+- Código único de validação.
+- Página pública de verificação.
+- Download em PDF.
+- Regras de emissão.
+- Revogação, se necessário.
+
+
+======================================================================
+10. ANOTAÇÕES DO ALUNO
+======================================================================
+
+Funcionalidade prevista:
+
+- Bloco de notas associado à aula.
+
+Decisões necessárias:
+
+- A anotação será privada ou poderá ser compartilhada?
+- Poderá ser vinculada a um momento do vídeo?
+- Haverá busca entre todas as anotações?
+- Será possível exportar as anotações?
+- As anotações serão preservadas após alterações no curso?
+- Haverá autosave?
+- O aluno poderá editar e excluir anotações?
+
+
+======================================================================
+11. MENTOR IA
+======================================================================
+
+Objetivo:
+
+Disponibilizar um agente de IA capaz de responder dúvidas dos alunos com
+base no conteúdo liberado da aula ou do curso.
+
+Escopo inicial:
+
+- Perguntas e respostas baseadas na aula atual.
+- Atendimento 24/7.
+- Orientação sobre conceitos e materiais.
+
+Funcionalidades recomendadas:
+
+- Histórico de conversas.
+- Referência à aula, página ou trecho utilizado.
+- Suporte a transcrições de vídeos.
+- Suporte a PDFs e textos.
+- Resposta limitada ao conteúdo liberado para o aluno.
+- Mensagem clara quando não houver informação suficiente.
+- Limite de uso por plano, se necessário.
+- Relatório de perguntas mais frequentes.
+- Encaminhamento para suporte humano.
+
+Requisitos de segurança:
+
+- O Mentor IA não pode consultar conteúdo bloqueado para o aluno.
+- Dados pessoais não devem ser enviados sem necessidade.
+- Conversas devem seguir a política de privacidade.
+- Deve existir controle de custos e uso.
+- A IA deve evitar apresentar suposições como fatos.
+
+
+======================================================================
+12. NOTIFICAÇÕES E MENSAGERIA
+======================================================================
+
+Canais possíveis:
+
+- Notificações internas.
+- E-mail.
+- WhatsApp em fase futura.
+- Push em aplicativo ou PWA em fase futura.
+
+Eventos de comunicação:
+
+- Cadastro concluído.
+- Recuperação de senha.
+- Pagamento aprovado.
+- Pagamento pendente ou recusado.
+- Assinatura renovada.
+- Assinatura cancelada.
+- Acesso liberado.
+- Nova aula publicada.
+- Novo módulo liberado.
+- Lembrete de estudo.
+- Certificado disponível.
+- Resposta a comentário.
+- Aviso do professor.
+
+Requisitos:
+
+- Preferências de recebimento do aluno.
+- Opt-out de comunicações não essenciais.
+- Segmentação por curso, plano, turma ou comportamento.
+- Templates editáveis.
+- Histórico de envios.
+- Controle de falhas e reenvios.
+- Fila para disparos em escala.
+
+
+======================================================================
+13. COMUNIDADE E ENGAJAMENTO — EVOLUÇÃO
+======================================================================
+
+Funcionalidades recomendadas para fases futuras:
+
+- Comentários por aula.
+- Respostas e menções.
+- Comunidade geral.
+- Avisos dos professores.
+- Moderação.
+- Denúncia de conteúdo.
+- Bloqueio de usuários.
+- Gamificação.
+- Pontos.
+- Badges.
+- Ranking opcional.
+- Metas de estudo.
+- Sequência de dias estudados.
+- Recompensas.
+
+
+======================================================================
+14. PAINEL ADMINISTRATIVO E OPERAÇÃO
+======================================================================
+
+Módulos administrativos:
+
+- Dashboard executivo.
+- Cursos e conteúdos.
+- Trilhas.
+- Alunos.
+- Matrículas.
+- Turmas.
+- Usuários administrativos.
+- Permissões.
+- Pagamentos.
+- Assinaturas.
+- Exercícios.
+- Certificados.
+- Notificações.
+- Comentários e comunidade.
+- Mentor IA.
+- Relatórios.
+- Integrações.
+- Configurações gerais.
+
+Operações necessárias:
+
+- Criar matrícula manual.
+- Liberar ou bloquear conteúdo.
+- Alterar turma.
+- Reenviar acesso.
+- Redefinir senha mediante solicitação.
+- Conceder extensão de prazo.
+- Emitir ou revogar certificado.
+- Consultar histórico do aluno.
+- Exportar dados.
+- Registrar ações administrativas.
+
+
+======================================================================
+15. DASHBOARD E RELATÓRIOS
+======================================================================
+
+Indicadores de negócio:
+
+- Receita.
+- Assinaturas ativas.
+- Novas assinaturas.
+- Cancelamentos.
+- Inadimplência.
+- Reembolsos.
+- Ticket médio.
+- Receita por plano.
+
+Indicadores de aprendizagem:
+
+- Alunos matriculados.
+- Alunos ativos.
+- Taxa de conclusão.
+- Progresso médio.
+- Abandono por aula.
+- Aulas mais assistidas.
+- Tempo de estudo.
+- Desempenho em exercícios.
+- Certificados emitidos.
+- Uso do Mentor IA.
+
+Indicadores operacionais:
+
+- Falhas de pagamento.
+- Falhas de e-mail.
+- Erros de vídeo.
+- Downloads.
+- Comentários pendentes.
+- Usuários bloqueados.
+- Atividades administrativas.
+
+Recursos:
+
+- Filtros por período.
+- Filtros por curso, plano e turma.
+- Exportação CSV.
+- Relatórios detalhados por aluno.
+- Relatórios detalhados por curso.
+- Atualização periódica ou em tempo real, conforme o indicador.
+
+
+======================================================================
+16. ARQUITETURA E SERVIÇOS PREVISTOS
+======================================================================
+
+Supabase
+- Banco de dados.
+- Autenticação.
+- Controle de acesso.
+- Possível uso de storage.
+- Políticas de segurança por linha.
+
+Brevo
+- E-mails transacionais.
+- E-mails de onboarding.
+- E-mails de pagamento.
+- E-mails da jornada de aprendizado.
+
+Vercel
+- Hospedagem.
+- Publicação da aplicação.
+- Ambientes de desenvolvimento, homologação e produção.
+
+YouTube
+- Hospedagem e reprodução de vídeos não listados.
+- Necessidade de avaliar proteção contra compartilhamento indevido.
+
+Mercado Pago
+- Processamento de pagamentos.
+- Assinaturas.
+- Confirmação de pagamentos.
+- Webhooks.
+
+Componentes ainda necessários:
+
+- Serviço de armazenamento de arquivos.
+- Serviço de transcrição de vídeos para o Mentor IA.
+- Serviço ou modelo de IA.
+- Monitoramento e logging.
+- Sistema de filas para comunicações.
+- Rotina de backups.
+- Analytics de produto.
+- Gestão de erros.
+
+
+======================================================================
+17. SEGURANÇA, PRIVACIDADE E LGPD
+======================================================================
+
+Requisitos:
+
+- Política de privacidade.
+- Termos de uso.
+- Consentimento para comunicações.
+- Consentimento e transparência para uso de IA.
+- Controle de acesso por função.
+- Criptografia em trânsito e em repouso quando aplicável.
+- Proteção de chaves e segredos.
+- Logs de auditoria.
+- Autenticação em dois fatores para administradores.
+- Recuperação segura de conta.
+- Exclusão da conta.
+- Exportação dos dados do usuário.
+- Política de retenção de dados.
+- Backup e recuperação de desastre.
+- Proteção contra abuso, scraping e automação indevida.
+- Controle de sessões e dispositivos.
+- Gestão de incidentes de segurança.
+
+Vídeos pagos:
+
+- Vídeos não listados podem ser compartilhados por link.
+- Avaliar autorização de reprodução por domínio.
+- Avaliar marca d’água e identificação do aluno.
+- Avaliar fornecedor especializado em vídeo protegido.
+- Definir política de downloads.
+
+
+======================================================================
+18. INTEGRAÇÕES FUTURAS
+======================================================================
+
+- WhatsApp.
+- Google Analytics.
+- Meta Pixel.
+- CRM.
+- Ferramenta de suporte.
+- Emissão fiscal.
+- Afiliados.
+- Cupons.
+- API pública.
+- Webhooks próprios.
+- Aplicativo mobile.
+- PWA.
+- Ferramentas de webinar e lives.
+
+
+======================================================================
+19. ROADMAP SUGERIDO
+======================================================================
+
+Fase 1 — Núcleo do produto
+
+- Autenticação.
+- Perfis e permissões básicas.
+- Cursos, módulos, aulas e materiais.
+- Matrículas.
+- Mercado Pago.
+- Webhooks de pagamento.
+- Controle de acesso.
+- Progresso.
+- Liberação programada.
+- E-mails essenciais.
+- Painel administrativo básico.
+
+Fase 2 — Experiência de aprendizagem
+
+- Certificados.
+- Exercícios.
+- Anotações.
+- Trilhas.
+- Busca.
+- Favoritos.
+- Retomada da última aula.
+- Relatórios básicos.
+
+Fase 3 — Inteligência e comunicação
+
+- Mentor IA.
+- Transcrição de conteúdos.
+- Notificações internas.
+- Segmentação de mensagens.
+- Relatórios de engajamento.
+- Suporte humano integrado.
+
+Fase 4 — Comunidade e crescimento
+
+- Comentários.
+- Comunidade.
+- Moderação.
+- Gamificação.
+- Pontos e badges.
+- Turmas avançadas.
+- Pacotes e cupons.
+
+Fase 5 — Escala
+
+- Aplicativo ou PWA avançado.
+- Vídeo protegido.
+- API pública.
+- Afiliados.
+- Integrações de CRM.
+- Lives.
+- Recomendações personalizadas.
+
+
+======================================================================
+20. DECISÕES PENDENTES
+======================================================================
+
+- O produto terá somente assinaturas ou também compra única?
+- Haverá um ou vários professores?
+- Existirão turmas diferentes para o mesmo curso?
+- O aluno poderá estudar fora da ordem?
+- O acesso terá validade?
+- Quais critérios liberam o certificado?
+- O Mentor IA consultará somente a aula atual ou todo o conteúdo liberado?
+- As anotações serão privadas?
+- Haverá comunidade na primeira versão?
+- Será utilizado YouTube ou um provedor de vídeo protegido?
+- Haverá aplicativo mobile?
+- Quais métricas serão prioritárias no dashboard?
+- Quais dados poderão ser exportados?
+- Qual o limite de sessões por aluno?
+- Haverá suporte por WhatsApp?
+- Quais requisitos específicos de LGPD serão adotados?
+
+
+======================================================================
+21. CRITÉRIO DE SUCESSO DO MVP
+======================================================================
+
+O MVP poderá ser considerado funcional quando:
+
+- Um usuário conseguir criar sua conta e acessar a plataforma.
+- Um administrador conseguir criar curso, módulo e aula.
+- Um cliente conseguir pagar pelo Mercado Pago.
+- O sistema receber e processar a confirmação do pagamento.
+- O acesso ao curso for liberado corretamente.
+- O aluno conseguir assistir às aulas e baixar materiais.
+- O sistema registrar seu progresso.
+- O acesso for bloqueado ou atualizado conforme o status da assinatura.
+- O administrador conseguir consultar alunos, matrículas e pagamentos.
+- O aluno receber as comunicações essenciais.
+- A plataforma registrar logs e aplicar regras básicas de segurança.
+
+
+======================================================================
+22. REFERÊNCIAS DE MERCADO
+======================================================================
+
+A visão foi consolidada considerando padrões funcionais observados em áreas
+de membros como Hotmart Club e Eduzz Membros/Nutror, incluindo módulos,
+conteúdos variados, trilhas, certificados, turmas, liberação programada,
+comunidades, gamificação, relatórios, permissões administrativas e acesso
+por dispositivos móveis.
+
+O objetivo não é copiar essas plataformas, mas utilizar suas capacidades como
+referência para definir o nível mínimo esperado pelo mercado e escolher os
+diferenciais próprios do TraderLab.
+
