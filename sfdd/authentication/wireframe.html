@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wireframe — Autenticação TraderLab</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        color: #222;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px 16px;
+      }
+      main {
+        width: min(100%, 960px);
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 24px;
+      }
+      .intro {
+        margin: 0 0 24px;
+        color: #555;
+      }
+      .flows {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      section {
+        padding: 22px;
+        border: 1px solid #bbb;
+        background: #fff;
+      }
+      h2 {
+        margin: 0 0 18px;
+        font-size: 18px;
+      }
+      label {
+        display: block;
+        margin: 14px 0 6px;
+        font-size: 14px;
+      }
+      input {
+        width: 100%;
+        min-height: 42px;
+        padding: 10px;
+        border: 1px solid #999;
+        background: #fafafa;
+      }
+      button {
+        width: 100%;
+        min-height: 42px;
+        margin-top: 18px;
+        border: 1px solid #555;
+        background: #ddd;
+        color: #222;
+        font-weight: 700;
+      }
+      .link {
+        margin: 14px 0 0;
+        text-align: center;
+        color: #555;
+        font-size: 14px;
+      }
+      .note {
+        margin-top: 18px;
+        padding: 10px;
+        border: 1px dashed #aaa;
+        color: #555;
+        font-size: 13px;
+      }
+      @media (max-width: 760px) {
+        .flows {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>TraderLab</h1>
+      <p class="intro">
+        Wireframe conceitual dos fluxos de acesso à plataforma.
+      </p>
+      <div class="flows">
+        <section aria-labelledby="login-title">
+          <h2 id="login-title">Entrar</h2>
+          <label for="login-email">E-mail</label>
+          <input id="login-email" type="email" placeholder="seu@email.com" />
+          <label for="login-password">Senha</label>
+          <input id="login-password" type="password" placeholder="Sua senha" />
+          <button type="button">Entrar</button>
+          <p class="link">Esqueceu a senha?</p>
+          <p class="link">Ainda não tem conta? Criar conta</p>
+          <div class="note">
+            Área reservada para mensagens de validação e erro.
+          </div>
+        </section>
+        <section aria-labelledby="signup-title">
+          <h2 id="signup-title">Criar conta</h2>
+          <label for="signup-name">Nome</label>
+          <input id="signup-name" type="text" placeholder="Seu nome" />
+          <label for="signup-email">E-mail</label>
+          <input id="signup-email" type="email" placeholder="seu@email.com" />
+          <label for="signup-phone">Telefone</label>
+          <input id="signup-phone" type="tel" placeholder="(00) 00000-0000" />
+          <label for="signup-password">Senha (mínimo de 6 caracteres)</label>
+          <input
+            id="signup-password"
+            type="password"
+            placeholder="Crie uma senha"
+          />
+          <label for="signup-password-confirm">Confirmar senha</label>
+          <input
+            id="signup-password-confirm"
+            type="password"
+            placeholder="Digite novamente sua senha"
+          />
+          <button type="button">Criar conta</button>
+          <p class="link">Já tem conta? Entrar</p>
+          <div class="note">
+            Após o envio, orientar a confirmação do e-mail antes do primeiro
+            acesso.
+          </div>
+        </section>
+        <section aria-labelledby="recovery-title">
+          <h2 id="recovery-title">Recuperar senha</h2>
+          <p>
+            Informe o e-mail associado à sua conta para receber as instruções.
+          </p>
+          <label for="recovery-email">E-mail</label>
+          <input id="recovery-email" type="email" placeholder="seu@email.com" />
+          <button type="button">Enviar instruções</button>
+          <p class="link">Voltar ao login</p>
+          <div class="note">
+            Confirmação genérica, sem indicar se o e-mail possui cadastro.
+          </div>
+        </section>
+        <section aria-labelledby="reset-title">
+          <h2 id="reset-title">Redefinir senha</h2>
+          <p>Acesse por meio do link seguro enviado ao seu e-mail.</p>
+          <label for="reset-password"
+            >Nova senha (mínimo de 6 caracteres)</label
+          >
+          <input
+            id="reset-password"
+            type="password"
+            placeholder="Digite a nova senha"
+          />
+          <label for="reset-password-confirm">Confirmar nova senha</label>
+          <input
+            id="reset-password-confirm"
+            type="password"
+            placeholder="Digite novamente a nova senha"
+          />
+          <button type="button">Salvar nova senha</button>
+          <div class="note">
+            Exibir confirmação de sucesso ou orientação caso o link esteja
+            inválido ou expirado.
+          </div>
+        </section>
+        <section aria-labelledby="session-title">
+          <h2 id="session-title">Área autenticada</h2>
+          <p>Olá, Nome do aluno</p>
+          <p>Seu progresso e seus cursos aparecerão nesta área.</p>
+          <button type="button">Sair</button>
+          <div class="note">
+            Ao sair, encerrar a sessão neste navegador e retornar à tela de
+            login.
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

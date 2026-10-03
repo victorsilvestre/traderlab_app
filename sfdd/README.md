@@ -13,6 +13,13 @@ SFDD is intentionally lightweight. It should create enough clarity for a human
 or AI agent to implement the work consistently, without producing unnecessary
 documentation or technical complexity.
 
+## Language
+
+Write all SFDD artifacts in Brazilian Portuguese (`pt-BR`), including
+`spec.md`, `plan.md`, `tasks.md` and the visible text in `wireframe.html`.
+Keep filenames, code identifiers, route names, API contracts and other
+technical conventions in English when required by the repository standards.
+
 ## What SFDD should solve
 
 SFDD exists to:
@@ -137,12 +144,12 @@ tasks, not only implementation tasks.
 Example:
 
 ```text
-- [ ] Create the student home route.
-- [ ] Implement the use case for accessible courses.
-- [ ] Implement the unread notification count.
-- [ ] Create the course list component.
-- [ ] Add loading, empty and error states.
-- [ ] Validate the acceptance criteria.
+- [ ] Criar a rota inicial do aluno.
+- [ ] Implementar o caso de uso para consultar cursos acessíveis.
+- [ ] Implementar a contagem de notificações não lidas.
+- [ ] Criar o componente de lista de cursos.
+- [ ] Adicionar estados de carregamento, vazio e erro.
+- [ ] Validar os critérios de aceitação.
 ```
 
 ## SFDD workflow

@@ -10,6 +10,9 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@traderlab/contracts": "workspace:*",
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.117.2",
     "next": "^16.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
