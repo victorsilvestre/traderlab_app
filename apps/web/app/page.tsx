@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import type { UserProfileDto } from '@traderlab/contracts';
-import { createSupabaseServerClient } from '../lib/supabase/server';
 import { LogoutButton } from '../components/authentication/LogoutButton';
+import { getCurrentUserProfile } from '../lib/authentication/getCurrentUserProfile';
 
 const roleNames: Record<UserProfileDto['role'], string> = {
   student: 'Aluno',
@@ -10,24 +11,18 @@ const roleNames: Record<UserProfileDto['role'], string> = {
 };
 
 export default async function HomePage() {
-  const supabase = await createSupabaseServerClient();
-  const { data: claimsData } = await supabase.auth.getClaims();
-  const userId = claimsData?.claims?.sub;
+  const { authenticated, profile } = await getCurrentUserProfile();
 
-  if (!userId) {
+  if (!authenticated) {
     return (
       <main className="home-page home-page-public">
         <header className="home-header">
           <Link className="brand-mark" href="/">
-            <span className="brand-symbol" aria-hidden="true">
-              T
-            </span>
+            <span className="brand-symbol" aria-hidden="true">T</span>
             <span>TraderLab</span>
           </Link>
           <nav aria-label="Acesso à plataforma">
-            <Link className="text-link" href="/sign-in">
-              Entrar
-            </Link>
+            <Link className="text-link" href="/sign-in">Entrar</Link>
             <Link className="primary-button header-button" href="/sign-up">
               Criar conta
             </Link>
@@ -48,50 +43,45 @@ export default async function HomePage() {
     );
   }
 
-  const { data: sessionData } = await supabase.auth.getSession();
-  let profile: UserProfileDto | null = null;
-  if (sessionData.session?.access_token) {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/authentication/me`,
-        {
-          headers: {
-            authorization: `Bearer ${sessionData.session.access_token}`,
-          },
-          cache: 'no-store',
-        },
-      );
-      if (response.ok) profile = (await response.json()) as UserProfileDto;
-    } catch {
-      profile = null;
-    }
+  if (!profile) {
+    return (
+      <main className="home-page">
+        <header className="home-header">
+          <Link className="brand-mark" href="/">
+            <span className="brand-symbol" aria-hidden="true">T</span>
+            <span>TraderLab</span>
+          </Link>
+          <LogoutButton />
+        </header>
+        <section className="welcome-panel">
+          <p className="eyebrow">SUA ÁREA DE APRENDIZAGEM</p>
+          <h1>Não conseguimos carregar seu perfil.</h1>
+          <p>Atualize a página em instantes. Sua sessão continua protegida.</p>
+        </section>
+      </main>
+    );
   }
+
+  if (profile.role === 'student') redirect('/home');
 
   return (
     <main className="home-page">
       <header className="home-header">
-        <Link className="brand-mark" href="/">
-          <span className="brand-symbol" aria-hidden="true">
-            T
-          </span>
+        <Link className="brand-mark" href="/" aria-label="TraderLab, início">
+          <span className="brand-symbol" aria-hidden="true">T</span>
           <span>TraderLab</span>
         </Link>
         <div className="home-header-actions">
-          <span className="profile-role">
-            {profile ? roleNames[profile.role] : 'Conta TraderLab'}
-          </span>
+          <span className="profile-role">{roleNames[profile.role]}</span>
           <LogoutButton />
         </div>
       </header>
-      <section className="welcome-panel">
-        <p className="eyebrow">Sua área de aprendizagem</p>
-        <h1>
-          {profile?.name ? `Olá, ${profile.name}` : 'Bem-vindo ao TraderLab'}
-        </h1>
+      <section className="welcome-panel workspace-pending">
+        <p className="eyebrow">ÁREA DE TRABALHO</p>
+        <h1>Olá, {profile.name?.split(' ')[0] || roleNames[profile.role]}.</h1>
         <p>
-          {profile
-            ? 'Sua conta está pronta. Em breve você encontrará seus cursos e poderá acompanhar seu progresso por aqui.'
-            : 'Sua sessão foi validada, mas não conseguimos carregar seu perfil agora. Atualize a página em instantes.'}
+          Esta página inicial é dedicada aos alunos. O espaço de trabalho do seu
+          perfil será disponibilizado em uma área própria.
         </p>
       </section>
     </main>

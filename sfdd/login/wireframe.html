@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wireframe — Fluxos de acesso TraderLab</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #222; background: #eee; font: 15px/1.5 Arial, sans-serif; }
+    main { display: grid; min-height: 100vh; grid-template-columns: 1fr 3fr; background: #fff; }
+    .form-panel { display: flex; flex-direction: column; justify-content: center; padding: 40px clamp(24px, 4vw, 64px); }
+    .brand { margin-bottom: 48px; font-weight: 700; }
+    .form { width: 100%; max-width: 400px; margin: auto; }
+    h1 { margin: 0; font-size: 32px; }
+    p { color: #555; }
+    label { display: block; margin: 18px 0 6px; font-size: 13px; font-weight: 700; }
+    input, button { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid #aaa; border-radius: 5px; background: #fff; }
+    button { margin-top: 22px; background: #ddd; font-weight: 700; }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; color: #666; }
+    .divider::before, .divider::after { content: ''; height: 1px; flex: 1; background: #ccc; }
+    .links, .legal { text-align: center; font-size: 13px; }
+    .visual { display: flex; align-items: end; padding: 48px; background: #ccc; }
+    .visual-copy { max-width: 500px; padding: 24px; background: #eee; }
+    @media (max-width: 760px) { main { grid-template-columns: 1fr; } .visual { display: none; } .form-panel { min-height: 100vh; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="form-panel" aria-label="Formulário do fluxo">
+      <div class="brand">TraderLab</div>
+      <div class="form">
+        <h1>Entre na sua conta</h1>
+        <p>Continue de onde seus estudos pararam.</p>
+        <button>Entrar com Google (em breve)</button>
+        <div class="divider">ou</div>
+        <label>E-mail</label><input placeholder="seu@email.com">
+        <label>Senha</label><input placeholder="••••••••">
+        <p><a href="#">Esqueceu a senha?</a></p>
+        <button>Entrar</button>
+        <p class="links">Não possui conta? Cadastre-se.</p>
+        <p class="legal">Ao continuar, você concorda com os Termos de Uso e a Política de Privacidade.</p>
+      </div>
+    </section>
+    <aside class="visual" aria-label="Imagem de apoio">
+      <div class="visual-copy">Área visual ampla — imagem e mensagem de apoio do TraderLab.</div>
+    </aside>
+  </main>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wireframe — Página inicial do aluno</title>
+    <style>
+      :root { color-scheme: light; font-family: Arial, sans-serif; background: #eee; color: #222; }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      .page { max-width: 1160px; margin: auto; padding: 20px 28px 48px; }
+      header { display: flex; align-items: center; gap: 20px; padding: 14px 0 22px; border-bottom: 1px solid #aaa; }
+      .logo { font-weight: 700; min-width: 170px; }
+      .search { flex: 1; padding: 12px; border: 1px solid #888; background: #fafafa; color: #555; }
+      .icon, .avatar { border: 1px solid #888; background: #ddd; padding: 10px 12px; }
+      .avatar { border-radius: 50%; }
+      h1 { font-size: 24px; margin: 26px 0 16px; }
+      h2 { font-size: 18px; margin: 30px 0 12px; }
+      .banner { min-height: 230px; padding: 28px; background: #d4d4d4; border: 1px solid #aaa; display: flex; flex-direction: column; justify-content: end; }
+      .placeholder { color: #555; }
+      .banner-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+      .dots { letter-spacing: 8px; }
+      .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .card { min-height: 150px; border: 1px solid #aaa; background: #fafafa; padding: 14px; }
+      .thumb { height: 76px; background: #ddd; border: 1px solid #bbb; margin-bottom: 12px; }
+      .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .course { border: 1px solid #aaa; background: #fafafa; padding: 12px; }
+      .course .thumb { height: 120px; }
+      .empty { min-height: 142px; display: grid; place-items: center; gap: 8px; padding: 22px; text-align: center; border: 1px dashed #aaa; background: #f7f7f7; color: #555; }
+      .empty-mark { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: #e2e2e2; color: #666; font-size: 20px; }
+      button { color: inherit; font: inherit; border: 1px solid #888; background: #eee; padding: 8px 12px; }
+      @media (max-width: 700px) {
+        .page { padding: 12px 16px 32px; }
+        header { gap: 8px; flex-wrap: wrap; }
+        .logo { min-width: 0; flex: 1; }
+        .search { order: 2; flex-basis: 100%; }
+        .cards, .course-grid { grid-template-columns: 1fr; }
+        .card:nth-child(n+2) { display: none; }
+        .banner { min-height: 190px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <a class="logo" href="#inicio">[Logo TraderLab]</a>
+        <button class="search" aria-label="Pesquisar">⌕ &nbsp; Pesquisar cursos, módulos e aulas</button>
+        <button class="icon" aria-label="Notificações">♧ <small>2</small></button>
+        <button class="avatar" aria-label="Menu do perfil">[A]</button>
+      </header>
+      <section aria-labelledby="welcome">
+        <h1 id="welcome">Olá, [Nome do aluno]</h1>
+        <div class="banner">
+          <p class="placeholder">[Comunicação em destaque]</p>
+          <strong>[Título do banner]</strong>
+          <p>[Texto de apoio e ação opcional]</p>
+        </div>
+        <div class="banner-nav"><button aria-label="Banner anterior">←</button><span class="dots" aria-label="Posição do banner">● ○ ○ ○ ○</span><button aria-label="Próximo banner">→</button></div>
+      </section>
+      <section aria-labelledby="continue">
+        <h2 id="continue">Continue Onde Parou</h2>
+        <div class="cards">
+          <div class="empty" style="grid-column: 1 / -1"><span class="empty-mark" aria-hidden="true">▶</span><strong>Você ainda não começou uma aula</strong><span>Seus conteúdos recentes vão aparecer aqui.</span></div>
+        </div>
+      </section>
+      <section aria-labelledby="courses">
+        <h2 id="courses">Meus Cursos</h2>
+        <div class="course-grid">
+          <div class="empty" style="grid-column: 1 / -1"><span class="empty-mark" aria-hidden="true">▱</span><strong>Você ainda não tem cursos por aqui</strong><span>Quando adquirir um curso, ele aparecerá nesta seção.</span></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

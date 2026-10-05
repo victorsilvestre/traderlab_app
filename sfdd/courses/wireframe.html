@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wireframe — Curso TraderLab</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font:
+          15px/1.5 "Segoe UI",
+          sans-serif;
+        color: #222;
+        background: #f4f4f4;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      a {
+        color: inherit;
+      }
+      .shell {
+        width: min(1120px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+      .topbar {
+        border-bottom: 1px solid #bbb;
+        background: #fff;
+      }
+      .topbar-inner {
+        min-height: 68px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .brand {
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+      .menu {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .placeholder {
+        display: grid;
+        place-items: center;
+        border: 1px solid #999;
+        background: #e5e5e5;
+        color: #555;
+        text-align: center;
+      }
+      .avatar {
+        width: 36px;
+        height: 36px;
+        border: 1px solid #999;
+        border-radius: 50%;
+      }
+      main {
+        padding: 22px 0 64px;
+      }
+      .breadcrumbs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+        color: #555;
+        font-size: 13px;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(240px, 0.85fr) 1.15fr;
+        gap: 28px;
+        align-items: stretch;
+      }
+      .course-cover {
+        min-height: 260px;
+      }
+      .course-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(30px, 4vw, 44px);
+        line-height: 1.1;
+      }
+      .course-description {
+        max-width: 62ch;
+        color: #555;
+      }
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 22px;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #bbb;
+      }
+      .stat strong {
+        display: block;
+        font-size: 20px;
+      }
+      .stat span {
+        color: #555;
+        font-size: 12px;
+      }
+      .resume {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        align-items: center;
+        margin: 28px 0 36px;
+        padding: 20px;
+        border: 1px solid #999;
+        background: #e9e9e9;
+      }
+      .resume p {
+        margin: 4px 0 0;
+        color: #555;
+      }
+      .button {
+        min-height: 42px;
+        padding: 8px 15px;
+        border: 1px solid #555;
+        background: #fff;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .section-head {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: end;
+        gap: 14px;
+        margin: 0 0 14px;
+      }
+      h2 {
+        margin: 0;
+        font-size: 23px;
+      }
+      .tools {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .icon-control,
+      .view-toggle button {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        border: 1px solid #999;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+      }
+      .icon-control svg,
+      .view-toggle svg {
+        width: 17px;
+        height: 17px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5;
+      }
+      .view-toggle {
+        display: inline-flex;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid #999;
+        border-radius: 24px;
+        background: #e9e9e9;
+      }
+      .view-toggle button[aria-pressed='true'] {
+        background: #ddd;
+      }
+      .modules {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .modules.list {
+        display: flex;
+        flex-direction: column;
+      }
+      .module {
+        overflow: hidden;
+        border: 1px solid #aaa;
+        background: #fff;
+      }
+      .module-top {
+        display: grid;
+        grid-template-columns: 112px 1fr;
+        gap: 16px;
+        padding: 14px;
+      }
+      .module-image {
+        min-height: 90px;
+      }
+      .modules.grid .module-top {
+        grid-template-columns: 1fr;
+      }
+      .modules.grid .module-image {
+        min-height: 190px;
+      }
+      .modules.list .module-top {
+        grid-template-columns: 82px minmax(0, 1fr);
+      }
+      .module h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+      .module-description {
+        margin: 0 0 9px;
+        color: #555;
+        font-size: 13px;
+      }
+      .module-progress {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: #555;
+        font-size: 12px;
+      }
+      progress {
+        width: 100%;
+        max-width: 190px;
+        height: 9px;
+      }
+      .content-list {
+        margin: 0;
+        padding: 8px 0 0;
+        list-style: none;
+        border-top: 1px solid #ccc;
+      }
+      .modules.grid .content-disclosure {
+        display: none;
+      }
+      .content-disclosure summary {
+        padding: 10px 14px;
+        border-top: 1px solid #ccc;
+        cursor: pointer;
+      }
+      .content-list li + li {
+        border-top: 1px solid #ddd;
+      }
+      .content-link {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 11px 14px;
+        text-decoration: none;
+      }
+      .content-link:hover {
+        background: #f0f0f0;
+      }
+      .content-type {
+        color: #666;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        clip-path: inset(50%);
+      }
+      .empty {
+        padding: 28px;
+        border: 1px dashed #999;
+        background: #fff;
+        color: #555;
+      }
+      dialog {
+        width: min(560px, calc(100% - 32px));
+        max-height: calc(100dvh - 32px);
+        margin: auto;
+        padding: 22px;
+        border: 1px solid #999;
+        background: #fff;
+      }
+      dialog::backdrop {
+        background: rgb(0 0 0 / 38%);
+      }
+      .dialog-head,
+      .dialog-tools {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .dialog-head h2 {
+        font-size: 21px;
+      }
+      .dialog-copy {
+        margin: 4px 0 18px;
+        color: #555;
+        font-size: 13px;
+      }
+      .dialog-form {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+      }
+      .dialog-form label {
+        grid-column: 1 / -1;
+        font-size: 12px;
+      }
+      .dialog-form input,
+      .dialog-form button {
+        min-height: 42px;
+        padding: 8px 11px;
+        border: 1px solid #888;
+        background: #fff;
+      }
+      .dialog-results {
+        margin-top: 18px;
+        border-top: 1px solid #ccc;
+      }
+      .dialog-results li {
+        padding: 11px 0;
+        border-bottom: 1px solid #ddd;
+      }
+      .dialog-results small {
+        display: block;
+        color: #555;
+      }
+      @media (max-width: 700px) {
+        .shell {
+          width: min(100% - 28px, 540px);
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+        .course-cover {
+          min-height: 190px;
+        }
+        .resume {
+          grid-template-columns: 1fr;
+        }
+        .resume .button {
+          justify-self: start;
+        }
+        .section-head {
+          align-items: stretch;
+          flex-direction: column;
+        }
+        .tools {
+          width: 100%;
+        }
+        .modules.grid {
+          grid-template-columns: 1fr;
+        }
+        .modules.list .module-top {
+          grid-template-columns: 82px 1fr;
+          gap: 12px;
+        }
+        .modules.list .module-image {
+          min-height: 74px;
+        }
+        .modules.grid .module-image {
+          min-height: 165px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="#inicio">TraderLab</a>
+        <nav class="menu" aria-label="Menu da aplicação">
+          <a href="#inicio">Início</a>
+          <a href="#modulos">Meus cursos</a>
+          <span class="placeholder avatar" aria-label="Avatar do aluno"></span>
+        </nav>
+      </div>
+    </header>
+    <main class="shell">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="#inicio">Início</a><span aria-hidden="true">/</span>
+        <a href="#cursos">Meus cursos</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Análise técnica</span>
+      </nav>
+
+      <section class="hero" aria-labelledby="course-title">
+        <div class="placeholder course-cover">Imagem do curso</div>
+        <div class="course-info">
+          <h1 id="course-title">Análise técnica do início ao avançado</h1>
+          <p class="course-description">
+            Descrição breve do curso para orientar o aluno sobre o conteúdo e os
+            objetivos de estudo.
+          </p>
+          <div class="stats">
+            <div class="stat">
+              <strong>8</strong><span>conteúdos no curso</span>
+            </div>
+            <div class="stat">
+              <strong>3</strong><span>conteúdos concluídos</span>
+            </div>
+            <div class="stat">
+              <strong>38%</strong><span>progresso geral</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="resume" aria-label="Retomar estudos">
+        <div>
+          <strong>Retomar estudos</strong>
+          <p>Último conteúdo acessado: Introdução à leitura de gráficos</p>
+        </div>
+        <a class="button" href="#conteudo">Continuar conteúdo</a>
+      </section>
+
+      <section id="modulos" aria-labelledby="modules-title">
+        <div class="section-head">
+          <div>
+            <h2 id="modules-title">Módulos do curso</h2>
+            <p>Veja os conteúdos e acompanhe seu progresso em cada módulo.</p>
+          </div>
+          <div class="tools">
+            <button
+              class="icon-control"
+              id="open-course-search"
+              type="button"
+              aria-label="Pesquisar conteúdo neste curso"
+              title="Pesquisar conteúdo"
+            >
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="8.6" cy="8.6" r="5.4" />
+                <path d="m12.6 12.6 4.1 4.1" />
+              </svg>
+            </button>
+            <div
+              class="view-toggle"
+              role="group"
+              aria-label="Forma de exibição dos módulos"
+            >
+              <button
+                type="button"
+                aria-label="Exibir módulos em grade"
+                title="Exibir em grade"
+                aria-pressed="true"
+                data-view="grid"
+              >
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <rect x="3.4" y="3.4" width="5.1" height="5.1" rx=".8" />
+                  <rect x="11.5" y="3.4" width="5.1" height="5.1" rx=".8" />
+                  <rect x="3.4" y="11.5" width="5.1" height="5.1" rx=".8" />
+                  <rect x="11.5" y="11.5" width="5.1" height="5.1" rx=".8" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                aria-label="Exibir módulos em lista"
+                title="Exibir em lista"
+                aria-pressed="false"
+                data-view="list"
+              >
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M7.2 5h9M7.2 10h9m-9 5h9" />
+                  <circle cx="4" cy="5" r=".7" fill="currentColor" />
+                  <circle cx="4" cy="10" r=".7" fill="currentColor" />
+                  <circle cx="4" cy="15" r=".7" fill="currentColor" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modules grid" id="module-list">
+          <article class="module" id="module-fundamentos">
+            <div class="module-top">
+              <div class="placeholder module-image">Imagem do módulo</div>
+              <div>
+                <h3>Fundamentos de mercado</h3>
+                <p class="module-description">
+                  Conceitos essenciais para entender os movimentos do mercado.
+                </p>
+                <div class="module-progress">
+                  <progress value="2" max="4"></progress><span>2 de 4</span>
+                </div>
+              </div>
+            </div>
+            <details class="content-disclosure" open>
+              <summary>Conteúdos do módulo · 2</summary>
+              <ul class="content-list">
+              <li>
+                <a class="content-link" href="#conteudo"
+                  ><span>Como funcionam os mercados</span
+                  ><span class="content-type">Aula · concluído</span></a
+                >
+              </li>
+              <li>
+                <a class="content-link" href="#conteudo"
+                  ><span>Leitura de gráficos</span
+                  ><span class="content-type">Aula · em andamento</span></a
+                >
+              </li>
+              </ul>
+            </details>
+          </article>
+          <article class="module">
+            <div class="module-top">
+              <div class="placeholder module-image">Imagem do módulo</div>
+              <div>
+                <h3>Estrutura e tendência</h3>
+                <p class="module-description">
+                  Observe a organização dos preços e regiões de interesse.
+                </p>
+                <div class="module-progress">
+                  <progress value="1" max="4"></progress><span>1 de 4</span>
+                </div>
+              </div>
+            </div>
+            <details class="content-disclosure" open>
+              <summary>Conteúdos do módulo · 2</summary>
+              <ul class="content-list">
+              <li>
+                <a class="content-link" href="#conteudo"
+                  ><span>Suportes e resistências</span
+                  ><span class="content-type">Aula</span></a
+                >
+              </li>
+              <li>
+                <a class="content-link" href="#conteudo"
+                  ><span>Material de apoio</span
+                  ><span class="content-type">Material</span></a
+                >
+              </li>
+              </ul>
+            </details>
+          </article>
+        </div>
+      </section>
+    </main>
+    <dialog id="course-search-dialog" aria-labelledby="course-search-title">
+      <div class="dialog-head">
+        <h2 id="course-search-title">Pesquisar neste curso</h2>
+        <button
+          class="icon-control"
+          id="close-course-search"
+          type="button"
+          aria-label="Fechar pesquisa"
+        >
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="m5 5 10 10M15 5 5 15" />
+          </svg>
+        </button>
+      </div>
+      <p class="dialog-copy">Busque módulos e conteúdos por título ou descrição.</p>
+      <form class="dialog-form" id="course-search-form">
+        <label for="course-search-query">Módulo ou conteúdo</label>
+        <input
+          id="course-search-query"
+          type="search"
+          placeholder="Digite um módulo ou conteúdo"
+          required
+        />
+        <button type="submit">Pesquisar</button>
+      </form>
+      <ul class="dialog-results">
+        <li>
+          <a href="#module-fundamentos">Fundamentos de mercado</a>
+          <small>Módulo · 2/4 conteúdos concluídos</small>
+        </li>
+        <li>
+          <a href="#conteudo">Como funcionam os mercados</a>
+          <small>Módulo: Fundamentos de mercado</small>
+        </li>
+        <li>
+          <a href="#conteudo">Suportes e resistências</a>
+          <small>Módulo: Estrutura e tendência</small>
+        </li>
+      </ul>
+    </dialog>
+    <script>
+      const moduleList = document.querySelector('#module-list');
+      const searchDialog = document.querySelector('#course-search-dialog');
+      document.querySelector('#open-course-search').addEventListener('click', () => {
+        searchDialog.showModal();
+      });
+      document.querySelector('#close-course-search').addEventListener('click', () => {
+        searchDialog.close();
+      });
+      document.querySelector('#course-search-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+      });
+      document.querySelectorAll('[data-view]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const isList = button.dataset.view === 'list';
+          moduleList.classList.toggle('list', isList);
+          moduleList.classList.toggle('grid', !isList);
+          document.querySelectorAll('[data-view]').forEach((item) => {
+            item.setAttribute('aria-pressed', String(item === button));
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -9,7 +9,11 @@ import { completeSignIn } from '../../lib/authentication/completeSignIn';
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser';
 
 export type AuthFormMode =
-  'sign-up' | 'sign-in' | 'recovery' | 'resend-confirmation' | 'reset';
+  | 'sign-up'
+  | 'sign-in'
+  | 'recovery'
+  | 'resend-confirmation'
+  | 'reset';
 
 const labels: Record<
   Exclude<AuthFormMode, 'reset'>,
@@ -20,12 +24,12 @@ const labels: Record<
     description: 'Comece sua jornada de aprendizado no TraderLab.',
   },
   'sign-in': {
-    title: 'Que bom ter você de volta',
-    description: 'Entre para continuar de onde parou.',
+    title: 'Boas-vindas de volta',
+    description: 'Entre na sua conta para continuar seus estudos.',
   },
   recovery: {
-    title: 'Recupere seu acesso',
-    description: 'Enviaremos instruções para o e-mail informado.',
+    title: 'Esqueceu sua senha?',
+    description: 'Informe seu e-mail e enviaremos as instruções para recuperar o acesso.',
   },
   'resend-confirmation': {
     title: 'Confirme seu e-mail',
@@ -38,6 +42,7 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const supabase = createSupabaseBrowserClient();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -121,86 +126,73 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
         description: 'Escolha uma senha com pelo menos 6 caracteres.',
       }
     : labels[mode];
+  const hasSocialOption = mode === 'sign-in' || mode === 'sign-up';
+  const hasPassword = mode === 'sign-in' || mode === 'sign-up' || isReset;
 
   return (
     <div className="auth-form-wrap">
-      <div className="mobile-brand" aria-hidden="true">
-        <span className="brand-symbol">T</span> TraderLab
-      </div>
       <p className="eyebrow">Sua área de aprendizagem</p>
       <h1>{copy.title}</h1>
       <p className="form-intro">{copy.description}</p>
+
+      {hasSocialOption && (
+        <div className="social-options">
+          <button className="social-button" type="button" disabled>
+            Entrar com Google <span className="coming-soon">Em breve</span>
+          </button>
+          <div className="auth-divider" aria-hidden="true"><span>ou</span></div>
+        </div>
+      )}
 
       <form className="auth-form" onSubmit={handleSubmit}>
         {mode === 'sign-up' && (
           <>
             <label htmlFor="name">Nome completo</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              autoComplete="name"
-              maxLength={120}
-              required
-            />
-            <label htmlFor="email">E-mail</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              maxLength={254}
-              required
-            />
-            <label htmlFor="phone">Telefone</label>
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              maxLength={30}
-              required
-            />
+            <input id="name" name="name" type="text" autoComplete="name" maxLength={120} required />
           </>
         )}
 
-        {(mode === 'sign-in' ||
-          mode === 'recovery' ||
-          mode === 'resend-confirmation') && (
+        {(mode === 'sign-up' || mode === 'sign-in' || mode === 'recovery' || mode === 'resend-confirmation') && (
           <>
             <label htmlFor="email">E-mail</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              maxLength={254}
-              required
-            />
+            <input id="email" name="email" type="email" autoComplete="email" maxLength={254} required />
           </>
         )}
 
-        {(mode === 'sign-in' || mode === 'sign-up' || isReset) && (
+        {mode === 'sign-up' && (
+          <>
+            <label htmlFor="phone">Telefone</label>
+            <input id="phone" name="phone" type="tel" autoComplete="tel" maxLength={30} required />
+          </>
+        )}
+
+        {hasPassword && (
           <>
             <div className="label-row">
-              <label htmlFor="password">
-                {isReset ? 'Nova senha' : 'Senha'}
-              </label>
-              {mode === 'sign-in' && (
-                <Link href="/password-recovery">Esqueceu a senha?</Link>
-              )}
+              <label htmlFor="password">{isReset ? 'Nova senha' : 'Senha'}</label>
+              {mode === 'sign-in' && <Link href="/password-recovery">Esqueceu a senha?</Link>}
             </div>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete={
-                mode === 'sign-in' ? 'current-password' : 'new-password'
-              }
-              minLength={6}
-              maxLength={128}
-              required
-            />
+            <div className="password-input-wrap">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete={mode === 'sign-in' ? 'current-password' : 'new-password'}
+                minLength={6}
+                maxLength={128}
+                required
+              />
+              <button
+                className="password-visibility"
+                type="button"
+                onClick={() => setShowPassword((visible) => !visible)}
+                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                aria-pressed={showPassword}
+              >
+                {showPassword ? 'Ocultar' : 'Mostrar'}
+              </button>
+            </div>
+            {mode === 'sign-up' && <p className="field-hint">Use pelo menos 6 caracteres.</p>}
           </>
         )}
 
@@ -219,16 +211,8 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
           </>
         )}
 
-        {error && (
-          <p className="form-message form-message-error" role="alert">
-            {error}
-          </p>
-        )}
-        {message && (
-          <p className="form-message form-message-success" role="status">
-            {message}
-          </p>
-        )}
+        {error && <p className="form-message form-message-error" role="alert">{error}</p>}
+        {message && <p className="form-message form-message-success" role="status">{message}</p>}
 
         <button className="primary-button" type="submit" disabled={busy}>
           {busy ? 'Aguarde…' : submitLabel(mode)}
@@ -236,57 +220,26 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
       </form>
 
       <nav className="auth-links" aria-label="Outras opções de acesso">
-        {mode === 'sign-in' && (
-          <p>
-            Não tem uma conta? <Link href="/sign-up">Criar conta</Link>
-          </p>
-        )}
-        {mode === 'sign-in' && (
-          <p>
-            Precisa confirmar o e-mail?{' '}
-            <Link href="/email-confirmation">Reenviar link</Link>
-          </p>
-        )}
-        {mode === 'sign-up' && (
-          <p>
-            Já tem uma conta? <Link href="/sign-in">Entrar</Link>
-          </p>
-        )}
-        {mode === 'recovery' && (
-          <p>
-            Lembrou a senha? <Link href="/sign-in">Voltar ao login</Link>
-          </p>
-        )}
-        {mode === 'resend-confirmation' && (
-          <p>
-            <Link href="/sign-in">Voltar ao login</Link>
-          </p>
-        )}
-        {isReset && (
-          <p>
-            <Link href="/sign-in">Voltar ao login</Link>
-          </p>
-        )}
+        {mode === 'sign-in' && <p>Não possui conta? <Link href="/sign-up">Cadastre-se.</Link></p>}
+        {mode === 'sign-up' && <p>Possui conta? <Link href="/sign-in">Faça login.</Link></p>}
+        {(mode === 'recovery' || mode === 'resend-confirmation' || isReset) && <p>Possui conta? <Link href="/sign-in">Faça login.</Link></p>}
       </nav>
-      <p className="security-note">
-        Seus dados são usados apenas para acessar sua conta e organizar seu
-        perfil.
-      </p>
+
+      {mode === 'sign-in' && (
+        <p className="legal-note">
+          Ao continuar, você concorda com os Termos de Uso e a Política de Privacidade do TraderLab.
+        </p>
+      )}
     </div>
   );
 }
 
 function submitLabel(mode: AuthFormMode): string {
   switch (mode) {
-    case 'sign-up':
-      return 'Criar conta';
-    case 'sign-in':
-      return 'Entrar';
-    case 'recovery':
-      return 'Enviar instruções';
-    case 'resend-confirmation':
-      return 'Reenviar confirmação';
-    case 'reset':
-      return 'Salvar nova senha';
+    case 'sign-up': return 'Criar conta';
+    case 'sign-in': return 'Entrar';
+    case 'recovery': return 'Enviar instruções';
+    case 'resend-confirmation': return 'Reenviar confirmação';
+    case 'reset': return 'Salvar nova senha';
   }
 }

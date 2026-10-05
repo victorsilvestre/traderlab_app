@@ -174,6 +174,72 @@ Do not put critical authorization or access rules only in the frontend. The API
 must validate authentication, authorization, role and resource ownership
 independently.
 
+### Web pages and component boundaries
+
+Keep the Next.js App Router responsible for URL and page composition. Organize
+screens by user area and feature; do not turn a route file into a large screen
+implementation:
+
+```text
+apps/web/
+├── app/
+│   ├── (public)/sign-in/page.tsx
+│   ├── (student)/home/page.tsx        # URL: /home
+│   └── (workspace)/workspace/page.tsx # URL: /workspace
+├── components/
+│   ├── authentication/                # Auth/session components
+│   ├── forms/                         # Reusable form components
+│   ├── ui/                            # Presentational UI and menus
+│   └── navigation/                    # Navigation and carousel controls
+└── lib/
+    ├── authentication/                # Web session helpers and auth flows
+    └── <feature>/                     # API clients and web-facing data mapping
+```
+
+Route groups organize code and layouts but do not add a URL segment. Add a real
+segment such as `home` or `workspace` when the page needs a distinct URL. Do not
+declare two route groups that resolve to the same URL. If `/` must serve as a
+public entry and authenticated destination, keep its `page.tsx` as a small
+dispatcher; put the actual student and workspace screens on their own routes.
+
+Responsibilities:
+
+- `page.tsx` resolves the route, loads server-side page data through a feature
+  helper, and composes the screen. Keep large UI trees, interaction state and
+  feature-specific copy out of route files.
+- `layout.tsx` owns persistent layout shared by routes in its area, such as an
+  area header or navigation. Keep student and workspace layouts separate when
+  their navigation or role context differs.
+- All React components live under `components/`, organized by responsibility
+  rather than page or feature. Use the established categories
+  `authentication/`, `forms/`, `ui/` and `navigation/`.
+- Put authentication/session UI in `authentication/`, reusable form components
+  in `forms/`, presentational components and menus in `ui/`, and controls whose
+  primary purpose is moving between views/items in `navigation/`.
+- Split a screen into components by meaningful responsibility or independent
+  interaction/state (for example, search, notifications, banner carousel and
+  course list). Keep the screen composition readable and avoid one client
+  component owning unrelated menus, search, modals and page sections.
+- Do not create page-specific component folders under routes or category
+  folders named after a page/feature. A component exclusive to one page still
+  belongs under the most appropriate responsibility category in `components/`.
+- Server Components are the default. Add `'use client'` to the smallest subtree
+  that needs browser state or events. A Server Component may compose Client
+  Components and pass serializable DTOs to them.
+- Web helpers may call the API and map DTOs for rendering. They must not contain
+  business rules, query the database directly, or expose server-only secrets.
+  Authorization and resource ownership remain enforced by the API.
+- Use CSS Modules (or another locally scoped project convention) for new
+  feature-specific styles. Reserve `globals.css` for resets, design tokens,
+  base typography and styles that are truly global. Do not migrate existing
+  styles as unrelated cleanup.
+- Keep mock data clearly named and visibly identified as demonstrative. Do not
+  use client-side mock filtering as a substitute for server authorization.
+
+Use this structure as the default, not as a requirement to create empty folders
+or a component for every element. Follow existing framework conventions and
+prefer the smallest clear separation that preserves these responsibilities.
+
 ## Naming conventions
 
 Use English for folders and files throughout the codebase.

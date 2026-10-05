@@ -1,0 +1,84 @@
+import Link from 'next/link';
+import type { CourseSummaryDto } from '@traderlab/contracts';
+import { homeClass } from './homeStyles';
+import { EmptyState } from './EmptyState';
+
+export function CourseList({
+  courses,
+  unavailable = false,
+}: {
+  courses: CourseSummaryDto[];
+  unavailable?: boolean;
+}) {
+  return (
+    <section
+      className={homeClass('learning-section', 'courses-section')}
+      aria-labelledby="courses-title"
+    >
+      <div className={homeClass('section-heading')}>
+        <div>
+          <p className="eyebrow">SUA BIBLIOTECA</p>
+          <h2 id="courses-title">Meus Cursos</h2>
+        </div>
+        <span className={homeClass('section-count')}>
+          {unavailable ? 'Indisponível' : `${courses.length} cursos`}
+        </span>
+      </div>
+      {unavailable ? (
+        <div className={homeClass('learning-empty')} role="status">
+          <strong>Não conseguimos carregar seus cursos agora.</strong>
+          <p>Atualize esta página para tentar novamente.</p>
+        </div>
+      ) : courses.length ? (
+        <div className={homeClass('course-grid')}>
+          {courses.map((course, index) => (
+            <article className={homeClass('course-tile')} key={course.id}>
+              <Link
+                className={homeClass('course-art-button')}
+                href={`/courses/${encodeURIComponent(course.id)}`}
+                aria-label={`Abrir curso ${course.title}`}
+              >
+                <span
+                  className={homeClass('course-art')}
+                  style={
+                    course.coverImageUrl
+                      ? { backgroundImage: `url(${course.coverImageUrl})` }
+                      : undefined
+                  }
+                />
+                <span className={homeClass('course-number')}>
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className={homeClass('course-open')} aria-hidden="true">
+                  ↗
+                </span>
+              </Link>
+              <div className={homeClass('course-details')}>
+                <div className={homeClass('course-meta-row')}>
+                  <span>CURSO</span>
+                  <span>
+                    {course.completedCount} de {course.contentCount} concluídos
+                  </span>
+                </div>
+                <h3>{course.title}</h3>
+                <p>{course.description}</p>
+                <div className={homeClass('course-progress-row')}>
+                  <span className={homeClass('progress-track')}>
+                    <span style={{ width: `${course.progressPercent}%` }} />
+                  </span>
+                  <small>{course.progressPercent}%</small>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          mark="⌑"
+          title="Você ainda não tem cursos por aqui"
+          description="Quando um curso for liberado para sua conta, ele aparecerá nesta seção."
+        />
+      )}
+    </section>
+  );
+}

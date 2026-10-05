@@ -15,6 +15,35 @@ enum UserRole {
   @@map("user_role")
 }
 
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+
+  @@map("publication_status")
+}
+
+enum CourseContentKind {
+  LESSON
+  MATERIAL
+
+  @@map("course_content_kind")
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  REVOKED
+
+  @@map("enrollment_status")
+}
+
+enum EnrollmentSource {
+  PURCHASE
+  INVITATION
+  MANUAL
+
+  @@map("enrollment_source")
+}
+
 model UserProfile {
   id        String   @id @db.Uuid
   name      String   @db.VarChar(120)
@@ -23,5 +52,103 @@ model UserProfile {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
+  createdCourses Course[]          @relation("CourseCreator")
+  enrollments    Enrollment[]
+  progress       ContentProgress[]
+
   @@map("user_profiles")
+}
+
+model Course {
+  id            Int               @id @default(autoincrement())
+  createdById   String            @map("created_by_id") @db.Uuid
+  title         String            @db.VarChar(180)
+  description   String            @db.Text
+  coverImageUrl String?           @map("cover_image_url") @db.VarChar(2048)
+  status        PublicationStatus @default(DRAFT)
+  publishedAt   DateTime?         @map("published_at") @db.Timestamptz(6)
+  createdAt     DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  createdBy   UserProfile    @relation("CourseCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  modules     CourseModule[]
+  enrollments Enrollment[]
+
+  @@index([status, publishedAt])
+  @@index([createdById])
+  @@map("courses")
+}
+
+model CourseModule {
+  id          Int               @id @default(autoincrement())
+  courseId    Int               @map("course_id")
+  title       String            @db.VarChar(180)
+  description String            @default("") @db.Text
+  imageUrl    String?           @map("image_url") @db.VarChar(2048)
+  position    Int               @default(0)
+  status      PublicationStatus @default(DRAFT)
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  course   Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  contents CourseContent[]
+
+  @@index([courseId, status, position])
+  @@map("course_modules")
+}
+
+model CourseContent {
+  id          Int               @id @default(autoincrement())
+  moduleId    Int               @map("module_id")
+  title       String            @db.VarChar(180)
+  description String            @default("") @db.Text
+  kind        CourseContentKind
+  body        String            @default("") @db.Text
+  resourceUrl String?           @map("resource_url") @db.VarChar(2048)
+  position    Int               @default(0)
+  status      PublicationStatus @default(DRAFT)
+  publishedAt DateTime?         @map("published_at") @db.Timestamptz(6)
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  module   CourseModule      @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  progress ContentProgress[]
+
+  @@index([moduleId, status, position])
+  @@map("course_contents")
+}
+
+model Enrollment {
+  id        Int              @id @default(autoincrement())
+  studentId String           @map("student_id") @db.Uuid
+  courseId  Int              @map("course_id")
+  source    EnrollmentSource
+  status    EnrollmentStatus @default(ACTIVE)
+  grantedAt DateTime         @default(now()) @map("granted_at") @db.Timestamptz(6)
+  createdAt DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  student UserProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+  @@index([courseId, status])
+  @@map("enrollments")
+}
+
+model ContentProgress {
+  id             Int       @id @default(autoincrement())
+  studentId      String    @map("student_id") @db.Uuid
+  contentId      Int       @map("content_id")
+  lastAccessedAt DateTime  @default(now()) @map("last_accessed_at") @db.Timestamptz(6)
+  completedAt    DateTime? @map("completed_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  student UserProfile   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  content CourseContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, contentId])
+  @@index([studentId, lastAccessedAt])
+  @@map("content_progress")
 }

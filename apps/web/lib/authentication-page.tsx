@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { AuthForm, type AuthFormMode } from '../components/authentication/AuthForm';
+import { AuthForm, type AuthFormMode } from '../components/forms/AuthForm';
 import { AuthShell } from '../components/authentication/AuthShell';
 import { createSupabaseServerClient } from './supabase/server';
 
