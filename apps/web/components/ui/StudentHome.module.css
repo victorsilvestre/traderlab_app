@@ -482,7 +482,8 @@
 }
 .featured-banner {
   position: relative;
-  min-height: clamp(275px, 31vw, 390px);
+  height: clamp(275px, 31vw, 390px);
+  min-height: 0;
   overflow: hidden;
   border-radius: 8px;
   background: #dfe5df;
@@ -499,6 +500,16 @@
   background-size: cover;
   animation: banner-arrive 320ms ease both;
 }
+.featured-destination {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+}
+.featured-destination:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: -6px;
+}
 .featured-shade {
   background: linear-gradient(
     90deg,
@@ -509,9 +520,14 @@
   );
 }
 .featured-copy {
+  position: relative;
+  z-index: 2;
   width: min(55%, 540px);
+  max-height: calc(100% - 64px);
+  overflow: hidden;
   padding: clamp(26px, 5vw, 58px);
   color: #fff;
+  pointer-events: none;
   animation: banner-copy-arrive 380ms ease both;
 }
 .featured-eyebrow {
@@ -558,6 +574,7 @@
 }
 .featured-controls {
   position: absolute;
+  z-index: 3;
   right: 24px;
   bottom: 22px;
   left: 24px;
@@ -635,7 +652,7 @@
 .recent-item {
   display: grid;
   width: 100%;
-  grid-template-columns: 36px 42px minmax(0, 1fr) minmax(100px, 150px) 20px;
+  grid-template-columns: 36px 42px minmax(0, 1fr) 20px;
   align-items: center;
   gap: 14px;
   min-height: 88px;
@@ -644,11 +661,15 @@
   border-bottom: 1px solid var(--line);
   background: transparent;
   color: var(--ink);
-  cursor: pointer;
+  text-decoration: none;
   text-align: left;
 }
 .recent-item:hover {
   background: rgb(255 255 255 / 54%);
+}
+.recent-item:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
 }
 .recent-index {
   color: #9ba39c;
@@ -693,11 +714,6 @@
   color: #9ba39c;
   font-size: 9px;
 }
-.recent-progress {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
 .progress-track {
   display: block;
   height: 4px;
@@ -712,7 +728,6 @@
   border-radius: inherit;
   background: #64806a;
 }
-.recent-progress small,
 .course-progress-row small {
   min-width: 27px;
   color: #78837a;
@@ -1010,7 +1025,8 @@
     padding-top: 29px;
   }
   .featured-banner {
-    min-height: 320px;
+    height: clamp(280px, 43vw, 340px);
+    min-height: 0;
   }
   .featured-art {
     background-position: 62% center;
@@ -1042,9 +1058,6 @@
   .recent-item {
     grid-template-columns: 22px 36px minmax(0, 1fr) 17px;
     gap: 9px;
-  }
-  .recent-progress {
-    display: none;
   }
   .course-grid {
     grid-template-columns: 1fr;

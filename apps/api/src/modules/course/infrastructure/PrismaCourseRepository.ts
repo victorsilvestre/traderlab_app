@@ -21,6 +21,7 @@ function mapContent(content: {
   description: string;
   kind: PrismaCourseContentKind;
   body: string;
+  videoUrl: string | null;
   resourceUrl: string | null;
   position: number;
   status: PublicationStatus;
@@ -47,6 +48,7 @@ function mapModules(
       description: string;
       kind: PrismaCourseContentKind;
       body: string;
+      videoUrl: string | null;
       resourceUrl: string | null;
       position: number;
       status: PublicationStatus;
@@ -138,6 +140,7 @@ export class PrismaCourseRepository implements CourseRepository {
             course: { select: { id: true, title: true } },
           },
         },
+        materials: { orderBy: { position: 'asc' } },
       },
     });
     if (!content) return null;
@@ -147,7 +150,40 @@ export class PrismaCourseRepository implements CourseRepository {
       courseId: content.module.course.id,
       courseTitle: content.module.course.title,
       moduleTitle: content.module.title,
+      materials: content.materials,
     };
+  }
+
+  async findPublishedMaterial(
+    courseId: number,
+    contentId: number,
+    materialId: number,
+  ) {
+    return prisma.courseMaterial.findFirst({
+      where: {
+        id: materialId,
+        contentId,
+        content: {
+          id: contentId,
+          kind: PrismaCourseContentKind.LESSON,
+          status: PublicationStatus.PUBLISHED,
+          module: {
+            status: PublicationStatus.PUBLISHED,
+            courseId,
+            course: { status: PublicationStatus.PUBLISHED },
+          },
+        },
+      },
+      select: {
+        id: true,
+        contentId: true,
+        name: true,
+        storagePath: true,
+        mimeType: true,
+        sizeBytes: true,
+        position: true,
+      },
+    });
   }
 
   async searchPublishedCourseItems(

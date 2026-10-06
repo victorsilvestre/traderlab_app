@@ -16,12 +16,16 @@
       .avatar { border-radius: 50%; }
       h1 { font-size: 24px; margin: 26px 0 16px; }
       h2 { font-size: 18px; margin: 30px 0 12px; }
-      .banner { min-height: 230px; padding: 28px; background: #d4d4d4; border: 1px solid #aaa; display: flex; flex-direction: column; justify-content: end; }
+      .banner { height: clamp(210px, 24vw, 280px); overflow: hidden; padding: 28px; background: #d4d4d4; border: 1px solid #aaa; display: flex; flex-direction: column; justify-content: end; color: inherit; text-decoration: none; }
+      .banner:focus-visible { outline: 2px solid #555; outline-offset: 3px; }
       .placeholder { color: #555; }
       .banner-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
       .dots { letter-spacing: 8px; }
       .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
       .card { min-height: 150px; border: 1px solid #aaa; background: #fafafa; padding: 14px; }
+      .recent-card { display: grid; align-content: start; gap: 8px; color: inherit; text-decoration: none; }
+      .recent-card:hover, .recent-card:focus-visible { outline: 2px solid #777; outline-offset: 2px; }
+      .recent-number, .recent-meta { color: #666; font-size: 12px; }
       .thumb { height: 76px; background: #ddd; border: 1px solid #bbb; margin-bottom: 12px; }
       .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
       .course { border: 1px solid #aaa; background: #fafafa; padding: 12px; }
@@ -35,8 +39,7 @@
         .logo { min-width: 0; flex: 1; }
         .search { order: 2; flex-basis: 100%; }
         .cards, .course-grid { grid-template-columns: 1fr; }
-        .card:nth-child(n+2) { display: none; }
-        .banner { min-height: 190px; }
+        .banner { height: 210px; }
       }
     </style>
   </head>
@@ -50,18 +53,21 @@
       </header>
       <section aria-labelledby="welcome">
         <h1 id="welcome">Olá, [Nome do aluno]</h1>
-        <div class="banner">
+        <a class="banner" href="#destino-do-banner" target="_blank" rel="noopener noreferrer" aria-label="Abrir comunicação em uma nova aba">
           <p class="placeholder">[Comunicação em destaque]</p>
           <strong>[Título do banner]</strong>
-          <p>[Texto de apoio e ação opcional]</p>
-        </div>
+          <p>[Texto de apoio e ação opcional · Abrir destino ↗]</p>
+        </a>
         <div class="banner-nav"><button aria-label="Banner anterior">←</button><span class="dots" aria-label="Posição do banner">● ○ ○ ○ ○</span><button aria-label="Próximo banner">→</button></div>
       </section>
       <section aria-labelledby="continue">
         <h2 id="continue">Continue Onde Parou</h2>
         <div class="cards">
-          <div class="empty" style="grid-column: 1 / -1"><span class="empty-mark" aria-hidden="true">▶</span><strong>Você ainda não começou uma aula</strong><span>Seus conteúdos recentes vão aparecer aqui.</span></div>
+          <a class="card recent-card" href="#conteudo"><span class="recent-number">01 · AULA</span><strong>[Conteúdo acessado mais recentemente]</strong><span>[Curso] · [Módulo]</span><span class="recent-meta">Acessado há alguns minutos ↗</span></a>
+          <a class="card recent-card" href="#conteudo"><span class="recent-number">02 · AULA</span><strong>[Segundo conteúdo recente]</strong><span>[Curso] · [Módulo]</span><span class="recent-meta">Acessado ontem ↗</span></a>
+          <a class="card recent-card" href="#conteudo"><span class="recent-number">03 · AULA</span><strong>[Terceiro conteúdo recente]</strong><span>[Curso] · [Módulo]</span><span class="recent-meta">Acessado nesta semana ↗</span></a>
         </div>
+        <p class="placeholder">Estado vazio (quando nenhum conteúdo foi acessado): “Sua próxima aula começa aqui. Escolha um curso e comece a estudar.”</p>
       </section>
       <section aria-labelledby="courses">
         <h2 id="courses">Meus Cursos</h2>

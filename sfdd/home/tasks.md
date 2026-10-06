@@ -50,7 +50,7 @@
 - [ ] Consultar quantidade de notificações não lidas do usuário autenticado.
 - [ ] Implementar ação para marcar uma notificação como lida após validar sua
       propriedade e estado.
-- [ ] Consultar os três conteúdos do próprio aluno com acesso mais recente em
+- [x] Consultar os três conteúdos do próprio aluno com acesso mais recente em
       ordem cronológica decrescente.
 - [ ] Garantir que progresso e notificações de outro usuário não possam ser
       consultados ou alterados por troca de identificadores.
@@ -104,7 +104,7 @@
       módulo `notification`.
 - [ ] Substituir cursos demonstrativos pela lista de cursos realmente adquiridos,
       confirmada por `payment`, `enrollment` e `access` no servidor.
-- [ ] Substituir progresso local demonstrativo pelo histórico real do módulo
+- [x] Substituir progresso local demonstrativo pelo histórico real do módulo
       `progress`.
 - [ ] Conectar banners a uma futura funcionalidade de cadastro/publicação, depois
       de definir papéis, validade e regras editoriais.
@@ -128,3 +128,61 @@
       banco pela interface.
 - [ ] Atualizar este arquivo com tarefas concluídas e documentar diferenças
       aprovadas entre comportamento e artefatos SFDD.
+
+## Retomada real de estudos — implementação autorizada
+
+- [x] Confirmar que a abertura autenticada de conteúdo registra o acesso em
+      `content_progress` com aluno, conteúdo e data atualizada.
+- [x] Acrescentar ao contrato compartilhado o DTO mínimo de conteúdo recente,
+      incluindo curso e módulo de destino.
+- [x] Implementar consulta autenticada no módulo `progress`, limitada aos três
+      acessos distintos mais recentes do aluno e ordenada com desempate estável.
+- [x] Filtrar na API conteúdos, módulos e cursos publicados que ainda pertençam
+      a um curso com matrícula ativa do aluno autenticado.
+- [x] Conectar a home à API sem dados demonstrativos na seção de retomada;
+      carregar progresso e cursos em paralelo e isolar falhas entre seções.
+- [x] Tornar cada item um link para sua página real e mostrar a quantidade de
+      itens retornados, inclusive quando houver somente um ou dois.
+- [x] Exibir orientação motivacional quando não houver acessos e estado distinto
+      quando a consulta falhar.
+- [x] Atualizar o wireframe para incluir a lista de conteúdos e a alternativa
+      vazia, preservando o padrão visual em tons de cinza.
+- [ ] Validar no navegador os estados vazio, um/dois/três conteúdos, ordem após
+      reabrir uma aula e navegação dos links.
+- [ ] Validar autorização, isolamento entre alunos, matrícula revogada e
+      conteúdo despublicado por testes de integração.
+- [x] Executar typecheck da web, API e contratos e conferir whitespace.
+
+## Banners — padronização da vitrine e destino
+
+- [x] Fixar a altura do quadro do banner por breakpoint para que a arte não
+      altere o layout; preencher o quadro com recorte proporcional `cover`.
+- [x] Preparar o componente para abrir em nova aba um destino HTTP(S) quando
+      fornecido, com isolamento `noopener noreferrer`; sem destino, manter o
+      banner sem comportamento de link.
+- [x] Atualizar especificação, plano e wireframe para refletir o quadro estável
+      e o comportamento de destino.
+- [x] Confirmar destino opcional: banner sem URL é informativo; URL HTTP(S)
+      válida abre em nova aba com `noopener noreferrer`.
+- [x] Confirmar administração por administradores e mentores no futuro sistema
+      administrativo.
+- [x] Aprovar contrato de dados: identificador, nome interno, referência da
+      imagem, destino opcional, texto alternativo, estado de publicação, ordem,
+      datas de criação/atualização e autoria de criação/atualização.
+- [x] Definir que o banco guarda a referência do arquivo, não seus bytes; usar
+      as imagens estáticas existentes inicialmente e preparar `imagePath` para
+      futuras referências de upload administrativo.
+- [x] Definir publicação/despublicação manual, sem agendamento por datas, e
+      limite de cinco banners publicados na vitrine.
+- [x] Criar migração/modelo persistido e contrato compartilhado de banner;
+      inserir os três arquivos demonstrativos como registros publicados sem URL.
+- [x] Implementar leitura autenticada dos banners publicados para a home de
+      aluno, limitada aos cinco primeiros pela ordem de exibição.
+- [x] Integrar os dados persistidos ao carrossel, preservando os caminhos dos
+      arquivos demonstrativos existentes.
+- [ ] Implementar autorização e operações de escrita para administradores e
+      mentores junto com o futuro sistema administrativo.
+- [ ] Implementar futuramente a interface administrativa de cadastro/edição,
+      ordenação e publicação; upload de imagens não faz parte desta etapa.
+- [ ] Validar o recorte em diferentes proporções/tamanhos de viewport, a abertura
+      em nova aba, URLs não permitidas, persistência e limites de publicação.

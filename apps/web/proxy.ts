@@ -3,10 +3,18 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
+  const authFetch: typeof fetch = (input, init) => {
+    const timeoutSignal = AbortSignal.timeout(2500);
+    const signal = init?.signal
+      ? AbortSignal.any([init.signal, timeoutSignal])
+      : timeoutSignal;
+    return fetch(input, { ...init, signal });
+  };
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
+      global: { fetch: authFetch },
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll(cookiesToSet) {
@@ -20,7 +28,15 @@ export async function proxy(request: NextRequest) {
     },
   );
 
-  await supabase.auth.getClaims();
+  // Refresh an existing session before downstream server components read it.
+  // Avoid contacting Supabase for anonymous/public requests.
+  if (request.cookies.getAll().some(({ name }) => name.startsWith('sb-'))) {
+    try {
+      await supabase.auth.getClaims();
+    } catch {
+      // The protected API independently distinguishes expired sessions from outages.
+    }
+  }
   return response;
 }
 

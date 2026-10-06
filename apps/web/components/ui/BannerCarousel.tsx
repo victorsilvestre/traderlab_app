@@ -1,20 +1,32 @@
 'use client';
 
 import { homeClass } from './homeStyles';
+import type { HomeBannerDto } from '@traderlab/contracts';
 
 import { useState } from 'react';
-import { demoBanners } from '../../lib/home/demoHomeData';
 import { CarouselControls } from '../navigation/CarouselControls';
 import { EmptyState } from './EmptyState';
 
-export function BannerCarousel() {
+export function BannerCarousel({ banners }: { banners: HomeBannerDto[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeBanner = demoBanners[activeIndex];
+  const activeBanner = banners[activeIndex];
 
   function move(direction: -1 | 1) {
     setActiveIndex((current) =>
-      (current + direction + demoBanners.length) % demoBanners.length,
+      (current + direction + banners.length) % banners.length,
     );
+  }
+
+  let destinationUrl: string | null = null;
+  if (activeBanner?.destinationUrl) {
+    try {
+      const destination = new URL(activeBanner.destinationUrl);
+      if (destination.protocol === 'https:' || destination.protocol === 'http:') {
+        destinationUrl = destination.toString();
+      }
+    } catch {
+      destinationUrl = null;
+    }
   }
 
   return (
@@ -23,21 +35,27 @@ export function BannerCarousel() {
         <>
           <div
             className={homeClass('featured-art')}
-            style={{ backgroundImage: `url(${activeBanner.image})` }}
-            aria-hidden="true"
+            style={{ backgroundImage: `url(${activeBanner.imagePath})` }}
+            role="img"
+            aria-label={activeBanner.altText}
           />
+          {destinationUrl && (
+            <a
+              className={homeClass('featured-destination')}
+              href={destinationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Abrir ${activeBanner.title} em uma nova aba`}
+            />
+          )}
           <div className={homeClass('featured-shade')} aria-hidden="true" />
           <div className={homeClass('featured-copy')} key={activeIndex}>
-            <p className={homeClass('featured-eyebrow')}>
-              <span /> {activeBanner.eyebrow}
-            </p>
+            <p className={homeClass('featured-eyebrow')}><span /> COMUNICAÇÃO</p>
             <h2>{activeBanner.title}</h2>
-            <p>{activeBanner.detail}</p>
-            <span className={homeClass('featured-label')}>COMUNICAÇÃO DE EXEMPLO</span>
           </div>
           <CarouselControls
             activeIndex={activeIndex}
-            itemCount={demoBanners.length}
+            itemCount={banners.length}
             onSelect={setActiveIndex}
             onPrevious={() => move(-1)}
             onNext={() => move(1)}

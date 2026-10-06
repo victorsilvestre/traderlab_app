@@ -23,5 +23,8 @@ export async function markCourseContentComplete(
 
   await completeStudentCourseContent(accessToken, courseId, contentId);
   revalidatePath(`/courses/${encodeURIComponent(courseId)}`);
+  revalidatePath(
+    `/courses/${encodeURIComponent(courseId)}/contents/${encodeURIComponent(contentId)}`,
+  );
   revalidatePath('/home');
 }

@@ -24,6 +24,15 @@ export type MessageDto = {
   message: string;
 };
 
+export type HomeBannerDto = {
+  id: number;
+  title: string;
+  imagePath: string;
+  destinationUrl: string | null;
+  altText: string;
+  displayOrder: number;
+};
+
 export type ApiErrorDto = {
   message: string;
 };
@@ -47,6 +56,18 @@ export type CourseContentSummaryDto = {
   kind: CourseContentKindDto;
   completed: boolean;
   lastAccessedAt: string | null;
+};
+
+export type RecentContentDto = {
+  contentId: number;
+  title: string;
+  kind: CourseContentKindDto;
+  courseId: number;
+  courseTitle: string;
+  moduleId: number;
+  moduleTitle: string;
+  completed: boolean;
+  lastAccessedAt: string;
 };
 
 export type CourseModuleDto = {
@@ -91,8 +112,33 @@ export type CourseContentDto = CourseContentSummaryDto & {
   courseTitle: string;
   moduleId: number;
   moduleTitle: string;
-  body: string;
+  body: RichTextDocumentDto;
+  videoUrl: string | null;
   resourceUrl: string | null;
+  materials: CourseMaterialDto[];
+};
+
+export type RichTextMarkDto = 'bold' | 'italic' | 'underline';
+
+export type RichTextNodeDto =
+  | { type: 'text'; text: string; marks?: RichTextMarkDto[] }
+  | { type: 'link'; text: string; href: string }
+  | { type: 'paragraph'; children: RichTextNodeDto[] }
+  | { type: 'heading'; level: 2 | 3; children: RichTextNodeDto[] }
+  | { type: 'bulletList' | 'orderedList'; children: RichTextNodeDto[] }
+  | { type: 'listItem'; children: RichTextNodeDto[] }
+  | { type: 'blockquote'; children: RichTextNodeDto[] };
+
+export type RichTextDocumentDto = {
+  type: 'doc';
+  children: RichTextNodeDto[];
+};
+
+export type CourseMaterialDto = {
+  id: number;
+  name: string;
+  mimeType: string;
+  sizeBytes: number;
 };
 
 export type CourseSearchDto = {

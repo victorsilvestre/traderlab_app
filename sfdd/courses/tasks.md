@@ -130,3 +130,15 @@
 - [ ] Executar testes automatizados dos módulos de curso, acesso e progresso.
 - [ ] Executar build dos aplicativos afetados.
 - [ ] Marcar as tarefas de validação após sua execução.
+
+
+## Navegação dos módulos
+
+- [x] Tornar a capa e o nome de cada módulo links para seu primeiro conteúdo publicado, em grade e lista.
+- [x] Validar no navegador os links da capa e do nome nos modos grade e lista.
+
+
+## Navegação de retorno
+
+- [x] Adicionar a opção “← Voltar” na página do curso, direcionando a Meus cursos.
+- [ ] Validar visualmente os links de retorno nas páginas de curso e conteúdo.

@@ -2,9 +2,25 @@ import type {
   ContentProgressRecord,
   ContentProgressRepository,
 } from '../domain/ContentProgress.js';
+import type { RecentContentDto } from '@traderlab/contracts';
 
 export class ContentProgressService {
   constructor(private readonly repository: ContentProgressRepository) {}
+
+  async listRecentForStudent(studentId: string): Promise<RecentContentDto[]> {
+    const records = await this.repository.listRecentForStudent(studentId, 3);
+    return records.map((record) => ({
+      contentId: record.contentId,
+      title: record.title,
+      kind: record.kind.toLowerCase() as RecentContentDto['kind'],
+      courseId: record.courseId,
+      courseTitle: record.courseTitle,
+      moduleId: record.moduleId,
+      moduleTitle: record.moduleTitle,
+      completed: record.completedAt !== null,
+      lastAccessedAt: record.lastAccessedAt.toISOString(),
+    }));
+  }
 
   listForCourse(studentId: string, courseId: number) {
     return this.repository.listForCourse(studentId, courseId);

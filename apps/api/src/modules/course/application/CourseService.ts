@@ -1,6 +1,7 @@
 import type {
   CourseCompletionDto,
   CourseContentDto,
+  CourseMaterialDto,
   CourseContentSearchResultDto,
   CourseContentSummaryDto,
   CourseDetailDto,
@@ -25,8 +26,10 @@ import type {
   CourseRecord,
   CourseRepository,
   CourseSearchRecord,
+  CourseMaterialStorage,
 } from '../domain/Course.js';
 import { CourseError } from '../domain/CourseError.js';
+import { toRichTextDocument } from './RichTextDocument.js';
 
 const searchLimit = 30;
 
@@ -99,8 +102,17 @@ function contentDto(
     courseTitle: content.courseTitle,
     moduleId: content.moduleId,
     moduleTitle: content.moduleTitle,
-    body: content.body,
+    body: toRichTextDocument(content.body),
+    videoUrl: content.videoUrl ?? content.resourceUrl,
     resourceUrl: content.resourceUrl,
+    materials: content.materials.map(
+      (material): CourseMaterialDto => ({
+        id: material.id,
+        name: material.name,
+        mimeType: material.mimeType,
+        sizeBytes: material.sizeBytes,
+      }),
+    ),
   };
 }
 
@@ -109,6 +121,7 @@ export class CourseService {
     private readonly courses: CourseRepository,
     private readonly access: RequireCourseAccess,
     private readonly progress: ContentProgressService,
+    private readonly materialStorage: CourseMaterialStorage,
   ) {}
 
   async listForStudent(studentId: string): Promise<CourseSummaryDto[]> {
@@ -279,6 +292,33 @@ export class CourseService {
     return {
       completed: true,
       completedAt: progress.completedAt!.toISOString(),
+    };
+  }
+
+  async downloadMaterial(
+    studentId: string,
+    courseId: number,
+    contentId: number,
+    materialId: number,
+  ): Promise<{ bytes: Uint8Array; name: string; mimeType: string; sizeBytes: number }> {
+    await this.access.execute(studentId, courseId);
+    const material = await this.courses.findPublishedMaterial(
+      courseId,
+      contentId,
+      materialId,
+    );
+    if (!material) throw new CourseError('Material não encontrado.', 404);
+    let bytes: Uint8Array;
+    try {
+      bytes = await this.materialStorage.download(material.storagePath);
+    } catch {
+      throw new CourseError('NÃ£o foi possÃ­vel acessar este material agora.', 503);
+    }
+    return {
+      bytes,
+      name: material.name,
+      mimeType: material.mimeType,
+      sizeBytes: material.sizeBytes,
     };
   }
 

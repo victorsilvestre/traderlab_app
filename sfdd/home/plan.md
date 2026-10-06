@@ -2,10 +2,11 @@
 
 ## Status
 
-Plano atualizado com as decisões de produto recebidas. A especificação original
-em `spec.md` foi preservada sem alterações. A primeira entrega implementa a
-interface e interações locais com dados de exemplo. Integração de pagamento,
-gestão de acessos, dados reais e cadastro de banners ficam para unidades futuras.
+Plano atualizado com as decisões de produto recebidas. A primeira entrega da
+home usou dados demonstrativos. A seção “Continue Onde Parou” agora lê os
+acessos reais do aluno pelo módulo `progress`; cursos e conteúdos são obtidos
+com validação de matrícula e publicação. Banners e notificações ainda usam
+comportamento demonstrativo nesta unidade.
 
 ## Escopo e aderência ao MVP
 
@@ -18,8 +19,8 @@ retomada de estudo e cursos com acesso vigente.
 | Menu e avatar | Incluídos. Usar identidade/perfil já autenticados. |
 | Pesquisar produtos, módulos e aulas | Incluído como pesquisa de cursos, módulos e aulas, usando o vocabulário do produto. Resultados só podem expor conteúdo publicado e autorizado ao aluno. |
 | Caixa de entrada e leitura de notificações | Incluídas no módulo `notification`, limitado a comunicações essenciais do MVP. |
-| Banner com até cinco comunicações | Exibir três imagens demonstrativas (`estudo.svg`, `analise.svg`, `progresso.svg`) em `apps/web/public/banners/`. Cadastro, publicação e origem dinâmica ficam para o futuro. |
-| “Continue Onde Parou” | Incluído no módulo `progress`, para os três conteúdos mais recentemente acessados; não introduzir avaliação, anotação ou recomendação. |
+| Banner com até cinco comunicações | O carrossel atual usa três imagens demonstrativas (`estudo.svg`, `analise.svg`, `progresso.svg`) em `apps/web/public/banners/`, em um quadro responsivo de altura fixa por breakpoint e recorte `cover`. Cadastro e publicação persistidos ainda não existem. |
+| “Continue Onde Parou” | Integrado ao módulo `progress`, para até três conteúdos distintos mais recentemente acessados, em ordem decrescente; links levam ao conteúdo real e o estado vazio orienta o aluno a iniciar os estudos. Não introduzir avaliação, anotação ou recomendação. |
 | “Meus Cursos” | Nesta etapa, exibir cursos demonstrativos adquiridos. Prever integração posterior com `payment`, `enrollment` e `access`; não simular autorização real nem declarar acesso validado. |
 | Acessar Perfil | Link para `/profile`, cuja tela fica fora desta unidade e será implementada depois, conforme indicado na especificação. |
 | Sair da conta | Reutilizar o logout já implementado no módulo de autenticação. |
@@ -35,6 +36,38 @@ retomada de estudo e cursos com acesso vigente.
 - Usar exemplos locais para pesquisa, notificações, cursos e progresso nesta etapa; não apresentar esses exemplos como dados reais do aluno.
 - Reutilizar os componentes e funções de logout existentes.
 - Tratar o wireframe como referência de hierarquia e layout, não como dependência de APIs ou de dados reais.
+
+### Banners — interface atual e integração de cadastro pendente
+
+- O quadro do carrossel define altura responsiva independentemente das dimensões
+  do arquivo. A imagem preenche a área com `background-size: cover`, preservando
+  a proporção e recortando excedentes sem redimensionar o restante da página.
+- O componente reconhece apenas URLs absolutas HTTP(S) como destinos e, quando
+  presente, oferece um link que abre nova aba com `noopener noreferrer`. Um
+  banner sem destino permanece informativo e não recebe affordance de link.
+- Hoje não há entidade/tabela, endpoint de leitura ou tela de cadastro de banner;
+  os três itens SVG demonstrativos ficam em `apps/web/public/banners/` e são
+  referenciados por registros publicados da tabela `home_banners`.
+- Contrato aprovado para a modelagem: `id`, `title` (nome interno), `imagePath`
+  (referência ao arquivo, sem armazenar bytes no banco), `destinationUrl`
+  opcional, `altText`, `status` (rascunho/publicado), `displayOrder`,
+  `createdAt`, `updatedAt`, `createdBy` e `updatedBy`.
+- `imagePath` deverá aceitar referências aos arquivos estáticos atuais e também
+  referências aos arquivos carregados pelo futuro sistema administrativo, sem
+  exigir mudança no contrato da vitrine. A implementação de upload fica fora
+  desta etapa.
+- Administradores e mentores poderão gerenciar banners no sistema
+  administrativo. A vitrine da home exibirá até cinco banners publicados na
+  ordem definida; destino vazio significa banner informativo e não clicável.
+- Não haverá agendamento por datas nesta modelagem inicial. Publicação e
+  despublicação serão manuais. A URL de destino é opcional e, quando preenchida,
+  deve aceitar apenas HTTP(S) e abrir em nova aba com `noopener noreferrer`.
+- Quando a implementação persistida for iniciada, revisar a fronteira de
+  negócio e a autorização no módulo `access`. A primeira fatia já cria a tabela,
+  o DTO compartilhado e a leitura autenticada de até cinco banners publicados
+  para alunos, consumida pela home. O cadastro/edição, as rotas de escrita e a
+  interface de gestão no `(workspace)` ficam para o sistema administrativo; não
+  criar módulo de dashboard nem executar upload nesta etapa.
 
 ### Organização web aplicada
 
@@ -132,8 +165,9 @@ Decisões confirmadas pelo usuário:
 
 - Home exclusiva do aluno; mentor/administrador têm workspace próprio.
 - “Produto” significa curso.
-- Exibir três banners/imagens demonstrativas agora; cadastro e regras dinâmicas
-  serão definidos futuramente.
+- Exibir três banners/imagens demonstrativas agora. Para a integração futura,
+  ficam aprovados o contrato e as regras de publicação descritos acima; a tela
+  administrativa e o upload continuam fora desta etapa.
 - O curso deve ter sido adquirido. Como pagamento e gestão de acesso ainda não
   existem, esta etapa é apenas visual e deve prever a integração futura sem
   alegar autorização real.
@@ -182,3 +216,23 @@ e `access`, inclusive concessões, convites e estados de assinatura.
 - Executar typecheck, lint, testes e build dos aplicativos/pacotes afetados.
 - Revisar que os componentes de UI não consultem banco diretamente e que a API
   não confie em identidade fornecida pelo cliente.
+
+## Integração implementada — “Continue Onde Parou”
+
+- `POST /courses/:courseId/contents/:contentId/open` já registra ou atualiza o
+  progresso por aluno e conteúdo, incluindo `lastAccessedAt`. Cada conteúdo
+  aparece uma vez na retomada; um novo acesso atualiza sua posição recente.
+- O módulo `progress` expõe `GET /progress/recent-contents`, autenticado e
+  restrito a alunos. A consulta retorna no máximo três itens do próprio aluno,
+  ordenados por `lastAccessedAt` decrescente e `contentId` decrescente para
+  desempate; exige curso, módulo e conteúdo publicados e matrícula ativa.
+- O DTO compartilhado contém somente os identificadores e títulos necessários
+  para navegar, o tipo do conteúdo, data do acesso e estado de conclusão. A API
+  deriva o aluno do token validado, sem aceitar `studentId` do navegador.
+- A home consulta histórico e cursos em paralelo e trata a falha de cada seção
+  de forma independente. A lista usa links para a rota real do conteúdo, exibe
+  a quantidade efetivamente retornada e mantém mensagem motivacional quando o
+  histórico está vazio; falha técnica tem estado próprio.
+- Conteúdos inacessíveis por matrícula revogada ou publicação removida deixam
+  de aparecer no histórico. A rota de destino continua revalidando autorização
+  e publicação no módulo `course`.

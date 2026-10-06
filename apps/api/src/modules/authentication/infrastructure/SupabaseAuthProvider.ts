@@ -23,11 +23,21 @@ const authOptions = {
   persistSession: false,
 };
 
+const authFetch: typeof fetch = (input, init) => {
+  const timeoutSignal = AbortSignal.timeout(8000);
+  const signal = init?.signal
+    ? AbortSignal.any([init.signal, timeoutSignal])
+    : timeoutSignal;
+  return fetch(input, { ...init, signal });
+};
+
 const publicClient = createClient(supabaseUrl, publishableKey, {
   auth: authOptions,
+  global: { fetch: authFetch },
 });
 const adminClient = createClient(supabaseUrl, secretKey, {
   auth: authOptions,
+  global: { fetch: authFetch },
 });
 
 function metadataText(user: User, field: string): string | null {
@@ -109,7 +119,11 @@ export class SupabaseAuthProvider implements AuthenticationProvider {
 
   async getIdentity(accessToken: string): Promise<AuthenticatedIdentity | null> {
     const { data, error } = await publicClient.auth.getUser(accessToken);
-    if (error || !data.user) return null;
+    if (error) {
+      if (error.status === 401 || error.status === 403) return null;
+      throw error;
+    }
+    if (!data.user) return null;
     return toIdentity(data.user);
   }
 

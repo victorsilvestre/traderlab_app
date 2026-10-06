@@ -6,24 +6,35 @@ export type DemoContent = {
   course: string;
 };
 
-export const demoBanners = [
+export type HomeBanner = {
+  image: string;
+  eyebrow: string;
+  title: string;
+  detail: string;
+  destinationUrl: string | null;
+};
+
+export const demoBanners: HomeBanner[] = [
   {
     image: '/banners/estudo.svg',
     eyebrow: 'Aprenda com método',
     title: 'Conhecimento se constrói com consistência.',
     detail: 'Um passo de cada vez, no seu ritmo.',
+    destinationUrl: null,
   },
   {
     image: '/banners/analise.svg',
     eyebrow: 'Estude com clareza',
     title: 'Entenda o contexto antes de agir.',
     detail: 'Conteúdo para apoiar decisões mais conscientes.',
+    destinationUrl: null,
   },
   {
     image: '/banners/progresso.svg',
     eyebrow: 'Seu aprendizado',
     title: 'Seu próximo passo começa aqui.',
     detail: 'Retome seus estudos sempre que quiser.',
+    destinationUrl: null,
   },
 ];
 

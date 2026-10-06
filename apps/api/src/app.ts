@@ -11,9 +11,14 @@ import { PrismaCourseAccessRepository } from './modules/access/infrastructure/Pr
 import { CourseService } from './modules/course/application/CourseService.js';
 import { CourseError } from './modules/course/domain/CourseError.js';
 import { PrismaCourseRepository } from './modules/course/infrastructure/PrismaCourseRepository.js';
+import { SupabaseCourseMaterialStorage } from './modules/course/infrastructure/SupabaseCourseMaterialStorage.js';
 import { courseRoutes } from './modules/course/presentation/course.routes.js';
 import { ContentProgressService } from './modules/progress/application/ContentProgressService.js';
 import { PrismaContentProgressRepository } from './modules/progress/infrastructure/PrismaContentProgressRepository.js';
+import { progressRoutes } from './modules/progress/presentation/progress.routes.js';
+import { HomeBannerService } from './modules/notification/application/HomeBannerService.js';
+import { PrismaHomeBannerRepository } from './modules/notification/infrastructure/PrismaHomeBannerRepository.js';
+import { homeBannerRoutes } from './modules/notification/presentation/homeBanner.routes.js';
 
 const configuredWebAppUrl = process.env.WEB_APP_URL;
 if (!configuredWebAppUrl) {
@@ -28,10 +33,17 @@ export function createApp() {
     new PrismaUserProfileRepository(),
     webAppUrl,
   );
+  const progressService = new ContentProgressService(
+    new PrismaContentProgressRepository(),
+  );
+  const homeBannerService = new HomeBannerService(
+    new PrismaHomeBannerRepository(),
+  );
   const courseService = new CourseService(
     new PrismaCourseRepository(),
     new RequireCourseAccess(new PrismaCourseAccessRepository()),
-    new ContentProgressService(new PrismaContentProgressRepository()),
+    progressService,
+    new SupabaseCourseMaterialStorage(),
   );
 
   void app.register(cors, {
@@ -43,6 +55,14 @@ export function createApp() {
   void app.register(courseRoutes, {
     authentication: service,
     service: courseService,
+  });
+  void app.register(progressRoutes, {
+    authentication: service,
+    service: progressService,
+  });
+  void app.register(homeBannerRoutes, {
+    authentication: service,
+    service: homeBannerService,
   });
 
   app.get('/health', async () => ({ status: 'ok' as const }));

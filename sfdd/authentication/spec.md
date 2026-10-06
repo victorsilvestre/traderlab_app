@@ -200,3 +200,17 @@ recursos serão verificadas na API junto com a implementação dessas rotas.
 - Requisitos adicionais de complexidade de senha.
 - Destinos diferentes de navegação pós-login por perfil.
 - Revogação de sessões em outros navegadores ou dispositivos.
+
+## Sessão expirada ou validação indisponível
+
+1. Ao navegar para uma área protegida, a página atual permanece visível e um indicador discreto aparece somente se o carregamento demorar.
+2. Se a sessão puder ser renovada, o usuário continua na rota solicitada.
+3. Se o servidor confirmar que a sessão expirou ou foi revogada, o sistema encaminha ao login e preserva a rota interna solicitada.
+4. Após login bem-sucedido, o usuário retorna à rota interna preservada. Destinos inválidos ou externos levam à página inicial.
+5. Se a validação falhar por indisponibilidade ou timeout, a sessão local é mantida e a interface oferece uma nova tentativa, sem redirecionamento automático ao login.
+
+### Critérios adicionais de aceitação
+
+- [ ] Durante a navegação protegida, um indicador discreto não substitui a página atual nem apresenta uma tela exclusiva de carregamento.
+- [ ] Sessão confirmada como expirada direciona ao login e, após autenticação, retorna à rota interna originalmente solicitada.
+- [ ] Falha temporária ou timeout de API/Auth apresenta erro recuperável, preserva cookies e não é tratado como sessão expirada.

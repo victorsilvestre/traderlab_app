@@ -6,6 +6,7 @@ import { CourseError } from '../domain/CourseError.js';
 
 type CourseParams = { courseId: number };
 type ContentParams = { courseId: number; contentId: number };
+type MaterialParams = ContentParams & { materialId: number };
 type SearchQuery = { query?: string };
 type StudentSearchQuery = { query?: string };
 
@@ -42,6 +43,17 @@ const contentParamsSchema = {
   properties: {
     courseId: { type: 'integer', minimum: 1 },
     contentId: { type: 'integer', minimum: 1 },
+  },
+} as const;
+
+const materialParamsSchema = {
+  type: 'object',
+  required: ['courseId', 'contentId', 'materialId'],
+  additionalProperties: false,
+  properties: {
+    courseId: { type: 'integer', minimum: 1 },
+    contentId: { type: 'integer', minimum: 1 },
+    materialId: { type: 'integer', minimum: 1 },
   },
 } as const;
 
@@ -131,6 +143,30 @@ export async function courseRoutes(
         request.params.courseId,
         request.params.contentId,
       );
+    },
+  );
+
+  app.get<{ Params: MaterialParams }>(
+    '/courses/:courseId/contents/:contentId/materials/:materialId/download',
+    { schema: { params: materialParamsSchema } },
+    async (request, reply) => {
+      const studentId = await requireStudent(request, options.authentication);
+      const material = await options.service.downloadMaterial(
+        studentId,
+        request.params.courseId,
+        request.params.contentId,
+        request.params.materialId,
+      );
+      return reply
+        .header('cache-control', 'private, no-store')
+        .header('content-type', material.mimeType)
+        .header('content-length', String(material.bytes.byteLength))
+        .header(
+          'content-disposition',
+          `attachment; filename*=UTF-8''${encodeURIComponent(material.name)}`,
+        )
+        .header('x-content-type-options', 'nosniff')
+        .send(Buffer.from(material.bytes));
     },
   );
 }

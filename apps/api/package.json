@@ -9,6 +9,7 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:status": "prisma migrate status",
+    "storage:ensure-course-materials": "node --env-file=.env scripts/provision-course-materials-bucket.mjs",
     "db:seed:courses": "node --env-file=.env prisma/seed-example-courses.mjs",
     "typecheck": "prisma generate && tsc --noEmit",
     "lint": "eslint .",

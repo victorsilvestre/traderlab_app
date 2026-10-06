@@ -237,3 +237,8 @@ navegador para confirmar visualmente a experiência com as novas URLs.
   leitor de tela.
 - Executar typecheck, lint, testes e build dos pacotes afetados quando a etapa de
   implementação estiver concluída e autorizada para validação.
+
+
+## Navegação por módulo
+
+A capa e o título de cada módulo apontam para o primeiro conteúdo publicado desse módulo. Os links permanecem no cabeçalho do módulo nos modos grade e lista. Módulos sem conteúdo publicado não oferecem esses links. O destino continua protegido pela validação de acesso existente na abertura do conteúdo.

@@ -55,8 +55,30 @@ model UserProfile {
   createdCourses Course[]          @relation("CourseCreator")
   enrollments    Enrollment[]
   progress       ContentProgress[]
+  createdBanners HomeBanner[]      @relation("HomeBannerCreator")
+  updatedBanners HomeBanner[]      @relation("HomeBannerUpdater")
 
   @@map("user_profiles")
+}
+
+model HomeBanner {
+  id             Int               @id @default(autoincrement())
+  title          String            @db.VarChar(180)
+  imagePath      String            @map("image_path") @db.VarChar(2048)
+  destinationUrl String?           @map("destination_url") @db.VarChar(2048)
+  altText        String            @map("alt_text") @db.VarChar(500)
+  status         PublicationStatus @default(DRAFT)
+  displayOrder   Int               @default(0) @map("display_order")
+  createdById    String?           @map("created_by_id") @db.Uuid
+  updatedById    String?           @map("updated_by_id") @db.Uuid
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  createdBy UserProfile? @relation("HomeBannerCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  updatedBy UserProfile? @relation("HomeBannerUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([status, displayOrder])
+  @@map("home_banners")
 }
 
 model Course {
@@ -104,6 +126,7 @@ model CourseContent {
   description String            @default("") @db.Text
   kind        CourseContentKind
   body        String            @default("") @db.Text
+  videoUrl    String?           @map("video_url") @db.VarChar(2048)
   resourceUrl String?           @map("resource_url") @db.VarChar(2048)
   position    Int               @default(0)
   status      PublicationStatus @default(DRAFT)
@@ -111,11 +134,28 @@ model CourseContent {
   createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  module   CourseModule      @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  progress ContentProgress[]
+  module    CourseModule      @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  progress  ContentProgress[]
+  materials CourseMaterial[]
 
   @@index([moduleId, status, position])
   @@map("course_contents")
+}
+
+model CourseMaterial {
+  id          Int      @id @default(autoincrement())
+  contentId   Int      @map("content_id")
+  name        String   @db.VarChar(240)
+  storagePath String   @map("storage_path") @db.VarChar(1024)
+  mimeType    String   @map("mime_type") @db.VarChar(160)
+  sizeBytes   Int      @map("size_bytes")
+  position    Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  content CourseContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@index([contentId, position])
+  @@map("course_materials")
 }
 
 model Enrollment {

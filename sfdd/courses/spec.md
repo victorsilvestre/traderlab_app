@@ -16,6 +16,7 @@ Retomar Estudos:
 - O usuário poderá retomar o último conteúdo acessado no curso;
 
 Listagem de Módulos
+- O usuário pode clicar na imagem da capa ou no nome do módulo para abrir o primeiro conteúdo publicado daquele módulo, nos modos grade e lista.
 - O usuário deverá visualizar todos os módulos do curso;
 - O usuário deverá visualizar a imagem dos módulos;
 - O usuário deverá visualizar o nome dos módulos;
@@ -33,3 +34,7 @@ Pesquisa do Curso
 - O usuário deverá visualizar o resultado da pesquisa, listando os cursos e/ou conteúdos encontrados e disponíveis para o seu perfil em lista no modal;
 - O usuário poderá clicar em um módulo ou um conteúdo e ser levado para a página correspondente;
 - Enquanto a tela de exibição do conteúdo não estiver disponível, ao clicar em um módulo o usuário será direcionado para a seção correspondente do módulo na página do curso;
+
+
+Navegação de retorno
+- Na página do curso, o aluno pode usar a opção “← Voltar” para retornar a Meus cursos.

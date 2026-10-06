@@ -5,6 +5,7 @@ import type {
 } from '@traderlab/contracts';
 import { CourseBreadcrumbs } from '../navigation/CourseBreadcrumbs';
 import { CourseModuleExplorer } from './CourseModuleExplorer';
+import { RetryPageButton } from './RetryPageButton';
 import { StudentHeader } from './StudentHeader';
 import styles from './CourseScreen.module.css';
 
@@ -16,29 +17,61 @@ export function CourseDetail({
   course: CourseDetailDto;
 }) {
   const resumeContent = course.lastAccessedContent;
+  const firstContent = course.modules
+    .flatMap((module) => module.contents)
+    .at(0);
+  const firstContentHref = firstContent
+    ? `/courses/${encodeURIComponent(course.id)}/contents/${encodeURIComponent(firstContent.id)}`
+    : null;
 
   return (
     <main className={styles.page}>
       <StudentHeader name={profile.name} />
       <div className={styles.container}>
         <CourseBreadcrumbs courseId={course.id} courseTitle={course.title} />
+        <Link className={styles.lessonBackLink} href="/home#courses-title">
+          ← Voltar
+        </Link>
         <section className={styles.courseHero} aria-labelledby="course-title">
-          <div
-            className={styles.courseCover}
-            role={course.coverImageUrl ? 'img' : undefined}
-            aria-label={
-              course.coverImageUrl ? `Capa do curso ${course.title}` : undefined
-            }
-            style={
-              course.coverImageUrl
-                ? { backgroundImage: `url(${course.coverImageUrl})` }
-                : undefined
-            }
-          >
-            {!course.coverImageUrl && <span aria-hidden="true">T</span>}
-          </div>
+          {firstContentHref ? (
+            <Link
+              className={styles.courseCover}
+              href={firstContentHref}
+              aria-label={`Abrir o primeiro conteúdo do curso ${course.title}`}
+              style={
+                course.coverImageUrl
+                  ? { backgroundImage: `url(${course.coverImageUrl})` }
+                  : undefined
+              }
+            >
+              {!course.coverImageUrl && <span aria-hidden="true">T</span>}
+            </Link>
+          ) : (
+            <div
+              className={styles.courseCover}
+              role={course.coverImageUrl ? 'img' : undefined}
+              aria-label={
+                course.coverImageUrl ? `Capa do curso ${course.title}` : undefined
+              }
+              style={
+                course.coverImageUrl
+                  ? { backgroundImage: `url(${course.coverImageUrl})` }
+                  : undefined
+              }
+            >
+              {!course.coverImageUrl && <span aria-hidden="true">T</span>}
+            </div>
+          )}
           <div className={styles.courseIntro}>
-            <h1 id="course-title">{course.title}</h1>
+            <h1 id="course-title">
+              {firstContentHref ? (
+                <Link className={styles.courseTitleLink} href={firstContentHref}>
+                  {course.title}
+                </Link>
+              ) : (
+                course.title
+              )}
+            </h1>
             <p>{course.description}</p>
             <div className={styles.courseStats}>
               <div>
@@ -121,6 +154,7 @@ export function CourseLoadError({ profile }: { profile: UserProfileDto }) {
             Atualize a página para tentar novamente. Seu acesso continua
             protegido.
           </p>
+          <RetryPageButton />
           <Link className={styles.resumeLink} href="/home">
             Voltar ao início
           </Link>

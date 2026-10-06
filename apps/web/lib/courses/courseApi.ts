@@ -21,10 +21,11 @@ async function request<T>(
     ...init,
     headers: {
       authorization: `Bearer ${accessToken}`,
-      'content-type': 'application/json',
+      ...(init?.body === undefined ? {} : { 'content-type': 'application/json' }),
       ...init?.headers,
     },
     cache: 'no-store',
+    signal: init?.signal ?? AbortSignal.timeout(6000),
   });
   const body = (await response.json().catch(() => ({}))) as T | ApiErrorDto;
 
@@ -57,6 +58,14 @@ export function getStudentCourse(accessToken: string, courseId: number) {
     `/courses/${encodeURIComponent(courseId)}`,
     accessToken,
   );
+}
+
+export function getStudentContentMaterialDownloadPath(
+  courseId: number,
+  contentId: number,
+  materialId: number,
+) {
+  return `/courses/${encodeURIComponent(courseId)}/contents/${encodeURIComponent(contentId)}/materials/${encodeURIComponent(materialId)}/download`;
 }
 
 export function searchStudentCourse(

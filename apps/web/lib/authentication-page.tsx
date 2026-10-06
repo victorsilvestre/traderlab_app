@@ -2,18 +2,28 @@ import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { AuthForm, type AuthFormMode } from '../components/forms/AuthForm';
 import { AuthShell } from '../components/authentication/AuthShell';
-import { createSupabaseServerClient } from './supabase/server';
+import { getCurrentUserProfile } from './authentication/getCurrentUserProfile';
+import { getSafeReturnPath } from './authentication/returnPath';
 
 export async function renderAuthenticationPage(
   mode: AuthFormMode,
+  requestedReturnPath?: string | null,
 ): Promise<ReactNode> {
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getClaims();
-  if (data?.claims?.sub && mode !== 'reset') redirect('/');
+  const returnTo = getSafeReturnPath(requestedReturnPath);
+  const { authenticated, profile } = await getCurrentUserProfile();
+  if (authenticated && profile && mode !== 'reset') redirect(returnTo);
 
   return (
     <AuthShell>
-      <AuthForm mode={mode} />
+      <AuthForm
+        mode={mode}
+        returnTo={returnTo}
+        notice={
+          authenticated && !profile && mode === 'sign-in'
+            ? 'Não conseguimos validar sua sessão agora. Você pode tentar novamente ou entrar de novo.'
+            : undefined
+        }
+      />
     </AuthShell>
   );
 }

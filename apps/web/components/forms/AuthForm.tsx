@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
-import type { MessageDto, SignInDto } from '../../lib/api';
+import type { MessageDto } from '../../lib/api';
 import { apiRequest } from '../../lib/api';
 import { completeSignIn } from '../../lib/authentication/completeSignIn';
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser';
@@ -37,7 +37,15 @@ const labels: Record<
   },
 };
 
-export function AuthForm({ mode }: { mode: AuthFormMode }) {
+export function AuthForm({
+  mode,
+  returnTo = '/',
+  notice = '',
+}: {
+  mode: AuthFormMode;
+  returnTo?: string;
+  notice?: string;
+}) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -70,11 +78,7 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
         });
         setMessage(result.message);
       } else if (mode === 'sign-in') {
-        const result = await apiRequest<SignInDto>('/authentication/sign-in', {
-          method: 'POST',
-          body: JSON.stringify({ email, password }),
-        });
-        await completeSignIn(result, supabase.auth, router);
+        await completeSignIn({ email, password }, router, returnTo);
       } else if (mode === 'recovery') {
         const result = await apiRequest<MessageDto>(
           '/authentication/password-recovery',
@@ -134,6 +138,7 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
       <p className="eyebrow">Sua área de aprendizagem</p>
       <h1>{copy.title}</h1>
       <p className="form-intro">{copy.description}</p>
+      {notice && <p className="form-message form-message-error" role="alert">{notice}</p>}
 
       {hasSocialOption && (
         <div className="social-options">

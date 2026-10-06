@@ -27,6 +27,10 @@ Profile
 Página Inicial
 - O usuário deverá visualizar a vitrine de banners com até 5 comunicações;
 - O usuário poderá navegar entre os banners;
-- O usuário deverá visualizar a lista "Continue Onde Parou", que deverá exibir os 3 últimos conteúdos acessados por ele em ordem cronológica, sendo o primeiro o último acessado;
+- A área visual do banner deverá manter proporção e altura padronizadas por tamanho de tela; a imagem deverá ocupar o quadro sem alterar o espaço reservado, com recorte proporcional quando necessário;
+- Quando o banner tiver URL de destino, clicar nele deverá abrir o destino em uma nova aba; banners sem destino não deverão parecer clicáveis;
+- O usuário deverá visualizar a lista "Continue Onde Parou", que deverá exibir até 3 conteúdos distintos acessados por ele, em ordem cronológica decrescente, sendo o primeiro o último acessado; se houver menos de 3, deverá visualizar somente os conteúdos acessados e a quantidade correspondente;
+- Ao selecionar um conteúdo recente, o usuário deverá ser direcionado para a página desse conteúdo;
+- Se o usuário ainda não tiver acessado conteúdos, a seção deverá exibir uma mensagem motivacional para iniciar os estudos; falhas ao carregar o histórico deverão ser informadas separadamente desse estado vazio;
 - O usuário deverá visualizar a lista "Meus Cursos", que deverá exibir os produtos comprados por ele e que ele possui direito de acessar;
 

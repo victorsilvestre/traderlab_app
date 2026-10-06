@@ -5,7 +5,7 @@
   "scripts": {
     "dev:web": "pnpm --filter @traderlab/web dev",
     "dev:api": "pnpm --filter @traderlab/api dev",
-    "dev": "pnpm run dev:web",
+    "dev": "pnpm --parallel --filter @traderlab/web --filter @traderlab/api run dev",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint",
     "format:check": "prettier --check .",

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { NavigationFeedback } from '../components/navigation/NavigationFeedback';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -11,7 +12,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        {children}
+        <NavigationFeedback />
+      </body>
     </html>
   );
 }

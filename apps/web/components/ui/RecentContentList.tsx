@@ -1,9 +1,42 @@
+import Link from 'next/link';
+import type { RecentContentDto } from '@traderlab/contracts';
 import { homeClass } from './homeStyles';
-import { demoCatalog, demoRecent } from '../../lib/home/demoHomeData';
-import { ContentPreviewButton } from './ContentPreviewButton';
 import { EmptyState } from './EmptyState';
 
-export function RecentContentList() {
+function formatAccessTime(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Acessado recentemente';
+
+  const elapsedMinutes = Math.max(0, Math.floor((Date.now() - date.getTime()) / 60_000));
+  if (elapsedMinutes < 1) return 'Acessado agora';
+  if (elapsedMinutes < 60) return `Acessado há ${elapsedMinutes} min`;
+
+  const elapsedHours = Math.floor(elapsedMinutes / 60);
+  if (elapsedHours < 24) return `Acessado há ${elapsedHours} h`;
+
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  if (date.toDateString() === yesterday.toDateString()) return 'Acessado ontem';
+
+  const formattedDate = new Intl.DateTimeFormat('pt-BR', {
+    day: 'numeric',
+    month: 'short',
+  }).format(date);
+  return `Acessado em ${formattedDate}`;
+}
+
+function countLabel(count: number): string {
+  return `${count} ${count === 1 ? 'conteúdo' : 'conteúdos'}`;
+}
+
+export function RecentContentList({
+  contents,
+  unavailable = false,
+}: {
+  contents: RecentContentDto[];
+  unavailable?: boolean;
+}) {
   return (
     <section className={homeClass('learning-section')} aria-labelledby="continue-title">
       <div className={homeClass('section-heading')}>
@@ -11,48 +44,49 @@ export function RecentContentList() {
           <p className="eyebrow">RETOME SEU CAMINHO</p>
           <h2 id="continue-title">Continue Onde Parou</h2>
         </div>
-        <span className={homeClass('section-count')}>{demoRecent.length} recentes</span>
+        <span className={homeClass('section-count')}>
+          {unavailable ? 'Indisponível' : countLabel(contents.length)}
+        </span>
       </div>
-      {demoRecent.length ? (
-        <div className={homeClass('recent-list')}>
-          {demoRecent.map((item, index) => {
-            const content = demoCatalog.find(({ id }) => id === item.id);
-            if (!content) return null;
 
-            return (
-              <ContentPreviewButton
-                key={item.id}
-                content={content}
-                className={homeClass('recent-item')}
-                label={`Ver prévia da aula ${item.title}`}
-              >
-                <span className={homeClass('recent-index')}>0{index + 1}</span>
-                <span className={homeClass('recent-play')} aria-hidden="true">▶</span>
-                <span className={homeClass('recent-main')}>
-                  <span className={homeClass('recent-course')}>{item.course}</span>
-                  <strong>{item.title}</strong>
-                  <span className={homeClass('recent-meta')}>{item.time}</span>
+      {unavailable ? (
+        <div className={homeClass('learning-empty')} role="status">
+          <strong>Não conseguimos carregar seus conteúdos recentes agora.</strong>
+          <p>Atualize esta página para tentar novamente.</p>
+        </div>
+      ) : contents.length ? (
+        <div className={homeClass('recent-list')}>
+          {contents.map((item, index) => (
+            <Link
+              key={`${item.courseId}-${item.contentId}`}
+              className={homeClass('recent-item')}
+              href={`/courses/${encodeURIComponent(item.courseId)}/contents/${encodeURIComponent(item.contentId)}`}
+              aria-label={`Continuar ${item.title}, em ${item.courseTitle}`}
+            >
+              <span className={homeClass('recent-index')}>
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span className={homeClass('recent-play')} aria-hidden="true">
+                ▶
+              </span>
+              <span className={homeClass('recent-main')}>
+                <span className={homeClass('recent-course')}>{item.courseTitle}</span>
+                <strong>{item.title}</strong>
+                <span className={homeClass('recent-meta')}>
+                  {item.moduleTitle} · {formatAccessTime(item.lastAccessedAt)}
                 </span>
-                <span className={homeClass('recent-progress')}>
-                  <span className={homeClass('progress-track')}>
-                    <span style={{ width: `${item.progress}%` }} />
-                  </span>
-                  <small>{item.progress}%</small>
-                </span>
-                <span className={homeClass('recent-arrow')} aria-hidden="true">↗</span>
-              </ContentPreviewButton>
-            );
-          })}
-          <p className={homeClass('demo-note', 'section-demo-note')}>
-            Conteúdo de exemplo · seu histórico de estudos ainda não está
-            conectado
-          </p>
+              </span>
+              <span className={homeClass('recent-arrow')} aria-hidden="true">
+                ↗
+              </span>
+            </Link>
+          ))}
         </div>
       ) : (
         <EmptyState
           mark="▶"
-          title="Você ainda não começou uma aula"
-          description="Seus conteúdos recentes vão aparecer aqui quando iniciar seus estudos."
+          title="Sua próxima aula começa aqui"
+          description="Escolha um curso e comece a estudar. Seus conteúdos acessados vão aparecer nesta seção."
         />
       )}
     </section>

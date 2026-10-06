@@ -206,26 +206,48 @@ export function CourseModuleExplorer({
               key={module.id}
             >
               <div className={styles.moduleHead}>
-                <div
-                  className={styles.moduleImage}
-                  role={module.imageUrl ? 'img' : undefined}
-                  aria-label={
-                    module.imageUrl
-                      ? `Imagem do módulo ${module.title}`
-                      : undefined
-                  }
-                  style={
-                    module.imageUrl
-                      ? { backgroundImage: `url(${module.imageUrl})` }
-                      : undefined
-                  }
-                >
-                  {!module.imageUrl && (
-                    <span>{String(index + 1).padStart(2, '0')}</span>
-                  )}
-                </div>
+                {module.contents[0] ? (
+                  <Link
+                    className={styles.moduleImage}
+                    href={`/courses/${encodeURIComponent(courseId)}/contents/${encodeURIComponent(module.contents[0].id)}`}
+                    aria-label={`Abrir o primeiro conteúdo do módulo ${module.title}`}
+                    style={
+                      module.imageUrl
+                        ? { backgroundImage: `url(${module.imageUrl})` }
+                        : undefined
+                    }
+                  >
+                    {!module.imageUrl && (
+                      <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                    )}
+                  </Link>
+                ) : (
+                  <div
+                    className={styles.moduleImage}
+                    role={module.imageUrl ? 'img' : undefined}
+                    aria-label={module.imageUrl ? `Imagem do módulo ${module.title}` : undefined}
+                    style={
+                      module.imageUrl
+                        ? { backgroundImage: `url(${module.imageUrl})` }
+                        : undefined
+                    }
+                  >
+                    {!module.imageUrl && <span>{String(index + 1).padStart(2, '0')}</span>}
+                  </div>
+                )}
                 <div className={styles.moduleInfo}>
-                  <h3>{module.title}</h3>
+                  <h3>
+                    {module.contents[0] ? (
+                      <Link
+                        className={styles.moduleTitleLink}
+                        href={`/courses/${encodeURIComponent(courseId)}/contents/${encodeURIComponent(module.contents[0].id)}`}
+                      >
+                        {module.title}
+                      </Link>
+                    ) : (
+                      module.title
+                    )}
+                  </h3>
                   <p className={styles.moduleDescription}>
                     {module.description}
                   </p>

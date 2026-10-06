@@ -58,7 +58,18 @@ export class AuthenticationService {
     let result;
     try {
       result = await this.provider.signIn(email.trim().toLowerCase(), password);
-    } catch {
+    } catch (cause) {
+      const status =
+        typeof cause === 'object' && cause !== null && 'status' in cause
+          ? cause.status
+          : undefined;
+      if (typeof status !== 'number' || status >= 500) {
+        throw new AuthenticationError(
+          'O serviço de autenticação está indisponível. Tente novamente em instantes.',
+          503,
+          { cause },
+        );
+      }
       throw new AuthenticationError(
         'Não foi possível entrar. Confira seus dados e a confirmação do e-mail.',
         401,
@@ -155,7 +166,16 @@ export class AuthenticationService {
   }
 
   async getCurrentUser(accessToken: string): Promise<UserProfileDto> {
-    const identity = await this.provider.getIdentity(accessToken);
+    let identity: AuthenticatedIdentity | null;
+    try {
+      identity = await this.provider.getIdentity(accessToken);
+    } catch (cause) {
+      throw new AuthenticationError(
+        'Não foi possível validar sua sessão agora. Tente novamente.',
+        503,
+        { cause },
+      );
+    }
 
     if (!identity) {
       throw new AuthenticationError('Sua sessão expirou. Entre novamente.', 401);

@@ -107,6 +107,10 @@ por padrão nas novas tabelas públicas.
   Authentication → URL Configuration → Redirect URLs para os links locais de
   confirmação e recuperação funcionarem.
 
+### Correção do estabelecimento e leitura de sessão (6 de outubro de 2026)
+
+O login aceito pela API ainda podia falhar: `supabase.auth.setSession()` fazia uma chamada adicional a `/user` do Supabase e falhava em determinadas condições de rede. A primeira correção tentou executar a operação numa Server Action, mas manteve a chamada externa e ainda passou tokens como argumentos da action; foi substituída. O fluxo atual envia e-mail e senha a uma rota interna da web, que chama a API e persiste os tokens devolvidos diretamente no armazenamento de cookies compatível com `@supabase/ssr`, sem uma chamada extra ao Supabase e sem expor os tokens na resposta ou nos argumentos de uma Server Action. A página inicial e o redirecionamento das telas de autenticação consultam `/authentication/me`, que continua sendo a autoridade para validar sessão e papel. O proxy só executa `getClaims()` quando há cookies Supabase, evitando a chamada de rede em visitas anônimas. A compatibilidade do cookie e o ciclo de renovação ainda precisam de validação manual após reiniciar a web.
+
 ## Aplicações e módulos afetados
 
 - `apps/web`: telas e interação dos fluxos públicos de autenticação.
@@ -252,3 +256,12 @@ por padrão nas novas tabelas públicas.
   frontend.
 
 Guardar valores reais em arquivo local ignorado pelo Git ou em um gerenciador de segredos. Não inserir senhas, chaves privadas ou URLs de conexão completas em arquivos versionados.
+
+### Evolução: renovação e recuperação de sessão
+
+- O Supabase Auth continua sendo a autoridade para emissão, duração e renovação de access/refresh tokens. A aplicação persiste os tokens devolvidos e usa @supabase/ssr no proxy para atualizar cookies. Não alterar JWT expirations manipulando tokens no cliente.
+- A validação de identidade na API distingue token inválido (401) de indisponibilidade do Auth (503); detalhes do provedor ficam nos logs, não na resposta pública.
+- A leitura do perfil e as consultas de conteúdo têm limites de espera. Em timeout/5xx, renderizar erro recuperável e manter cookies; somente 401 confirmado encaminha ao login.
+- A rota de login aceita somente destinos internos permitidos e preserva a aula/curso através do fluxo. Validar o destino tanto no servidor quanto no redirecionamento do cliente.
+- O layout persistente mostra um indicador compacto para navegações internas demoradas; não adicionar fallback loading.tsx de tela cheia nas rotas de curso.
+- Configurações de expiração do JWT e limites gerais de sessão pertencem ao painel/configuração do Supabase. Política própria de duração da aplicação exigiria controle de sessão server-side separado e está fora desta alteração.

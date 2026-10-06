@@ -1,5 +1,13 @@
 # Autenticação do usuário — Tarefas
 
+## Correção do fluxo de login (6 de outubro de 2026)
+
+- [x] Persistir os tokens retornados pela API nos cookies SSR por uma rota interna da web, sem chamada extra ao endpoint `/user` do Supabase e sem retornar tokens ao navegador.
+- [x] Resolver autenticação e perfil pelo endpoint `/authentication/me` em vez de depender de `getClaims()` na decisão das páginas.
+- [x] Evitar validação de claims pelo proxy em visitas sem cookies de sessão.
+- [x] Validar manualmente login, autenticação e logout no ambiente local após a correção da persistência dos cookies SSR.
+- [ ] Confirmar o comportamento quando API ou Supabase estiver indisponível e ajustar mensagens de erro conforme necessário.
+
 ## Revisão e preparação
 
 - [x] Registrar as decisões de produto aprovadas em `spec.md`.
@@ -103,3 +111,14 @@
       por testes com a sessão do fragmento e o código PKCE.
 - [ ] Validar de ponta a ponta, com novos links de e-mail, a confirmação após a
       correção do callback e a solicitação/conclusão de redefinição de senha.
+
+## Renovação e recuperação de sessão
+
+- [x] Exibir indicador discreto e atrasado para navegações internas, sem trocar o conteúdo atual por uma tela de carregamento.
+- [x] Preservar a rota interna no redirecionamento de sessão inválida e voltar a ela após o login.
+- [x] Validar os destinos de retorno e rejeitar URLs externas, rotas públicas e valores malformados.
+- [x] Diferenciar 401 confirmado de falha transitória/timeout ao validar identidade no Supabase.
+- [x] Limitar o tempo de espera da validação de perfil e das chamadas de conteúdo; fornecer tentativa manual sem limpar cookies.
+- [x] Mostrar uma mensagem recuperável de indisponibilidade da sessão em vez de redirecionar ao login.
+- [ ] Conferir no painel do Supabase as configurações de expiração de JWT e duração/inatividade da sessão.
+- [ ] Validar manualmente renovação, expiração real, falha temporária do Auth/API e retorno ao conteúdo original.

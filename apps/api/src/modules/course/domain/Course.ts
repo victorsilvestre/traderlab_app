@@ -8,6 +8,7 @@ export type CourseContentRecord = {
   description: string;
   kind: CourseContentKind;
   body: string;
+  videoUrl: string | null;
   resourceUrl: string | null;
   position: number;
   status: PublicationState;
@@ -36,6 +37,17 @@ export type CourseContentLocation = CourseContentRecord & {
   courseId: number;
   courseTitle: string;
   moduleTitle: string;
+  materials: CourseMaterialRecord[];
+};
+
+export type CourseMaterialRecord = {
+  id: number;
+  contentId: number;
+  name: string;
+  storagePath: string;
+  mimeType: string;
+  sizeBytes: number;
+  position: number;
 };
 
 export type CourseContentSearchRecord = CourseContentRecord & {
@@ -73,6 +85,11 @@ export interface CourseRepository {
     courseId: number,
     contentId: number,
   ): Promise<CourseContentLocation | null>;
+  findPublishedMaterial(
+    courseId: number,
+    contentId: number,
+    materialId: number,
+  ): Promise<CourseMaterialRecord | null>;
   searchPublishedCourseItems(
     courseId: number,
     query: string,
@@ -83,4 +100,8 @@ export interface CourseRepository {
     query: string,
     limit: number,
   ): Promise<CourseCatalogSearchRecord[]>;
+}
+
+export interface CourseMaterialStorage {
+  download(storagePath: string): Promise<Uint8Array>;
 }

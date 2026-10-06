@@ -1,32 +1,59 @@
 import { redirect } from 'next/navigation';
 import type { CourseSummaryDto } from '@traderlab/contracts';
+import type { RecentContentDto } from '@traderlab/contracts';
 import { StudentHome } from '../../../components/ui/StudentHome';
-import { getCurrentAccessToken } from '../../../lib/authentication/getCurrentAccessToken';
+import { StudentSessionUnavailable } from '../../../components/ui/CourseContentView';
 import { getCurrentUserProfile } from '../../../lib/authentication/getCurrentUserProfile';
+import { getSignInPath } from '../../../lib/authentication/returnPath';
 import { getStudentCourses } from '../../../lib/courses/courseApi';
+import { getStudentRecentContents } from '../../../lib/progress/progressApi';
+import { getHomeBanners } from '../../../lib/home/homeBannerApi';
+
+function isUnauthorized(error: unknown): boolean {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'statusCode' in error &&
+    error.statusCode === 401
+  );
+}
 
 export default async function StudentHomePage() {
-  const { authenticated, profile } = await getCurrentUserProfile();
+  const signInPath = getSignInPath('/home');
+  const { authenticated, profile, accessToken } = await getCurrentUserProfile();
 
-  if (!authenticated) redirect('/sign-in');
-  if (!profile || profile.role !== 'student') redirect('/');
+  if (!authenticated) redirect(signInPath);
+  if (!profile) return <StudentSessionUnavailable returnTo="/home" />;
+  if (profile.role !== 'student') redirect('/');
 
-  const accessToken = await getCurrentAccessToken();
-  if (!accessToken) redirect('/sign-in');
+  if (!accessToken) redirect(signInPath);
 
-  let coursesUnavailable = false;
-  let courses: CourseSummaryDto[] = [];
-  try {
-    courses = await getStudentCourses(accessToken);
-  } catch {
-    coursesUnavailable = true;
+  const [coursesResult, recentResult, bannersResult] = await Promise.allSettled([
+    getStudentCourses(accessToken),
+    getStudentRecentContents(accessToken),
+    getHomeBanners(accessToken),
+  ]);
+  if (
+    (coursesResult.status === 'rejected' && isUnauthorized(coursesResult.reason)) ||
+    (recentResult.status === 'rejected' && isUnauthorized(recentResult.reason)) ||
+    (bannersResult.status === 'rejected' && isUnauthorized(bannersResult.reason))
+  ) {
+    redirect(signInPath);
   }
+
+  const courses: CourseSummaryDto[] =
+    coursesResult.status === 'fulfilled' ? coursesResult.value : [];
+  const recentContents: RecentContentDto[] =
+    recentResult.status === 'fulfilled' ? recentResult.value : [];
 
   return (
     <StudentHome
       profile={profile}
       courses={courses}
-      coursesUnavailable={coursesUnavailable}
+      coursesUnavailable={coursesResult.status === 'rejected'}
+      recentContents={recentContents}
+      recentContentsUnavailable={recentResult.status === 'rejected'}
+      banners={bannersResult.status === 'fulfilled' ? bannersResult.value : []}
     />
   );
 }

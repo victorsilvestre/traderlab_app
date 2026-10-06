@@ -2,6 +2,7 @@ import { prisma } from '../../../database/prisma.js';
 import type {
   ContentProgressRecord,
   ContentProgressRepository,
+  RecentContentRecord,
 } from '../domain/ContentProgress.js';
 
 function toRecord(progress: {
@@ -17,6 +18,60 @@ function toRecord(progress: {
 }
 
 export class PrismaContentProgressRepository implements ContentProgressRepository {
+  async listRecentForStudent(
+    studentId: string,
+    limit: number,
+  ): Promise<RecentContentRecord[]> {
+    const records = await prisma.contentProgress.findMany({
+      where: {
+        studentId,
+        content: {
+          status: 'PUBLISHED',
+          module: {
+            status: 'PUBLISHED',
+            course: {
+              status: 'PUBLISHED',
+              enrollments: { some: { studentId, status: 'ACTIVE' } },
+            },
+          },
+        },
+      },
+      orderBy: [{ lastAccessedAt: 'desc' }, { contentId: 'desc' }],
+      take: limit,
+      select: {
+        contentId: true,
+        lastAccessedAt: true,
+        completedAt: true,
+        content: {
+          select: {
+            id: true,
+            title: true,
+            kind: true,
+            module: {
+              select: {
+                id: true,
+                title: true,
+                course: { select: { id: true, title: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return records.map((record) => ({
+      contentId: record.content.id,
+      lastAccessedAt: record.lastAccessedAt,
+      completedAt: record.completedAt,
+      title: record.content.title,
+      kind: record.content.kind,
+      courseId: record.content.module.course.id,
+      courseTitle: record.content.module.course.title,
+      moduleId: record.content.module.id,
+      moduleTitle: record.content.module.title,
+    }));
+  }
+
   async listForCourse(studentId: string, courseId: number) {
     const records = await prisma.contentProgress.findMany({
       where: {

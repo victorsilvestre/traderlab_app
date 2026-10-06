@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wireframe — aula do curso</title>
+    <style>
+      :root { color-scheme: light; font-family: Arial, sans-serif; color: #222; background: #f2f2f2; }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      .topbar { display:flex; align-items:center; justify-content:space-between; min-height:64px; padding:12px max(20px, calc((100% - 1120px)/2)); background:#fff; border-bottom:1px solid #ccc; }
+      .brand, .avatar, .button, .link-button, .video, .material-icon { border:1px solid #999; background:#e5e5e5; }
+      .brand { padding:10px 14px; font-weight:700; }
+      .profile { display:flex; align-items:center; gap:10px; }
+      .avatar { width:34px; height:34px; border-radius:50%; display:grid; place-items:center; }
+      main { max-width:1200px; margin:0 auto; padding:26px 20px 64px; }
+      .breadcrumbs { color:#666; font-size:14px; margin-bottom:18px; }
+      .breadcrumbs a, .back { color:#333; }
+      .back { display:inline-block; margin:0 0 22px; font-size:14px; }
+      .course-layout { display:grid; grid-template-columns:minmax(0, 1fr) 320px; gap:28px; align-items:start; }
+      .lesson-column { min-width:0; }
+      .curriculum { background:#fff; border:1px solid #bbb; border-radius:8px; }
+      .curriculum-heading { padding:18px; border-bottom:1px solid #ccc; }
+      .curriculum-heading h2 { margin:0 0 5px; font-size:18px; }
+      .curriculum-heading p { margin:0; color:#666; font-size:13px; }
+      .module { border-bottom:1px solid #ccc; }
+      .module:last-child { border-bottom:0; }
+      .module-title { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0; padding:13px 16px; background:#e9e9e9; font-size:14px; cursor:pointer; list-style:none; }
+      .module-title::-webkit-details-marker { display:none; }
+      .module-title::after { content:"＋"; color:#555; font-size:16px; }
+      .module[open] > .module-title::after { content:"−"; }
+      .lesson-list { list-style:none; padding:6px 0; margin:0; }
+      .lesson-list a { display:flex; align-items:flex-start; gap:10px; padding:11px 14px; color:#333; text-decoration:none; border-left:3px solid transparent; }
+      .lesson-list a:hover { background:#f4f4f4; }
+      .lesson-list a[aria-current="page"] { background:#eee; border-left-color:#555; font-weight:700; }
+      .lesson-state { width:18px; height:18px; flex:none; display:grid; place-items:center; border:1px solid #888; border-radius:50%; font-size:11px; }
+      .lesson-name { font-size:14px; line-height:1.4; }
+      .lesson-name small { display:block; margin-top:3px; color:#666; font-weight:400; }
+      .curriculum-toggle { display:none; }
+      .eyebrow { color:#666; text-transform:uppercase; letter-spacing:.08em; font-size:12px; margin:0 0 8px; }
+      h1 { font-size:clamp(28px, 5vw, 40px); line-height:1.12; margin:0 0 10px; }
+      .description { max-width:720px; color:#555; line-height:1.6; margin:0 0 24px; }
+      .video { width:100%; aspect-ratio:16/9; display:grid; place-items:center; border-radius:8px; background:#d8d8d8; color:#555; }
+      .play { width:62px; height:44px; border:1px solid #888; border-radius:10px; display:grid; place-items:center; background:#eee; font-size:22px; }
+      .video small { display:block; margin-top:10px; text-align:center; }
+      .section { margin-top:34px; }
+      h2 { font-size:21px; margin:0 0 14px; }
+      .lesson-body { background:#fff; border:1px solid #ccc; border-radius:8px; padding:22px; line-height:1.7; color:#444; }
+      .lesson-body p { margin:0 0 14px; }
+      .lesson-body p:last-child { margin-bottom:0; }
+      .materials { display:grid; gap:10px; }
+      .material { display:flex; align-items:center; gap:14px; padding:14px 16px; border:1px solid #ccc; border-radius:8px; background:#fff; }
+      .material-icon { width:40px; height:40px; border-radius:6px; display:grid; place-items:center; flex:none; }
+      .material-info { min-width:0; flex:1; }
+      .material-info strong, .material-info small { display:block; }
+      .material-info small { margin-top:5px; color:#666; }
+      .download { white-space:nowrap; color:#333; font-size:14px; }
+      .footer { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:34px; padding-top:20px; border-top:1px solid #ccc; }
+      .progress-note { color:#666; font-size:14px; }
+      .button { border-radius:6px; padding:12px 16px; font:inherit; cursor:pointer; }
+      .empty { border:1px dashed #aaa; border-radius:8px; padding:18px; color:#666; background:#fafafa; }
+      @media (max-width:600px) {
+        .topbar { min-height:58px; }
+        main { padding:20px 16px 44px; }
+        .description { margin-bottom:18px; }
+        .section { margin-top:26px; }
+        .footer { align-items:stretch; flex-direction:column; }
+        .button { width:100%; }
+        .download { font-size:13px; }
+      }
+      @media (max-width:900px) {
+        .course-layout { grid-template-columns:minmax(0, 1fr); }
+        .curriculum { grid-row:1; }
+        .lesson-column { grid-row:2; }
+        .curriculum-toggle { display:flex; justify-content:space-between; align-items:center; width:100%; padding:16px 18px; border:0; background:#fff; text-align:left; font:inherit; font-weight:700; }
+        .curriculum-heading { display:none; }
+        .curriculum-content { display:none; }
+        .curriculum[open] .curriculum-content { display:block; }
+        .curriculum[open] .curriculum-toggle { border-bottom:1px solid #ccc; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand" aria-label="Marca do TraderLab">TRADERLAB</div>
+      <nav class="profile" aria-label="Menu do aluno">
+        <span>Olá, Ana</span>
+        <span class="avatar" aria-hidden="true">A</span>
+      </nav>
+    </header>
+    <main>
+      <nav class="breadcrumbs" aria-label="Caminho de navegação">
+        <a href="#inicio">Início</a> / <a href="#curso">Análise Técnica Essencial</a> / <span>Leitura de tendência</span>
+      </nav>
+      <div class="lesson-heading">
+      <a class="back" href="#curso">← Voltar ao curso</a>
+        <p class="eyebrow">Módulo 1 · Aula 2</p>
+        <h1>Leitura de tendência</h1>
+        <p class="description">Aprenda a reconhecer a direção predominante do mercado e a organizar sua leitura antes de tomar uma decisão.</p>
+      </div>
+      <div class="course-layout">
+      <article class="lesson-column">
+
+        <div class="video" role="img" aria-label="Área reservada ao vídeo incorporado do YouTube">
+          <div>
+            <div class="play" aria-hidden="true">▶</div>
+            <small>Vídeo da aula · 12:48</small>
+          </div>
+        </div>
+
+        <section class="section" aria-labelledby="lesson-content-title">
+          <h2 id="lesson-content-title">Sobre esta aula</h2>
+          <div class="lesson-body">
+            <p>Neste conteúdo, vamos observar como <strong>topos e fundos</strong> ajudam a identificar a estrutura do mercado.</p>
+            <p>Comece marcando os pontos mais relevantes no gráfico. Depois, compare a sequência dos movimentos:</p>
+            <ul><li>observe a direção predominante;</li><li>anote os níveis relevantes;</li><li>descreva o cenário com suas próprias palavras.</li></ul>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="materials-title">
+          <h2 id="materials-title">Materiais de apoio</h2>
+          <div class="materials">
+            <div class="material">
+              <span class="material-icon" aria-hidden="true">PDF</span>
+              <div class="material-info"><strong>Guia de leitura de tendência.pdf</strong><small>PDF · 2,4 MB</small></div>
+              <a class="download" href="#arquivo" download>Baixar arquivo ↓</a>
+            </div>
+            <div class="material">
+              <span class="material-icon" aria-hidden="true">DOC</span>
+              <div class="material-info"><strong>Exemplo de marcação no gráfico</strong><small>Imagem · PNG</small></div>
+              <a class="download" href="#arquivo" download>Baixar arquivo ↓</a>
+            </div>
+          </div>
+          <!-- Estado alternativo quando não houver materiais:
+          <div class="empty">Esta aula não possui materiais de apoio.</div>
+          -->
+        </section>
+
+        <div class="footer">
+          <span class="progress-note">Seu progresso é salvo na sua conta.</span>
+          <button class="button" type="button">Marcar aula como concluída</button>
+        </div>
+      </article>
+
+      <details class="curriculum" open>
+        <summary class="curriculum-toggle">Conteúdo do curso <span aria-hidden="true">⌄</span></summary>
+        <div class="curriculum-heading">
+          <h2>Conteúdo do curso</h2>
+          <p>2 módulos · 6 aulas</p>
+        </div>
+        <div class="curriculum-content">
+          <details class="module" open>
+            <summary class="module-title" id="module-one-title">Módulo 1 · Fundamentos</summary>
+            <ul class="lesson-list">
+              <li><a href="#aula-1"><span class="lesson-state" aria-label="Concluída">✓</span><span class="lesson-name">Boas-vindas e objetivos<small>Aula · 08 min</small></span></a></li>
+              <li><a href="#aula-2" aria-current="page"><span class="lesson-state" aria-label="Em andamento">▶</span><span class="lesson-name">Leitura de tendência<small>Aula atual · 12 min</small></span></a></li>
+              <li><a href="#aula-3"><span class="lesson-state" aria-label="Não concluída"></span><span class="lesson-name">Estrutura de mercado<small>Aula · 15 min</small></span></a></li>
+            </ul>
+          </details>
+          <details class="module" open>
+            <summary class="module-title" id="module-two-title">Módulo 2 · Aplicação</summary>
+            <ul class="lesson-list">
+              <li><a href="#aula-4"><span class="lesson-state" aria-label="Não concluída"></span><span class="lesson-name">Suportes e resistências<small>Aula · 18 min</small></span></a></li>
+              <li><a href="#aula-5"><span class="lesson-state" aria-label="Não concluída"></span><span class="lesson-name">Exemplos comentados<small>Aula · 14 min</small></span></a></li>
+              <li><a href="#aula-6"><span class="lesson-state" aria-label="Não concluída"></span><span class="lesson-name">Encerramento do módulo<small>Aula · 06 min</small></span></a></li>
+            </ul>
+          </details>
+        </div>
+      </details>
+      </div>
+    </main>
+  </body>
+</html>
