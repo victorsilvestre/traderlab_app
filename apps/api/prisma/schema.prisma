@@ -44,6 +44,13 @@ enum EnrollmentSource {
   @@map("enrollment_source")
 }
 
+enum NotificationAudience {
+  GENERAL
+  COURSE
+
+  @@map("notification_audience")
+}
+
 model UserProfile {
   id        String   @id @db.Uuid
   name      String   @db.VarChar(120)
@@ -52,11 +59,14 @@ model UserProfile {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  createdCourses Course[]          @relation("CourseCreator")
-  enrollments    Enrollment[]
-  progress       ContentProgress[]
-  createdBanners HomeBanner[]      @relation("HomeBannerCreator")
-  updatedBanners HomeBanner[]      @relation("HomeBannerUpdater")
+  createdCourses         Course[]                @relation("CourseCreator")
+  enrollments            Enrollment[]
+  progress               ContentProgress[]
+  createdBanners         HomeBanner[]            @relation("HomeBannerCreator")
+  updatedBanners         HomeBanner[]            @relation("HomeBannerUpdater")
+  createdNotifications   Notification[]          @relation("NotificationAuthor")
+  updatedNotifications   Notification[]          @relation("NotificationUpdater")
+  notificationRecipients NotificationRecipient[]
 
   @@map("user_profiles")
 }
@@ -81,6 +91,43 @@ model HomeBanner {
   @@map("home_banners")
 }
 
+model Notification {
+  id          Int                  @id @default(autoincrement())
+  title       String               @db.VarChar(180)
+  description String               @db.VarChar(3000)
+  linkUrl     String?              @map("link_url") @db.VarChar(2048)
+  audience    NotificationAudience
+  courseId    Int?                 @map("course_id")
+  status      PublicationStatus    @default(DRAFT)
+  createdById String?              @map("created_by_id") @db.Uuid
+  updatedById String?              @map("updated_by_id") @db.Uuid
+  createdAt   DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  publishedAt DateTime?            @map("published_at") @db.Timestamptz(6)
+
+  course     Course?                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdBy  UserProfile?            @relation("NotificationAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  updatedBy  UserProfile?            @relation("NotificationUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+  recipients NotificationRecipient[]
+
+  @@index([audience, courseId, status, publishedAt])
+  @@map("notifications")
+}
+
+model NotificationRecipient {
+  notificationId Int       @map("notification_id")
+  userId         String    @map("user_id") @db.Uuid
+  deliveredAt    DateTime  @default(now()) @map("delivered_at") @db.Timestamptz(6)
+  readAt         DateTime? @map("read_at") @db.Timestamptz(6)
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user         UserProfile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([notificationId, userId])
+  @@index([userId, readAt, deliveredAt])
+  @@map("notification_recipients")
+}
+
 model Course {
   id            Int               @id @default(autoincrement())
   createdById   String            @map("created_by_id") @db.Uuid
@@ -92,9 +139,10 @@ model Course {
   createdAt     DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt     DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  createdBy   UserProfile    @relation("CourseCreator", fields: [createdById], references: [id], onDelete: Restrict)
-  modules     CourseModule[]
-  enrollments Enrollment[]
+  createdBy     UserProfile    @relation("CourseCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  modules       CourseModule[]
+  enrollments   Enrollment[]
+  notifications Notification[]
 
   @@index([status, publishedAt])
   @@index([createdById])

@@ -33,6 +33,26 @@ export type HomeBannerDto = {
   displayOrder: number;
 };
 
+export type NotificationAudienceDto = 'general' | 'course';
+
+export type NotificationDto = {
+  id: number;
+  title: string;
+  description: string;
+  linkUrl: string | null;
+  audience: NotificationAudienceDto;
+  courseId: number | null;
+  courseTitle: string | null;
+  sentAt: string;
+  readAt: string | null;
+};
+
+export type NotificationListDto = {
+  items: NotificationDto[];
+  unreadCount: number;
+  nextOffset: number | null;
+};
+
 export type ApiErrorDto = {
   message: string;
 };
@@ -104,8 +124,7 @@ export type CourseModuleSearchResultDto = {
 };
 
 export type CourseSearchResultDto =
-  | CourseContentSearchResultDto
-  | CourseModuleSearchResultDto;
+  CourseContentSearchResultDto | CourseModuleSearchResultDto;
 
 export type CourseContentDto = CourseContentSummaryDto & {
   courseId: number;

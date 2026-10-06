@@ -7,18 +7,18 @@ MVP (Minimum Viable Product) do TraderLab.
 
 O MVP deve permitir que:
 
-- Um usuario crie sua conta e acesse a plataforma.
-- Um administrador gerencie cursos, modulos, aulas e materiais.
-- Um mentor gerencie cursos, modulos, aulas e materiais.
-- Um cliente realize um pagamento pelo Mercado Pago.
-- O sistema receba e processe a confirmacao do pagamento.
-- O acesso ao curso seja liberado corretamente.
-- O aluno assista as aulas e baixe materiais.
-- O sistema registre o progresso do aluno.
-- O acesso seja bloqueado ou atualizado conforme o status da assinatura.
-- O administrador consulte alunos, matriculas e pagamentos.
-- O aluno receba comunicacoes essenciais.
-- O sistema registre logs e aplique regras basicas de seguranca.
+[x] - Um usuario crie sua conta e acesse a plataforma.
+[ ] - Um administrador gerencie cursos, modulos, aulas e materiais.
+[ ] - Um mentor gerencie cursos, modulos, aulas e materiais.
+[ ] - Um cliente realize um pagamento pelo Mercado Pago.
+[ ] - O sistema receba e processe a confirmacao do pagamento.
+[x] - O acesso ao curso seja liberado corretamente.
+[x] - O aluno assista as aulas e baixe materiais.
+[x] - O sistema registre o progresso do aluno.
+[ ] - O acesso seja bloqueado ou atualizado conforme o status da assinatura.
+[ ] - O administrador consulte alunos, matriculas e pagamentos.
+[x] - O aluno receba comunicacoes essenciais.
+[ ] - O sistema registre logs e aplique regras basicas de seguranca.
 
 Funcionalidades do MVP:
 

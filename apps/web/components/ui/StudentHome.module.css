@@ -159,6 +159,13 @@
 .notification-menu > summary::-webkit-details-marker {
   display: none;
 }
+.notification-menu .header-popover {
+  width: min(440px, calc(100vw - 28px));
+}
+.notification-list {
+  max-height: min(62vh, 540px);
+  overflow-y: auto;
+}
 .account-popover-wrap::after {
   position: absolute;
   top: 100%;
@@ -200,6 +207,9 @@
   padding: 14px 12px;
   border-bottom: 1px solid #edf0ec;
 }
+.notification-item-unread {
+  background: #f7faf7;
+}
 .notification-dot {
   width: 7px;
   height: 7px;
@@ -210,8 +220,21 @@
 .notification-dot.is-unread {
   background: var(--green);
 }
+.notification-dot-unread {
+  background: var(--green);
+}
 .notification-item strong {
   font-size: 12px;
+}
+.notification-title-link {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.notification-title-link:hover {
+  color: var(--green);
+  text-decoration: underline;
 }
 .notification-item p {
   margin: 5px 0 7px;
@@ -230,6 +253,217 @@
 }
 .mark-read:hover {
   text-decoration: underline;
+}
+.notification-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+}
+.all-notifications-link {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.all-notifications-link:hover {
+  text-decoration: underline;
+}
+.notification-page {
+  min-height: 100vh;
+  padding: 24px clamp(20px, 6vw, 88px) 72px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.notification-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.notification-page-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-weight: 750;
+  text-decoration: none;
+}
+.notification-page-brand .brand-symbol {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+}
+.notification-back-link {
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.notification-back-link:hover {
+  color: var(--green);
+}
+.notification-center {
+  max-width: 900px;
+  margin: 42px auto 0;
+}
+.notification-center-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.notification-center-heading h1 {
+  margin: 7px 0 8px;
+  font-size: clamp(28px, 4vw, 38px);
+  letter-spacing: -0.04em;
+}
+.notification-center-heading p:not(.eyebrow) {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.mark-all-read {
+  min-height: 40px;
+  padding: 0 15px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fff;
+  color: var(--green);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+.mark-all-read:hover {
+  border-color: var(--green);
+}
+.notification-filters {
+  display: flex;
+  gap: 22px;
+  margin-top: 28px;
+  border-bottom: 1px solid var(--line);
+}
+.notification-filter {
+  padding: 0 2px 12px;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.notification-filter-active {
+  border-color: var(--green);
+  color: var(--ink);
+  font-weight: 700;
+}
+.notification-center-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+.notification-card {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr);
+  gap: 13px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+}
+.notification-card-unread {
+  border-left: 3px solid var(--green);
+  background: #fbfdfb;
+}
+.notification-card-content {
+  min-width: 0;
+}
+.notification-card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.notification-card h2 {
+  margin: 9px 0 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.notification-description {
+  margin: 7px 0 0;
+  color: #505c54;
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+.notification-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 16px;
+}
+.notification-card-actions a,
+.notification-card-actions button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.notification-card-actions a:hover,
+.notification-card-actions button:hover {
+  text-decoration: underline;
+}
+.notification-center-state {
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  margin-top: 18px;
+  padding: 56px 22px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  text-align: center;
+}
+.notification-center-state strong {
+  font-size: 15px;
+}
+.notification-center-state p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.notification-empty-mark {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: #edf3ee;
+  color: var(--green);
+}
+.notification-pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 22px;
+}
+.notification-pagination a {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
 }
 .popover-footnote {
   padding: 7px 13px;
@@ -1069,6 +1303,16 @@
   .student-footer {
     margin-top: 55px;
   }
+  .notification-page {
+    padding-inline: 18px;
+  }
+  .notification-center-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .notification-card {
+    padding: 17px 15px;
+  }
 }
 @media (max-width: 420px) {
   .student-home {
@@ -1104,6 +1348,14 @@
   }
   .student-footer {
     flex-direction: column;
+  }
+  .notification-page-header {
+    padding-bottom: 17px;
+  }
+  .notification-card-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

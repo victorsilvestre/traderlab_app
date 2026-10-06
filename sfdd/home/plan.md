@@ -5,8 +5,10 @@
 Plano atualizado com as decisões de produto recebidas. A primeira entrega da
 home usou dados demonstrativos. A seção “Continue Onde Parou” agora lê os
 acessos reais do aluno pelo módulo `progress`; cursos e conteúdos são obtidos
-com validação de matrícula e publicação. Banners e notificações ainda usam
-comportamento demonstrativo nesta unidade.
+com validação de matrícula e publicação. A vitrine de banners lê até cinco
+registros publicados do banco. Notificações usam persistência, segmentação e
+estado individual de leitura; a criação/envio administrativo fica para uma
+unidade futura.
 
 ## Escopo e aderência ao MVP
 
@@ -18,10 +20,10 @@ retomada de estudo e cursos com acesso vigente.
 | --- | --- |
 | Menu e avatar | Incluídos. Usar identidade/perfil já autenticados. |
 | Pesquisar produtos, módulos e aulas | Incluído como pesquisa de cursos, módulos e aulas, usando o vocabulário do produto. Resultados só podem expor conteúdo publicado e autorizado ao aluno. |
-| Caixa de entrada e leitura de notificações | Incluídas no módulo `notification`, limitado a comunicações essenciais do MVP. |
-| Banner com até cinco comunicações | O carrossel atual usa três imagens demonstrativas (`estudo.svg`, `analise.svg`, `progresso.svg`) em `apps/web/public/banners/`, em um quadro responsivo de altura fixa por breakpoint e recorte `cover`. Cadastro e publicação persistidos ainda não existem. |
+| Caixa de entrada e leitura de notificações | Incluídas no módulo `notification`: mensagens gerais ou por curso, histórico, filtros e estado individual de leitura. Envio por e-mail e tela administrativa não fazem parte desta etapa. |
+| Banner com até cinco comunicações | O carrossel consulta `home_banners` e exibe até cinco registros publicados, usando as três imagens de exemplo em `apps/web/public/banners/`, em um quadro responsivo de altura fixa por breakpoint e recorte `cover`. |
 | “Continue Onde Parou” | Integrado ao módulo `progress`, para até três conteúdos distintos mais recentemente acessados, em ordem decrescente; links levam ao conteúdo real e o estado vazio orienta o aluno a iniciar os estudos. Não introduzir avaliação, anotação ou recomendação. |
-| “Meus Cursos” | Nesta etapa, exibir cursos demonstrativos adquiridos. Prever integração posterior com `payment`, `enrollment` e `access`; não simular autorização real nem declarar acesso validado. |
+| “Meus Cursos” | Consultar cursos publicados com matrícula ativa do aluno; a API calcula progresso e a home mostra estado vazio ou erro separado. |
 | Acessar Perfil | Link para `/profile`, cuja tela fica fora desta unidade e será implementada depois, conforme indicado na especificação. |
 | Sair da conta | Reutilizar o logout já implementado no módulo de autenticação. |
 
@@ -33,7 +35,7 @@ retomada de estudo e cursos com acesso vigente.
 - Usar Server Components como padrão e limitar Client Components às interações locais que precisam de estado ou eventos do navegador.
 - Manter todos os componentes em apps/web/components/, organizados somente por responsabilidade: authentication/, forms/, ui/ e navigation/. Não criar diretórios de componentes dentro de rotas ou pastas por página/funcionalidade.
 - Compor a home a partir de componentes globais de UI; controles do carrossel ficam em navigation/. Dados demonstrativos ficam em lib/home/ e estilos específicos da tela em CSS Module.
-- Usar exemplos locais para pesquisa, notificações, cursos e progresso nesta etapa; não apresentar esses exemplos como dados reais do aluno.
+- A pesquisa consulta o catálogo publicado e acessível pela API; notificações, cursos, banners e progresso usam consultas reais e autenticadas.
 - Reutilizar os componentes e funções de logout existentes.
 - Tratar o wireframe como referência de hierarquia e layout, não como dependência de APIs ou de dados reais.
 
@@ -87,7 +89,8 @@ sem concentrar consultas ou regras nos handlers:
 - `enrollment` e `access`: cursos aos quais o aluno tem direito vigente.
 - `progress`: últimos conteúdos acessados do próprio aluno.
 - `notification`: notificações do próprio aluno, contagem de não lidas e ação
-  para marcar como lida.
+  para marcar como lida/não lida e marcar todas como lidas; envio por e-mail e
+  tela de gestão administrativa ficam fora desta entrega.
 - `authentication`/`user`: perfil mínimo para o avatar e identificação visual;
   não implementar a tela de perfil nesta unidade.
 - `audit`: registrar operações importantes conforme as regras do módulo quando
@@ -97,20 +100,26 @@ Adicionar contratos neutros em `packages/contracts` apenas se web e API
 compartilharem os DTOs. DTOs não devem expor linhas Prisma/Supabase nem objetos
 do framework.
 
-## Contratos de leitura e comportamento esperado (futuro)
+## Contratos de leitura e comportamento
 
-Na entrega visual atual, nenhuma consulta de negócio nova é criada. As
-interações usam exemplos fixos no cliente e são explicitamente identificadas.
-Na integração futura, implementar casos de uso e rotas autenticadas nos módulos
-existentes:
+As consultas personalizadas são autenticadas pela API. Identidade e
+destinatários vêm do servidor, sem aceitar `userId` do navegador:
 
 - Consultar dados da página inicial do aluno: perfil mínimo, até cinco banners
   ativos (se a origem for aprovada), três itens recentes e cursos acessíveis.
 - Pesquisar cursos, módulos e aulas por texto em título/descrição, com
   correspondência parcial/palavras contidas. Definir limite, ordenação e
   comportamento para consulta vazia antes de codificar.
-- Consultar notificações próprias, não lidas e contagem de não lidas; marcar
-  notificação como lida validando propriedade no servidor.
+- Consultar histórico de notificações do usuário autenticado, com filtro de
+  não lidas, paginação e contagem total de não lidas.
+- Fixar destinatários no envio: avisos gerais alcançam os perfis existentes no
+  momento da publicação; avisos por curso alcançam alunos com matrícula ativa
+  nesse momento. A tabela de destinatários preserva essa fotografia, mesmo se
+  uma matrícula mudar depois.
+- Marcar uma notificação como lida/não lida e todas como lidas, sempre
+  confirmando na API que o usuário é destinatário.
+- Validar links opcionais: caminhos internos relativos permanecem na mesma aba;
+  URLs HTTP(S) externas abrem em nova aba com `noopener noreferrer`.
 - Consultar progresso recente próprio em ordem decrescente de acesso e cursos
   cujo acesso esteja vigente no momento da consulta.
 
@@ -120,11 +129,14 @@ ou chamada direta de API a partir de componentes visuais.
 
 ## Segurança e autorização
 
-- Exigir sessão válida na API para os dados personalizados desta página.
+- Exigir sessão válida na API para notificações. Usuários gerais podem acessar
+  sua caixa de entrada; conteúdo por curso exige que estejam entre os
+  destinatários fixados no envio.
 - Garantir que o contexto de usuário venha da identidade autenticada no servidor,
   nunca de um `userId` enviado pelo navegador.
-- Restringir progresso e notificações ao usuário autenticado; validar propriedade
-  também ao marcar uma notificação como lida.
+- Restringir progresso e notificações ao usuário autenticado; validar
+  destinatário também ao alterar leitura. Um identificador de outra pessoa não
+  deve revelar se a notificação existe.
 - Aplicar regra de matrícula/acesso vigente no servidor para cursos e conteúdos,
   inclusive nos resultados de pesquisa e na navegação ao destino.
 - Não revelar conteúdo em rascunho nem conteúdo de cursos sem autorização.
@@ -178,12 +190,14 @@ Decisões confirmadas pelo usuário:
 
 Limites da primeira entrega visual:
 
-- Pesquisa e notificações são demonstrações locais; busca não consulta catálogo
-  nem garante autorização. As opções clicadas abrem uma prévia de exemplo.
-- Cursos e progresso apresentados são conteúdo ilustrativo, não comprovam compra,
-  matrícula ou direito de acesso.
-- Os banners são SVG estáticos em `apps/web/public/banners/`, sem cadastro ou
-  integração com dados.
+- As notificações eram demonstrações locais; a seção “Notificações — entrega
+  funcional” abaixo descreve a evolução aprovada.
+- A pesquisa consulta cursos, módulos e aulas publicados em cursos com matrícula
+  ativa; abrir cada resultado continua sujeito à revalidação de acesso na API.
+- Cursos e progresso exibidos pela home são consultados com identidade e acesso
+  validados no servidor.
+- A home lê os banners publicados do banco; os três arquivos atuais são artes
+  demonstrativas referenciadas pelos registros iniciais.
 
 Antes da integração real, definir contratos e regras de `payment`, `enrollment`
 e `access`, inclusive concessões, convites e estados de assinatura.
@@ -203,6 +217,45 @@ e `access`, inclusive concessões, convites e estados de assinatura.
   destino futuro nesta entrega.
 - Busca deve ter limite de resultados e estados de teclado/acessibilidade, a
   definir antes da implementação interativa.
+
+## Notificações — entrega funcional
+
+- **Contrato da mensagem:** `id`, `title` (até 180 caracteres), `description`
+  (texto simples, até 3000 caracteres), `linkUrl` opcional (caminho interno ou
+  URL HTTP(S)), `audience` (`GENERAL` ou `COURSE`), `courseId` obrigatório apenas
+  para público de curso, `status` (`DRAFT`/`PUBLISHED`), `createdById`,
+  `updatedById`, `createdAt`, `updatedAt` e `publishedAt`.
+- **Destinatários e leitura:** tabela `notification_recipients` associa cada
+  mensagem ao usuário no envio/publicação, com `deliveredAt` e `readAt`. Geral
+  inclui perfis existentes no momento; curso inclui alunos com matrícula ativa
+  naquele curso. A leitura/não leitura é individual. A tela administrativa de
+  criação/envio será feita depois.
+- **API:** `GET /notifications` retorna lista paginada, filtro `all`/`unread` e
+  contagem não lida. `PATCH /notifications/:id/read-state` muda apenas o estado
+  do destinatário autenticado. `POST /notifications/read-all` marca sua caixa
+  como lida. A API aceita qualquer usuário autenticado e nunca recebe o
+  identificador do usuário nos parâmetros.
+- **Home e sino:** mostrar até cinco mensagens recentes em um popover de 440px,
+  com título, descrição e ação de leitura; indicar a contagem não lida e
+  fornecer acesso ao histórico completo. Falha na contagem deve ser discreta e
+  não bloquear o restante da tela.
+- **Interação do sino:** fechar o popover ao clicar fora, pressionar Escape ou
+  navegar por um link do próprio menu.
+- **Histórico:** rota `/notifications`, acessível a qualquer usuário
+  autenticado, ordenação mais recente primeiro, filtros Todas/Não lidas,
+  paginação de 20 itens, ações de marcar lida/não lida e marcar todas como
+  lidas. Em cada card, a ação de leitura fica à esquerda e o link opcional à
+  direita. O usuário não exclui avisos nesta etapa.
+- **Links:** caminhos relativos internos abrem na mesma aba; externos aceitam
+  apenas HTTP(S) e abrem em nova aba com `noopener noreferrer`. Nenhuma
+  notificação exige link.
+- **Persistência de exemplos:** criar mensagens gerais para todos os perfis
+  existentes, incluindo um aviso demonstrativo da Black Friday TraderLab, e uma
+  mensagem vinculada ao primeiro curso publicado com alunos matriculados
+  ativamente, associando os destinatários na migração.
+- **Escopo excluído:** envio por e-mail, agendamento e interface de gestão no
+  sistema administrativo. O estado publicado e o modelo de autoria deixam essa
+  futura gestão preparada sem criar rotas de escrita agora.
 
 ## Validação
 

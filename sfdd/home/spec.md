@@ -14,10 +14,18 @@ Pesquisa
 - O usuário poderá clicar e visualizar o produto, módulo ou aula pesquisado;
 
 Notificação
+- O menu do sino deverá fechar ao clicar fora dele, pressionar Escape ou navegar por um link do próprio menu;
 - O usuário deverá visualizar o símbolo de notificação;
 - O usuário deverá visualizar a quantidade de notificações não lidas;
-- O usuário poderá clicar na notificação e acessar todas as notificações recebidas;
-- O usuário poderá sinalizar que uma notificação foi lida;
+- O usuário poderá visualizar no sino as notificações recentes, com largura e espaço suficientes para ler título e descrição;
+- O usuário poderá acessar uma página com todas as notificações recebidas, ordenadas das mais recentes para as mais antigas;
+- A página deverá permitir filtrar notificações não lidas, marcar uma notificação como lida ou não lida e marcar todas como lidas; não haverá exclusão pelo usuário;
+- Em cada card, a ação de marcar como lida/não lida ficará à esquerda e o link opcional ficará à direita;
+- Notificações serão exibidas somente dentro da plataforma nesta etapa;
+- Uma notificação poderá ser geral, destinada a todos os usuários, ou vinculada a um curso e destinada aos alunos com matrícula ativa no momento do envio;
+- Cada usuário deverá ter seu próprio estado de leitura. A leitura de uma pessoa não deverá alterar a notificação para os demais destinatários;
+- O conteúdo da notificação deverá ter título, descrição em texto simples e link opcional. Links internos abrirão na mesma aba; links externos HTTP(S) abrirão em nova aba;
+- A gestão de criação e envio pelo administrador/mentor ficará para o sistema administrativo, a ser especificado em breve;
 
 Profile
 - O usário deverá visualizar a imagem de avatar da sua conta;

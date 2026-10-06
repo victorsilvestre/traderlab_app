@@ -98,16 +98,16 @@
 - [x] Preservar a sessão, o logout, as rotas de autenticação, o comportamento demonstrativo e alterações preexistentes.
 ## Integrações futuras (não incluídas na entrega visual)
 
-- [ ] Substituir exemplos de busca pela consulta autenticada a cursos, módulos e
+- [x] Substituir exemplos de busca pela consulta autenticada a cursos, módulos e
       aulas publicados e acessíveis.
-- [ ] Substituir notificações locais por consultas e atualização persistidas no
+- [x] Substituir notificações locais por consultas e atualização persistidas no
       módulo `notification`.
-- [ ] Substituir cursos demonstrativos pela lista de cursos realmente adquiridos,
+- [x] Substituir cursos demonstrativos pela lista de cursos realmente adquiridos,
       confirmada por `payment`, `enrollment` e `access` no servidor.
 - [x] Substituir progresso local demonstrativo pelo histórico real do módulo
       `progress`.
-- [ ] Conectar banners a uma futura funcionalidade de cadastro/publicação, depois
-      de definir papéis, validade e regras editoriais.
+- [x] Conectar a vitrine à tabela `home_banners`, exibindo os registros
+      publicados e respeitando a ordem e o limite definidos.
 
 ## Testes e validação
 
@@ -186,3 +186,42 @@
       ordenação e publicação; upload de imagens não faz parte desta etapa.
 - [ ] Validar o recorte em diferentes proporções/tamanhos de viewport, a abertura
       em nova aba, URLs não permitidas, persistência e limites de publicação.
+
+## Notificações — entrega funcional autorizada
+
+- [x] Definir canal apenas na plataforma, segmentação geral/curso, links
+      opcionais e gestão pelo usuário sem exclusão.
+- [x] Definir destinatários como fotografia no envio: todos os perfis existentes
+      para avisos gerais e alunos com matrícula ativa para avisos do curso.
+- [x] Atualizar especificação, plano e wireframe para incluir sino expandido,
+      histórico completo e estados de leitura individuais.
+- [x] Criar modelos e migração para mensagens e destinatários com `readAt`
+      individual; sem criar tabela de e-mail nem rotina de agendamento.
+- [x] Popular mensagens demonstrativas gerais e por curso, associando os
+      destinatários disponíveis na migração.
+- [x] Fechar o menu do sino ao clicar fora, pressionar Escape ou navegar por
+      um link do próprio menu.
+- [x] Adicionar um aviso geral demonstrativo da Black Friday TraderLab para os
+      perfis existentes, sem especificar condições comerciais não definidas.
+- [x] Criar DTO compartilhado com título, descrição, link opcional, público,
+      curso relacionado, data de envio e estado de leitura pessoal.
+- [x] Implementar consulta autenticada paginada, filtro de não lidas e contagem
+      não lida no módulo `notification`.
+- [x] Implementar mudança individual lida/não lida e ação de marcar todas como
+      lidas, validando destinatário na API.
+- [x] Conectar o sino da home e dos cabeçalhos de curso aos cinco avisos mais
+      recentes e ampliar seu popover para leitura confortável.
+- [x] Criar `/notifications` para qualquer perfil autenticado, com filtros,
+      paginação, links e ações individuais/coletivas de leitura.
+- [x] Validar caminhos internos e links HTTP(S) externos antes de renderizar;
+      abrir somente destinos externos em nova aba com `noopener noreferrer`.
+- [x] Aplicar as migrações de notificações e campos de auditoria ao banco
+      Supabase configurado, com exemplos e destinatários iniciais.
+- [x] Executar typecheck da API, da web e dos contratos compartilhados.
+- [ ] Validar visualmente menu e histórico em larguras desktop e mobile.
+- [ ] Validar isolamento por usuário, público geral/curso e alteração de leitura
+      para destinatário próprio por testes de integração.
+- [ ] Implementar em unidade futura a criação/edição/publicação e segmentação
+      no sistema administrativo, incluindo geração dos destinatários no envio.
+- [ ] Definir a permissão de mentor para enviar aviso apenas aos cursos sob sua
+      responsabilidade e registrar a operação em auditoria na futura gestão.

@@ -19,6 +19,9 @@ import { progressRoutes } from './modules/progress/presentation/progress.routes.
 import { HomeBannerService } from './modules/notification/application/HomeBannerService.js';
 import { PrismaHomeBannerRepository } from './modules/notification/infrastructure/PrismaHomeBannerRepository.js';
 import { homeBannerRoutes } from './modules/notification/presentation/homeBanner.routes.js';
+import { NotificationService } from './modules/notification/application/NotificationService.js';
+import { PrismaNotificationRepository } from './modules/notification/infrastructure/PrismaNotificationRepository.js';
+import { notificationRoutes } from './modules/notification/presentation/notification.routes.js';
 
 const configuredWebAppUrl = process.env.WEB_APP_URL;
 if (!configuredWebAppUrl) {
@@ -39,6 +42,9 @@ export function createApp() {
   const homeBannerService = new HomeBannerService(
     new PrismaHomeBannerRepository(),
   );
+  const notificationService = new NotificationService(
+    new PrismaNotificationRepository(),
+  );
   const courseService = new CourseService(
     new PrismaCourseRepository(),
     new RequireCourseAccess(new PrismaCourseAccessRepository()),
@@ -48,7 +54,7 @@ export function createApp() {
 
   void app.register(cors, {
     origin: webAppUrl,
-    methods: ['GET', 'POST', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['authorization', 'content-type'],
   });
   void app.register(authenticationRoutes, { service });
@@ -63,6 +69,10 @@ export function createApp() {
   void app.register(homeBannerRoutes, {
     authentication: service,
     service: homeBannerService,
+  });
+  void app.register(notificationRoutes, {
+    authentication: service,
+    service: notificationService,
   });
 
   app.get('/health', async () => ({ status: 'ok' as const }));

@@ -8,6 +8,7 @@ import { getSignInPath } from '../../../lib/authentication/returnPath';
 import { getStudentCourses } from '../../../lib/courses/courseApi';
 import { getStudentRecentContents } from '../../../lib/progress/progressApi';
 import { getHomeBanners } from '../../../lib/home/homeBannerApi';
+import { getNotifications } from '../../../lib/notifications/notificationApi';
 
 function isUnauthorized(error: unknown): boolean {
   return (
@@ -28,15 +29,22 @@ export default async function StudentHomePage() {
 
   if (!accessToken) redirect(signInPath);
 
-  const [coursesResult, recentResult, bannersResult] = await Promise.allSettled([
-    getStudentCourses(accessToken),
-    getStudentRecentContents(accessToken),
-    getHomeBanners(accessToken),
-  ]);
+  const [coursesResult, recentResult, bannersResult, notificationsResult] =
+    await Promise.allSettled([
+      getStudentCourses(accessToken),
+      getStudentRecentContents(accessToken),
+      getHomeBanners(accessToken),
+      getNotifications(accessToken, { limit: 5 }),
+    ]);
   if (
-    (coursesResult.status === 'rejected' && isUnauthorized(coursesResult.reason)) ||
-    (recentResult.status === 'rejected' && isUnauthorized(recentResult.reason)) ||
-    (bannersResult.status === 'rejected' && isUnauthorized(bannersResult.reason))
+    (coursesResult.status === 'rejected' &&
+      isUnauthorized(coursesResult.reason)) ||
+    (recentResult.status === 'rejected' &&
+      isUnauthorized(recentResult.reason)) ||
+    (bannersResult.status === 'rejected' &&
+      isUnauthorized(bannersResult.reason)) ||
+    (notificationsResult.status === 'rejected' &&
+      isUnauthorized(notificationsResult.reason))
   ) {
     redirect(signInPath);
   }
@@ -54,6 +62,11 @@ export default async function StudentHomePage() {
       recentContents={recentContents}
       recentContentsUnavailable={recentResult.status === 'rejected'}
       banners={bannersResult.status === 'fulfilled' ? bannersResult.value : []}
+      notificationInbox={
+        notificationsResult.status === 'fulfilled'
+          ? notificationsResult.value
+          : null
+      }
     />
   );
 }

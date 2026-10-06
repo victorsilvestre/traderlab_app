@@ -1,5 +1,11 @@
 import { homeClass } from './homeStyles';
-import type { CourseSummaryDto, HomeBannerDto, RecentContentDto, UserProfileDto } from '@traderlab/contracts';
+import type {
+  CourseSummaryDto,
+  HomeBannerDto,
+  NotificationListDto,
+  RecentContentDto,
+  UserProfileDto,
+} from '@traderlab/contracts';
 import { BannerCarousel } from './BannerCarousel';
 import { CourseList } from './CourseList';
 import { RecentContentList } from './RecentContentList';
@@ -12,6 +18,7 @@ export function StudentHome({
   recentContents,
   recentContentsUnavailable,
   banners,
+  notificationInbox,
 }: {
   profile: UserProfileDto;
   courses: CourseSummaryDto[];
@@ -19,12 +26,16 @@ export function StudentHome({
   recentContents: RecentContentDto[];
   recentContentsUnavailable: boolean;
   banners: HomeBannerDto[];
+  notificationInbox: NotificationListDto | null;
 }) {
   const firstName = profile.name?.trim().split(/\s+/)[0] || 'aluno';
 
   return (
     <main className={homeClass('student-home')}>
-      <StudentHeader name={profile.name} />
+      <StudentHeader
+        name={profile.name}
+        notificationInbox={notificationInbox}
+      />
       <div className={homeClass('student-content')}>
         <div className={homeClass('student-greeting')}>
           <div>
