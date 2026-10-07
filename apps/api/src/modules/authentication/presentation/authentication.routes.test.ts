@@ -8,10 +8,12 @@ let app: ReturnType<typeof Fastify>;
 const service = {
   signUp: vi.fn(async (_input: unknown) => ({ message: 'confirmation sent' })),
   signIn: vi.fn(async () => ({ session: {}, user: {} })),
+  signInForWorkspace: vi.fn(async () => ({ session: {}, user: {} })),
   requestPasswordRecovery: vi.fn(async () => ({ message: 'recovery sent' })),
   resendConfirmation: vi.fn(async () => ({ message: 'confirmation sent' })),
   resetPassword: vi.fn(async () => ({ message: 'password updated' })),
   getCurrentUser: vi.fn(async () => ({ id: 'user-1' })),
+  getCurrentWorkspaceUser: vi.fn(async () => ({ id: 'user-1', role: 'mentor' })),
 };
 
 afterEach(() => vi.clearAllMocks());
@@ -91,10 +93,31 @@ describe('authentication routes', () => {
     expect(confirmation.statusCode).toBe(202);
   });
 
+  it('routes workspace entry separately and rejects arbitrary email destinations', async () => {
+    const entry = await app.inject({
+      method: 'POST',
+      url: '/authentication/workspace/sign-in',
+      payload: { email: 'mentor@example.com', password: 'secret123' },
+    });
+    const invalidDestination = await app.inject({
+      method: 'POST',
+      url: '/authentication/password-recovery',
+      payload: { email: 'mentor@example.com', destination: 'https://evil.example' },
+    });
+    expect(entry.statusCode).toBe(200);
+    expect(service.signInForWorkspace).toHaveBeenCalledWith('mentor@example.com', 'secret123');
+    expect(invalidDestination.statusCode).toBe(400);
+    expect(service.requestPasswordRecovery).not.toHaveBeenCalled();
+  });
+
   it('requires a bearer token for profile and password-reset routes', async () => {
     const profile = await app.inject({
       method: 'GET',
       url: '/authentication/me',
+    });
+    const workspaceProfile = await app.inject({
+      method: 'GET',
+      url: '/authentication/workspace/me',
     });
     const reset = await app.inject({
       method: 'POST',
@@ -103,8 +126,10 @@ describe('authentication routes', () => {
     });
 
     expect(profile.statusCode).toBe(401);
+    expect(workspaceProfile.statusCode).toBe(401);
     expect(reset.statusCode).toBe(401);
     expect(service.getCurrentUser).not.toHaveBeenCalled();
+    expect(service.getCurrentWorkspaceUser).not.toHaveBeenCalled();
     expect(service.resetPassword).not.toHaveBeenCalled();
   });
 });

@@ -12,7 +12,11 @@ import { CourseService } from './modules/course/application/CourseService.js';
 import { CourseError } from './modules/course/domain/CourseError.js';
 import { PrismaCourseRepository } from './modules/course/infrastructure/PrismaCourseRepository.js';
 import { SupabaseCourseMaterialStorage } from './modules/course/infrastructure/SupabaseCourseMaterialStorage.js';
+import { SupabaseCourseImageStorage } from './modules/course/infrastructure/SupabaseCourseImageStorage.js';
 import { courseRoutes } from './modules/course/presentation/course.routes.js';
+import { CourseManagementService } from './modules/course/application/CourseManagementService.js';
+import { PrismaCourseManagementRepository } from './modules/course/infrastructure/PrismaCourseManagementRepository.js';
+import { courseManagementRoutes } from './modules/course/presentation/courseManagement.routes.js';
 import { ContentProgressService } from './modules/progress/application/ContentProgressService.js';
 import { PrismaContentProgressRepository } from './modules/progress/infrastructure/PrismaContentProgressRepository.js';
 import { progressRoutes } from './modules/progress/presentation/progress.routes.js';
@@ -22,12 +26,18 @@ import { homeBannerRoutes } from './modules/notification/presentation/homeBanner
 import { NotificationService } from './modules/notification/application/NotificationService.js';
 import { PrismaNotificationRepository } from './modules/notification/infrastructure/PrismaNotificationRepository.js';
 import { notificationRoutes } from './modules/notification/presentation/notification.routes.js';
+import { UserService } from './modules/user/application/UserService.js';
+import { PrismaUserProfileRepository as UserProfileEditRepository } from './modules/user/infrastructure/PrismaUserProfileRepository.js';
+import { SupabaseProfileAvatarStorage } from './modules/user/infrastructure/SupabaseProfileAvatarStorage.js';
+import { userRoutes } from './modules/user/presentation/user.routes.js';
+import { UserError } from './modules/user/domain/UserError.js';
 
 const configuredWebAppUrl = process.env.WEB_APP_URL;
 if (!configuredWebAppUrl) {
   throw new Error('WEB_APP_URL is required to start the API.');
 }
 const webAppUrl = configuredWebAppUrl.replace(/\/$/, '');
+const adminAppUrl = process.env.ADMIN_APP_URL?.replace(/\/$/, '');
 
 export function createApp() {
   const app = Fastify({ logger: true });
@@ -35,6 +45,7 @@ export function createApp() {
     new SupabaseAuthProvider(),
     new PrismaUserProfileRepository(),
     webAppUrl,
+    adminAppUrl,
   );
   const progressService = new ContentProgressService(
     new PrismaContentProgressRepository(),
@@ -45,15 +56,24 @@ export function createApp() {
   const notificationService = new NotificationService(
     new PrismaNotificationRepository(),
   );
+  const userService = new UserService(
+    new UserProfileEditRepository(),
+    new SupabaseProfileAvatarStorage(),
+  );
   const courseService = new CourseService(
     new PrismaCourseRepository(),
     new RequireCourseAccess(new PrismaCourseAccessRepository()),
     progressService,
     new SupabaseCourseMaterialStorage(),
+    new SupabaseCourseImageStorage(),
+  );
+  const courseManagementService = new CourseManagementService(
+    new PrismaCourseManagementRepository(),
+    new SupabaseCourseImageStorage(),
   );
 
   void app.register(cors, {
-    origin: webAppUrl,
+    origin: adminAppUrl ? [webAppUrl, adminAppUrl] : webAppUrl,
     methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['authorization', 'content-type'],
   });
@@ -61,6 +81,10 @@ export function createApp() {
   void app.register(courseRoutes, {
     authentication: service,
     service: courseService,
+  });
+  void app.register(courseManagementRoutes, {
+    authentication: service,
+    service: courseManagementService,
   });
   void app.register(progressRoutes, {
     authentication: service,
@@ -74,6 +98,7 @@ export function createApp() {
     authentication: service,
     service: notificationService,
   });
+  void app.register(userRoutes, { authentication: service, service: userService });
 
   app.get('/health', async () => ({ status: 'ok' as const }));
 
@@ -101,6 +126,9 @@ export function createApp() {
           'Authentication provider request failed',
         );
       }
+      return reply.code(error.statusCode).send({ message: error.message });
+    }
+    if (error instanceof UserError) {
       return reply.code(error.statusCode).send({ message: error.message });
     }
     if (error instanceof CourseError) {

@@ -65,14 +65,17 @@
       dados independentes que carregaram com sucesso.
 
 ## Web — página inicial e menu
+- [x] Exibir três cursos por linha na grade de Meus Cursos em telas largas, com adaptação para duas e uma coluna em telas menores.
+- [x] Restaurar explicitamente o fundo verde do símbolo T no cabeçalho do aluno.
+- [x] Ampliar o painel e os itens de resultado da busca global, preservando o uso em telas menores.
 
 - [x] Implementar a página autenticada demonstrativa do aluno na rota atual,
       preservando
       a página pública de entrada e os redirecionamentos por papel existentes.
 - [x] Exibir logo/link para a home, pesquisa, notificações e avatar no cabeçalho.
 - [x] Implementar menu do avatar com “Acessar Perfil” e logout, reutilizando o
-      logout existente; manter `/profile` como destino futuro conforme a
-      especificação.
+      logout existente; a página `/profile` fica especificada nas tarefas de
+      perfil do usuário abaixo.
 - [x] Implementar expansão da pesquisa, até cinco sugestões locais, estado sem
       resultados, atalho `/` e fechamento por Escape; identificar dados como
       demonstrativos e abrir prévia local ao selecionar um resultado.
@@ -119,8 +122,8 @@
       estados de assinatura definidos.
 - [ ] Testar integração/interface: menu, abertura da pesquisa, sugestões,
       navegação, leitura de notificação, banners aprovados e estados vazios/erro.
-- [ ] Validar que mentor/administrador seguem para o workspace e não recebem
-      permissões de aluno por esta página.
+- [ ] Validar que aluno, mentor e administrador acessam a home e os próprios cursos, sem obter acesso a cursos sem matrícula ativa.
+
 - [ ] Validar responsividade e navegação por teclado/leitor de tela nos controles
       interativos.
 - [ ] Executar typecheck, lint, testes e build nos pacotes afetados.
@@ -225,3 +228,49 @@
       no sistema administrativo, incluindo geração dos destinatários no envio.
 - [ ] Definir a permissão de mentor para enviar aviso apenas aos cursos sob sua
       responsabilidade e registrar a operação em auditoria na futura gestão.
+
+## Perfil do usuário — visualização e edição
+
+- [x] Ler a especificação existente sem alterar seu conteúdo e registrar no plano o menu de conta por hover/clique, a página completa /profile e o e-mail somente leitura.
+- [x] Atualizar o wireframe para incluir o menu da conta e a tela de perfil com edição de nome/telefone e avatar.
+- [x] Criar DTO de perfil detalhado com nome, telefone, e-mail somente leitura, avatar e papel, sem expor identificadores internos de armazenamento.
+- [x] Criar migração para persistir a referência do avatar no perfil e aplicá-la ao Supabase.
+- [x] Provisionar bucket privado traderlab-profile-avatars; aceitar JPEG/PNG/WebP até 5 MB.
+- [x] Implementar no módulo user a consulta e a atualização autenticada de nome/telefone e avatar do próprio usuário.
+- [x] Implementar emissão de upload autorizado, validação do arquivo e persistência do caminho do avatar no perfil.
+- [x] Implementar /profile como página completa, protegida para usuário autenticado e acessível diretamente e pelo menu do avatar.
+- [x] Reutilizar o cabeçalho completo da aplicação em home, /profile e /notifications.
+- [x] Fazer o avatar navegar diretamente para /profile sem acrescentar símbolos visuais ao lado da imagem; abrir as opções da conta por hover ou foco de teclado.
+- [x] Fechar o menu ao clicar fora e disponibilizar “Acessar Perfil” e logout nas opções da conta.
+- [x] Exibir o avatar persistido nos locais da conta; manter as iniciais como fallback sem imagem.
+- [x] Exibir o e-mail em campo travado com indicação discreta de que não pode ser alterado.
+- [x] Exibir o telefone antes do e-mail e aplicar máscara brasileira para números com DDD.
+- [x] Exibir estados de envio, sucesso e erro ao salvar; preservar os dados já preenchidos quando ocorrer uma falha.
+- [ ] Validar leitura e atualização do próprio perfil para todos os papéis e rejeitar qualquer tentativa de acessar ou alterar perfil alheio.
+- [ ] Validar upload, preview, armazenamento, exibição, fallback de iniciais, responsividade e navegação por teclado.
+- [x] Executar typecheck da API e da web após a implementação.
+
+## Acesso à aprendizagem por mentor e administrador
+
+- [x] Encaminhar todos os perfis autenticados da entrada da plataforma para `/home`.
+- [x] Remover a restrição de papel nas páginas de home, curso e conteúdo da web.
+- [x] Permitir todos os perfis autenticados nas rotas de leitura e interação de curso, progresso e banners da API, preservando matrícula e publicação.
+- [x] Fazer os links de retorno do perfil e das notificações apontarem para a home da plataforma.
+- [ ] Validar manualmente a navegação de mentor e administrador e os estados de curso com e sem matrícula.
+
+## Cache das capas de curso
+
+- [x] Reutilizar por caminho as URLs assinadas de leitura do bucket privado,
+      renovar com margem antes da expiração e compartilhar geração concorrente.
+- [x] Limitar o cache em memória da API e documentar seu alcance por processo.
+- [x] Definir cache de uma hora em uploads novos e reduzir a qualidade da capa
+      otimizada para 90.
+- [ ] Validar no navegador retorno à home após abrir um curso e conferir o
+      reaproveitamento da imagem e sua nitidez em desktop e mobile.
+
+## Ampliação aprovada do padrão de imagens
+
+- [x] Aplicar o componente de imagem responsiva também ao detalhe do curso e aos módulos.
+- [x] Registrar que o cache do adaptador atende imagens de cursos, módulos e conteúdos.
+- [ ] Validar visualmente detalhe do curso e módulos em desktop e mobile.
+- [ ] Usar o mesmo componente quando houver uma área visual para imagem de conteúdo.

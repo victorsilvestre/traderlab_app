@@ -2,7 +2,6 @@ import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type { AuthenticationService } from '../../authentication/application/AuthenticationService.js';
 import { AuthenticationError } from '../../authentication/domain/AuthenticationError.js';
 import type { CourseService } from '../application/CourseService.js';
-import { CourseError } from '../domain/CourseError.js';
 
 type CourseParams = { courseId: number };
 type ContentParams = { courseId: number; contentId: number };
@@ -18,14 +17,11 @@ function accessToken(request: FastifyRequest): string {
   return header.slice('Bearer '.length);
 }
 
-async function requireStudent(
+async function requireLearner(
   request: FastifyRequest,
   authentication: AuthenticationService,
 ): Promise<string> {
   const profile = await authentication.getCurrentUser(accessToken(request));
-  if (profile.role !== 'student') {
-    throw new CourseError('Esta área é exclusiva para alunos.', 403);
-  }
   return profile.id;
 }
 
@@ -65,7 +61,7 @@ export async function courseRoutes(
   },
 ): Promise<void> {
   app.get('/courses', async (request) => {
-    const studentId = await requireStudent(request, options.authentication);
+    const studentId = await requireLearner(request, options.authentication);
     return options.service.listForStudent(studentId);
   });
 
@@ -81,7 +77,7 @@ export async function courseRoutes(
       },
     },
     async (request) => {
-      const studentId = await requireStudent(request, options.authentication);
+      const studentId = await requireLearner(request, options.authentication);
       return options.service.searchAccessibleCatalog(
         studentId,
         request.query.query ?? '',
@@ -93,7 +89,7 @@ export async function courseRoutes(
     '/courses/:courseId',
     { schema: { params: courseParamsSchema } },
     async (request) => {
-      const studentId = await requireStudent(request, options.authentication);
+      const studentId = await requireLearner(request, options.authentication);
       return options.service.getCourse(studentId, request.params.courseId);
     },
   );
@@ -111,7 +107,7 @@ export async function courseRoutes(
       },
     },
     async (request) => {
-      const studentId = await requireStudent(request, options.authentication);
+      const studentId = await requireLearner(request, options.authentication);
       return options.service.searchCourse(
         studentId,
         request.params.courseId,
@@ -124,7 +120,7 @@ export async function courseRoutes(
     '/courses/:courseId/contents/:contentId/open',
     { schema: { params: contentParamsSchema } },
     async (request) => {
-      const studentId = await requireStudent(request, options.authentication);
+      const studentId = await requireLearner(request, options.authentication);
       return options.service.openContent(
         studentId,
         request.params.courseId,
@@ -137,7 +133,7 @@ export async function courseRoutes(
     '/courses/:courseId/contents/:contentId/completion',
     { schema: { params: contentParamsSchema } },
     async (request) => {
-      const studentId = await requireStudent(request, options.authentication);
+      const studentId = await requireLearner(request, options.authentication);
       return options.service.completeContent(
         studentId,
         request.params.courseId,
@@ -150,7 +146,7 @@ export async function courseRoutes(
     '/courses/:courseId/contents/:contentId/materials/:materialId/download',
     { schema: { params: materialParamsSchema } },
     async (request, reply) => {
-      const studentId = await requireStudent(request, options.authentication);
+      const studentId = await requireLearner(request, options.authentication);
       const material = await options.service.downloadMaterial(
         studentId,
         request.params.courseId,

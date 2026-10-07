@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import { CourseImage } from './CourseImage';
 import type {
   CourseDetailDto,
-  UserProfileDto,
+  UserProfileDetailsDto,
 } from '@traderlab/contracts';
 import { CourseBreadcrumbs } from '../navigation/CourseBreadcrumbs';
 import { CourseModuleExplorer } from './CourseModuleExplorer';
@@ -13,7 +14,7 @@ export function CourseDetail({
   profile,
   course,
 }: {
-  profile: UserProfileDto;
+  profile: UserProfileDetailsDto;
   course: CourseDetailDto;
 }) {
   const resumeContent = course.lastAccessedContent;
@@ -26,7 +27,7 @@ export function CourseDetail({
 
   return (
     <main className={styles.page}>
-      <StudentHeader name={profile.name} />
+      <StudentHeader name={profile.name} avatarUrl={profile.avatarUrl} role={profile.role} />
       <div className={styles.container}>
         <CourseBreadcrumbs courseId={course.id} courseTitle={course.title} />
         <Link className={styles.lessonBackLink} href="/home#courses-title">
@@ -38,12 +39,18 @@ export function CourseDetail({
               className={styles.courseCover}
               href={firstContentHref}
               aria-label={`Abrir o primeiro conteúdo do curso ${course.title}`}
-              style={
-                course.coverImageUrl
-                  ? { backgroundImage: `url(${course.coverImageUrl})` }
-                  : undefined
-              }
+              style={course.coverImageUrl && !course.coverImageUrl.includes('/storage/v1/object/sign/traderlab-course-images/')
+                ? { backgroundImage: `url(${course.coverImageUrl})` }
+                : undefined}
             >
+              {course.coverImageUrl && course.coverImageUrl.includes('/storage/v1/object/sign/traderlab-course-images/') && (
+                <CourseImage
+                  className={styles.courseCoverImage ?? ''}
+                  src={course.coverImageUrl!}
+                  alt=""
+                  sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1220px) 40vw, 520px"
+                />
+              )}
               {!course.coverImageUrl && <span aria-hidden="true">T</span>}
             </Link>
           ) : (
@@ -53,12 +60,18 @@ export function CourseDetail({
               aria-label={
                 course.coverImageUrl ? `Capa do curso ${course.title}` : undefined
               }
-              style={
-                course.coverImageUrl
-                  ? { backgroundImage: `url(${course.coverImageUrl})` }
-                  : undefined
-              }
+              style={course.coverImageUrl && !course.coverImageUrl.includes('/storage/v1/object/sign/traderlab-course-images/')
+                ? { backgroundImage: `url(${course.coverImageUrl})` }
+                : undefined}
             >
+              {course.coverImageUrl && course.coverImageUrl.includes('/storage/v1/object/sign/traderlab-course-images/') && (
+                <CourseImage
+                  className={styles.courseCoverImage ?? ''}
+                  src={course.coverImageUrl!}
+                  alt={`Capa do curso ${course.title}`}
+                  sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1220px) 40vw, 520px"
+                />
+              )}
               {!course.coverImageUrl && <span aria-hidden="true">T</span>}
             </div>
           )}
@@ -140,10 +153,10 @@ export function CourseDetail({
   );
 }
 
-export function CourseLoadError({ profile }: { profile: UserProfileDto }) {
+export function CourseLoadError({ profile }: { profile: UserProfileDetailsDto }) {
   return (
     <main className={styles.page}>
-      <StudentHeader name={profile.name} />
+      <StudentHeader name={profile.name} avatarUrl={profile.avatarUrl} role={profile.role} />
       <div className={styles.container}>
         <Link href="/home" className={styles.backLink}>
           ← Voltar ao início

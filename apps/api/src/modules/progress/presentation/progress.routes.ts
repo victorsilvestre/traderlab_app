@@ -22,9 +22,6 @@ export async function progressRoutes(
     const profile = await options.authentication.getCurrentUser(
       accessToken(request),
     );
-    if (profile.role !== 'student') {
-      throw new AuthenticationError('Esta área é exclusiva para alunos.', 403);
-    }
     return options.service.listRecentForStudent(profile.id);
   });
 }

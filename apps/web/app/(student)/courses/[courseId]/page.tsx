@@ -32,7 +32,6 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
   if (!authenticated) redirect(signInPath);
   if (!profile) return <StudentSessionUnavailable returnTo={returnTo} />;
-  if (profile.role !== 'student') redirect('/');
 
   const accessToken = await getCurrentAccessToken();
   if (!accessToken) redirect(signInPath);

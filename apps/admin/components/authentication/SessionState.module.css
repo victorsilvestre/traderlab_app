@@ -1,0 +1,38 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.card {
+  width: min(100%, 500px);
+  padding: 36px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.card h1 {
+  font-size: 29px;
+  line-height: 1.15;
+}
+.card p {
+  line-height: 1.5;
+  color: var(--muted);
+}
+.card a,
+.card button {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 11px 15px;
+  background: var(--green);
+  color: white;
+  border: 1px solid var(--green);
+  border-radius: 6px;
+  text-decoration: none;
+}

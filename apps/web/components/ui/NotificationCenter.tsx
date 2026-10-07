@@ -1,39 +1,50 @@
 import Link from 'next/link';
-import type { NotificationListDto } from '@traderlab/contracts';
+import type {
+  NotificationListDto,
+  UserProfileDetailsDto,
+} from '@traderlab/contracts';
 import {
   markAllNotificationsReadAction,
   updateNotificationReadAction,
 } from '../../lib/notifications/notificationActions';
 import { getSafeNotificationLink } from '../../lib/notifications/notificationLink';
 import { homeClass } from './homeStyles';
+import { StudentHeader } from './StudentHeader';
 
 export function NotificationCenter({
   inbox,
   filter,
   offset,
   unavailable,
+  profile,
 }: {
   inbox: NotificationListDto | null;
   filter: 'all' | 'unread';
   offset: number;
   unavailable: boolean;
+  profile: UserProfileDetailsDto | null;
 }) {
   const items = inbox?.items ?? [];
 
   return (
-    <main className={homeClass('notification-page')}>
-      <header className={homeClass('notification-page-header')}>
-        <Link className={homeClass('notification-page-brand')} href="/">
-          <span className={homeClass('brand-symbol')} aria-hidden="true">
-            T
-          </span>
-          <span>TraderLab</span>
-        </Link>
-        <Link className={homeClass('notification-back-link')} href="/">
-          ← Voltar
-        </Link>
-      </header>
-
+    <main className={homeClass('student-home')}>
+      {profile ? (
+        <StudentHeader
+          name={profile.name}
+          avatarUrl={profile.avatarUrl}
+          role={profile.role}
+          homeHref="/home"
+        />
+      ) : (
+        <header className={homeClass('student-header')}>
+          <Link className={homeClass('brand-mark')} href="/">
+            <span className={homeClass('brand-symbol')} aria-hidden="true">
+              T
+            </span>
+            <span>TraderLab</span>
+          </Link>
+        </header>
+      )}
       <section
         className={homeClass('notification-center')}
         aria-labelledby="notification-title"

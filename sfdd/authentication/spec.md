@@ -1,5 +1,14 @@
 # Autenticação do usuário — Especificação
 
+## Evolução: aplicação administrativa
+
+O fluxo já entregue nesta unidade continua sendo a autenticação pública da
+plataforma. A entrada de mentor e administrador no endereço separado
+`admin.traderbrunoborges.com.br`, com sessão própria e sem cadastro público,
+é definida em `sfdd/admin-authentication`. O redirecionamento de todos os
+papéis para a raiz descrito abaixo registra o comportamento original desta
+unidade; o admin usa uma entrada específica e papel persistido na API.
+
 ## Status
 
 Escopo de autenticação implementado e coberto por testes automatizados. Ainda

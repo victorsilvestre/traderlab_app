@@ -25,7 +25,6 @@ export default async function StudentHomePage() {
 
   if (!authenticated) redirect(signInPath);
   if (!profile) return <StudentSessionUnavailable returnTo="/home" />;
-  if (profile.role !== 'student') redirect('/');
 
   if (!accessToken) redirect(signInPath);
 

@@ -1,14 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import type { UserProfileDto } from '@traderlab/contracts';
 import { LogoutButton } from '../components/authentication/LogoutButton';
 import { getCurrentUserProfile } from '../lib/authentication/getCurrentUserProfile';
-
-const roleNames: Record<UserProfileDto['role'], string> = {
-  student: 'Aluno',
-  mentor: 'Mentor',
-  administrator: 'Administrador',
-};
 
 export default async function HomePage() {
   const { authenticated, profile } = await getCurrentUserProfile();
@@ -62,28 +55,5 @@ export default async function HomePage() {
     );
   }
 
-  if (profile.role === 'student') redirect('/home');
-
-  return (
-    <main className="home-page">
-      <header className="home-header">
-        <Link className="brand-mark" href="/" aria-label="TraderLab, início">
-          <span className="brand-symbol" aria-hidden="true">T</span>
-          <span>TraderLab</span>
-        </Link>
-        <div className="home-header-actions">
-          <span className="profile-role">{roleNames[profile.role]}</span>
-          <LogoutButton />
-        </div>
-      </header>
-      <section className="welcome-panel workspace-pending">
-        <p className="eyebrow">ÁREA DE TRABALHO</p>
-        <h1>Olá, {profile.name?.split(' ')[0] || roleNames[profile.role]}.</h1>
-        <p>
-          Esta página inicial é dedicada aos alunos. O espaço de trabalho do seu
-          perfil será disponibilizado em uma área própria.
-        </p>
-      </section>
-    </main>
-  );
+  redirect('/home');
 }

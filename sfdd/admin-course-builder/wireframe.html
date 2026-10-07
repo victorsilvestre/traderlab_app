@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wireframe — Gestão do conteúdo do curso</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, sans-serif;
+        color: #202326;
+        background: #f1f2f2;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        color: inherit;
+        cursor: pointer;
+      }
+      .shell {
+        width: min(1180px, calc(100% - 48px));
+        margin: 0 auto;
+        padding: 26px 0 64px;
+      }
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: #62686c;
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+      .breadcrumb a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .course-header {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 20px;
+        border: 1px solid #cbd0d1;
+        border-radius: 12px;
+        background: #fff;
+      }
+      .cover {
+        width: 118px;
+        aspect-ratio: 16 / 9;
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        border: 1px solid #b8bec0;
+        background: #e6e8e8;
+        color: #666;
+        font-size: 12px;
+      }
+      .course-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .eyebrow {
+        margin: 0 0 7px;
+        color: #686e71;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(22px, 3vw, 30px);
+        line-height: 1.15;
+      }
+      .course-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        color: #62686c;
+        font-size: 13px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #9da4a6;
+        border-radius: 999px;
+        padding: 4px 9px;
+        color: #444a4d;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .button,
+      .icon-button {
+        display: inline-flex;
+        min-height: 40px;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid #8f9698;
+        border-radius: 7px;
+        background: #fff;
+        padding: 0 13px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 13px;
+      }
+      .button.primary {
+        background: #414749;
+        color: #fff;
+        border-color: #414749;
+      }
+      .icon-button {
+        width: 40px;
+        padding: 0;
+        font-size: 18px;
+      }
+      .content-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 25px 0 0;
+        padding: 0 2px 13px;
+        border-bottom: 1px solid #cbd0d1;
+      }
+      .content-heading h2 {
+        margin: 0;
+        font-size: 17px;
+      }
+      .content-heading p {
+        margin: 0;
+        color: #687074;
+        font-size: 12px;
+      }
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 24px 0 14px;
+      }
+      .toolbar h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .toolbar p {
+        margin: 5px 0 0;
+        color: #62686c;
+        font-size: 13px;
+      }
+      .toolbar-actions {
+        display: flex;
+        gap: 9px;
+      }
+      .module-list {
+        display: grid;
+        gap: 13px;
+      }
+      .module {
+        overflow: clip;
+        border: 1px solid #c4cacc;
+        border-radius: 10px;
+        background: #fff;
+      }
+      .module-head {
+        display: grid;
+        grid-template-columns: 42px 1fr auto auto;
+        gap: 13px;
+        align-items: center;
+        min-height: 83px;
+        padding: 14px 17px;
+      }
+      .drag {
+        color: #70777a;
+        font-size: 19px;
+        letter-spacing: -5px;
+        padding-right: 5px;
+        user-select: none;
+      }
+      .module-title {
+        min-width: 0;
+      }
+      .module-title strong {
+        display: block;
+        font-size: 15px;
+      }
+      .module-title p {
+        margin: 5px 0 0;
+        color: #687074;
+        font-size: 12px;
+      }
+      .module-meta {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: #646b6e;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .module-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .module-actions .icon-button {
+        width: 36px;
+        min-height: 36px;
+      }
+      .chevron {
+        transition: transform 0.15s ease;
+      }
+      .module[aria-expanded='true'] .chevron {
+        transform: rotate(180deg);
+      }
+      .module-body {
+        padding: 0 17px 17px 72px;
+      }
+      .content-list {
+        display: grid;
+        gap: 8px;
+      }
+      .content-row {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr) auto auto;
+        gap: 12px;
+        align-items: center;
+        min-height: 66px;
+        padding: 10px 12px;
+        border: 1px solid #d2d6d7;
+        border-radius: 8px;
+        background: #f9fafa;
+      }
+      .type-icon {
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #adb4b6;
+        border-radius: 6px;
+        background: #fff;
+        color: #555d60;
+        font-size: 15px;
+      }
+      .content-info {
+        min-width: 0;
+      }
+      .content-info strong {
+        display: block;
+        font-size: 13px;
+      }
+      .content-info p {
+        margin: 4px 0 0;
+        color: #72797c;
+        font-size: 11px;
+      }
+      .content-type {
+        display: block;
+        color: #72797c;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+      }
+      .row-actions {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .row-actions .icon-button {
+        width: 32px;
+        min-height: 32px;
+        border-color: transparent;
+        background: transparent;
+      }
+      .attachments {
+        margin: 7px 0 2px 46px;
+        padding: 11px 13px;
+        border-left: 2px solid #aeb5b7;
+        background: #f2f4f4;
+        border-radius: 0 6px 6px 0;
+      }
+      .attachments-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 7px;
+        color: #596164;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .attachment {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 0;
+        color: #4e5558;
+        font-size: 12px;
+      }
+      .attachment .row-actions {
+        margin-left: auto;
+      }
+      .add-content {
+        display: flex;
+        gap: 9px;
+        margin-top: 10px;
+      }
+      .add-content .button {
+        min-height: 35px;
+        font-size: 12px;
+      }
+      .empty-hint {
+        margin-top: 13px;
+        padding: 18px;
+        border: 1px dashed #aeb5b7;
+        border-radius: 8px;
+        color: #5f676a;
+        text-align: center;
+        font-size: 13px;
+      }
+      .footnote {
+        margin: 20px 0 0;
+        color: #777e81;
+        font-size: 11px;
+      }
+      @media (max-width: 760px) {
+        .shell {
+          width: min(100% - 28px, 620px);
+          padding-top: 16px;
+        }
+        .course-header {
+          align-items: flex-start;
+          flex-wrap: wrap;
+          padding: 14px;
+        }
+        .cover {
+          width: 90px;
+        }
+        .course-info {
+          width: calc(100% - 110px);
+          flex: initial;
+        }
+        .header-actions {
+          width: 100%;
+          justify-content: flex-end;
+        }
+        .header-actions .button {
+          flex: 1;
+        }
+        .toolbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .toolbar-actions {
+          width: 100%;
+        }
+        .toolbar-actions .button {
+          flex: 1;
+        }
+        .module-head {
+          grid-template-columns: 25px 1fr auto;
+          gap: 8px;
+          padding: 12px;
+        }
+        .module-meta {
+          grid-column: 2;
+          grid-row: 2;
+        }
+        .module-actions {
+          grid-column: 3;
+          grid-row: 1 / span 2;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          max-width: 80px;
+        }
+        .module-actions .edit-label {
+          display: none;
+        }
+        .module-body {
+          padding: 0 10px 12px;
+        }
+        .content-row {
+          grid-template-columns: 30px minmax(0, 1fr) auto;
+          gap: 8px;
+        }
+        .content-row > .badge {
+          grid-column: 2;
+          justify-self: start;
+        }
+        .content-row > .row-actions {
+          grid-column: 3;
+          grid-row: 1 / span 2;
+        }
+        .attachments {
+          margin-left: 20px;
+        }
+        .content-heading {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <a href="#">Cursos</a><span aria-hidden="true">›</span
+        ><span>Gestão de Risco na Prática</span>
+      </nav>
+
+      <header class="course-header">
+        <div class="cover" aria-label="Espaço reservado para a capa do curso">
+          Capa 16:9
+        </div>
+        <div class="course-info">
+          <p class="eyebrow">Curso online</p>
+          <h1>Gestão de Risco na Prática</h1>
+          <div class="course-meta">
+            <span class="badge">Publicado</span><span>3 módulos</span
+            ><span>·</span><span>7 conteúdos</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="button" type="button">◉ &nbsp; Pré-visualizar</button>
+          <a class="button" href="#course-settings"
+            >⚙ &nbsp; Configurações do curso</a
+          >
+        </div>
+      </header>
+
+      <header class="content-heading">
+        <h2>Conteúdo</h2>
+        <p>Organize módulos, aulas e materiais deste curso</p>
+      </header>
+
+      <section aria-label="Estrutura de conteúdo do curso">
+        <div class="toolbar">
+          <div>
+            <p>Expanda um módulo para organizar aulas e materiais.</p>
+          </div>
+          <div class="toolbar-actions">
+            <button class="button" type="button">
+              ＋ &nbsp; Adicionar módulo
+            </button>
+            <button class="button primary" type="button">
+              ＋ &nbsp; Adicionar conteúdo
+            </button>
+          </div>
+        </div>
+
+        <div class="module-list">
+          <section class="module" aria-expanded="true">
+            <div class="module-head">
+              <span class="drag" aria-label="Alça para reordenar módulo"
+                >⠿</span
+              >
+              <div class="module-title">
+                <strong>Fundamentos do risco</strong>
+                <p>Conceitos essenciais para definir limites operacionais.</p>
+              </div>
+              <div class="module-meta">
+                <span>3 itens</span><span class="badge">Publicado</span>
+              </div>
+              <div class="module-actions">
+                <button
+                  class="icon-button"
+                  type="button"
+                  aria-label="Adicionar conteúdo ao módulo"
+                  title="Adicionar conteúdo"
+                >
+                  ＋
+                </button>
+                <button
+                  class="icon-button"
+                  type="button"
+                  aria-label="Editar módulo"
+                  title="Editar módulo"
+                >
+                  ✎
+                </button>
+                <button
+                  class="icon-button"
+                  type="button"
+                  aria-label="Mais ações do módulo"
+                  title="Mais ações"
+                >
+                  ⋮
+                </button>
+                <button
+                  class="icon-button chevron"
+                  type="button"
+                  aria-label="Recolher módulo"
+                  title="Recolher módulo"
+                  data-toggle-module
+                >
+                  ⌄
+                </button>
+              </div>
+            </div>
+            <div class="module-body">
+              <div class="content-list">
+                <article>
+                  <div class="content-row">
+                    <span class="drag" aria-label="Alça para reordenar aula"
+                      >⠿</span
+                    >
+                    <div class="content-info">
+                      <span class="content-type">Aula · Vídeo</span
+                      ><strong>O que é gestão de risco?</strong>
+                      <p>Introdução aos conceitos e à aplicação prática.</p>
+                    </div>
+                    <span class="badge">Publicado</span>
+                    <div class="row-actions">
+                      <button
+                        class="icon-button"
+                        type="button"
+                        aria-label="Editar aula"
+                        title="Editar aula"
+                      >
+                        ✎</button
+                      ><button
+                        class="icon-button"
+                        type="button"
+                        aria-label="Mais ações da aula"
+                        title="Mais ações"
+                      >
+                        ⋮
+                      </button>
+                    </div>
+                  </div>
+                  <div class="attachments">
+                    <div class="attachments-title">
+                      <span>Materiais complementares · 2</span
+                      ><button class="button" type="button">
+                        ＋ Adicionar material
+                      </button>
+                    </div>
+                    <div class="attachment">
+                      <span aria-hidden="true">▤</span
+                      ><span>Guia de gestão de risco.pdf</span
+                      ><span class="badge">PDF · 2,4 MB</span>
+                      <div class="row-actions">
+                        <button
+                          class="icon-button"
+                          type="button"
+                          aria-label="Editar material complementar"
+                          title="Editar"
+                        >
+                          ✎</button
+                        ><button
+                          class="icon-button"
+                          type="button"
+                          aria-label="Mais ações do material"
+                          title="Mais ações"
+                        >
+                          ⋮
+                        </button>
+                      </div>
+                    </div>
+                    <div class="attachment">
+                      <span aria-hidden="true">▤</span
+                      ><span>Planilha de cálculo.xlsx</span
+                      ><span class="badge">XLSX · 840 KB</span>
+                      <div class="row-actions">
+                        <button
+                          class="icon-button"
+                          type="button"
+                          aria-label="Editar material complementar"
+                          title="Editar"
+                        >
+                          ✎</button
+                        ><button
+                          class="icon-button"
+                          type="button"
+                          aria-label="Mais ações do material"
+                          title="Mais ações"
+                        >
+                          ⋮
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="content-row">
+                  <span class="drag" aria-label="Alça para reordenar material"
+                    >⠿</span
+                  >
+                  <div class="content-info">
+                    <span class="content-type"
+                      >Material independente · Download</span
+                    ><strong>Apostila — Fundamentos</strong>
+                    <p>
+                      Arquivo disponível no módulo, sem vínculo com uma aula.
+                    </p>
+                  </div>
+                  <span class="badge">Publicado</span>
+                  <div class="row-actions">
+                    <button
+                      class="icon-button"
+                      type="button"
+                      aria-label="Editar material independente"
+                      title="Editar material"
+                    >
+                      ✎</button
+                    ><button
+                      class="icon-button"
+                      type="button"
+                      aria-label="Mais ações do material independente"
+                      title="Mais ações"
+                    >
+                      ⋮
+                    </button>
+                  </div>
+                </article>
+
+                <article class="content-row">
+                  <span class="drag" aria-label="Alça para reordenar aula"
+                    >⠿</span
+                  >
+                  <div class="content-info">
+                    <span class="content-type">Aula · Conteúdo escrito</span
+                    ><strong>Definindo limites operacionais</strong>
+                    <p>Rascunho · ainda não visível aos alunos.</p>
+                  </div>
+                  <span class="badge">Rascunho</span>
+                  <div class="row-actions">
+                    <button
+                      class="icon-button"
+                      type="button"
+                      aria-label="Editar aula"
+                      title="Editar aula"
+                    >
+                      ✎</button
+                    ><button
+                      class="icon-button"
+                      type="button"
+                      aria-label="Mais ações da aula"
+                      title="Mais ações"
+                    >
+                      ⋮
+                    </button>
+                  </div>
+                </article>
+              </div>
+              <div class="add-content">
+                <button class="button" type="button">＋ Adicionar aula</button>
+                <button class="button" type="button">
+                  ＋ Material independente
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section class="module" aria-expanded="false">
+            <div class="module-head">
+              <span class="drag" aria-label="Alça para reordenar módulo"
+                >⠿</span
+              >
+              <div class="module-title">
+                <strong>Dimensionamento de posição</strong>
+                <p>Como ajustar exposição em cada operação.</p>
+              </div>
+              <div class="module-meta">
+                <span>2 itens</span><span class="badge">Rascunho</span>
+              </div>
+              <div class="module-actions">
+                <button
+                  class="icon-button"
+                  type="button"
+                  aria-label="Adicionar conteúdo ao módulo"
+                  title="Adicionar conteúdo"
+                >
+                  ＋
+                </button>
+                <button
+                  class="icon-button"
+                  type="button"
+                  aria-label="Editar módulo"
+                  title="Editar módulo"
+                >
+                  ✎
+                </button>
+                <button
+                  class="icon-button"
+                  type="button"
+                  aria-label="Mais ações do módulo"
+                  title="Mais ações"
+                >
+                  ⋮
+                </button>
+                <button
+                  class="icon-button chevron"
+                  type="button"
+                  aria-label="Expandir módulo"
+                  title="Expandir módulo"
+                  data-toggle-module
+                >
+                  ⌄
+                </button>
+              </div>
+            </div>
+            <div class="module-body" hidden>
+              <div class="empty-hint">
+                Este módulo ainda não tem itens. Adicione uma aula ou um
+                material independente.
+              </div>
+            </div>
+          </section>
+
+          <section class="module" aria-expanded="false">
+            <div class="module-head">
+              <span class="drag" aria-label="Alça para reordenar módulo"
+                >⠿</span
+              >
+              <div class="module-title">
+                <strong>Rotina e revisão</strong>
+                <p>Materiais para aplicar e revisar o método.</p>
+              </div>
+              <div class="module-meta">
+                <span>0 itens</span><span class="badge">Rascunho</span>
+              </div>
+              <div class="module-actions">
+                <button
+                  class="icon-button"
+                  type="button"
+                  aria-label="Adicionar conteúdo ao módulo"
+                  title="Adicionar conteúdo"
+                >
+                  ＋
+                </button>
+                <button
+                  class="icon-button"
+                  type="button"
+                  aria-label="Editar módulo"
+                  title="Editar módulo"
+                >
+                  ✎
+                </button>
+                <button
+                  class="icon-button"
+                  type="button"
+                  aria-label="Mais ações do módulo"
+                  title="Mais ações"
+                >
+                  ⋮
+                </button>
+                <button
+                  class="icon-button chevron"
+                  type="button"
+                  aria-label="Expandir módulo"
+                  title="Expandir módulo"
+                  data-toggle-module
+                >
+                  ⌄
+                </button>
+              </div>
+            </div>
+            <div class="module-body" hidden>
+              <div class="empty-hint">
+                Este módulo ainda não tem itens. Adicione uma aula ou um
+                material independente.
+              </div>
+            </div>
+          </section>
+        </div>
+        <p class="footnote">
+          Wireframe demonstrativo · textos, dados e ações são ilustrativos · sem
+          conexão com API ou banco.
+        </p>
+      </section>
+    </main>
+    <script>
+      document.querySelectorAll('[data-toggle-module]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const module = button.closest('.module');
+          const expanded = module.getAttribute('aria-expanded') === 'true';
+          module.setAttribute('aria-expanded', String(!expanded));
+          module.querySelector('.module-body').hidden = expanded;
+          button.setAttribute(
+            'aria-label',
+            expanded ? 'Expandir módulo' : 'Recolher módulo',
+          );
+          button.title = expanded ? 'Expandir módulo' : 'Recolher módulo';
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,164 @@
+.shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 236px minmax(0, 1fr);
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 16px;
+  border-right: 1px solid var(--line);
+  background: #f0f2ed;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 8px 35px;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.mark {
+  display: grid;
+  width: 35px;
+  height: 35px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50% 50% 50% 10%;
+  background: var(--green);
+  color: white;
+  font-size: 17px;
+  font-weight: 750;
+}
+.brand small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+.sidebarNote {
+  margin-top: auto;
+  padding: 17px 8px 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+.mainArea {
+  min-width: 0;
+}
+.header {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 32px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+}
+.account {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--ink);
+}
+.avatar {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--soft-green);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 750;
+}
+.account > span:nth-child(2) {
+  font-size: 13px;
+  font-weight: 650;
+}
+.account small {
+  color: var(--muted);
+  font-weight: 400;
+}
+.account button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 650;
+}
+.account button:hover {
+  border-color: #abc4b3;
+  background: #f8faf7;
+}
+.account button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.account button svg {
+  width: 16px;
+  height: 16px;
+}
+.account span:has(button) {
+  display: grid;
+}
+.account [role='alert'] {
+  color: var(--error);
+}
+.content {
+  width: 100%;
+  min-width: 0;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding: 48px clamp(28px, 5vw, 72px);
+}
+@media (max-width: 740px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    padding: 16px 18px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    padding: 0 0 14px;
+  }
+  .sidebarNote {
+    display: none;
+  }
+  .header {
+    min-height: 66px;
+    padding: 12px 18px;
+  }
+  .header > span {
+    display: none;
+  }
+  .account {
+    width: 100%;
+    gap: 10px;
+  }
+  .account > span:nth-child(2) {
+    flex: 1;
+    min-width: 0;
+  }
+  .content {
+    padding: 32px 20px;
+  }
+}

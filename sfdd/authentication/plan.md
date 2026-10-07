@@ -1,5 +1,14 @@
 # Autenticação do usuário — Plano técnico
 
+## Evolução: segunda aplicação web
+
+`sfdd/admin-foundation` e `sfdd/admin-authentication` acrescentam `apps/admin`
+como aplicação separada para mentor e administrador. A API mantém o projeto
+Supabase Auth e o banco existentes. O login administrativo exige perfil de
+gestor já persistido, e os links de recuperação/confirmação passam a escolher
+entre origens `web` e `admin` definidas no servidor. As decisões e tarefas
+específicas dessa evolução estão nas duas unidades citadas.
+
 ## Status
 
 Plano técnico aprovado para implementação após a solicitação explícita do

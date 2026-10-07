@@ -49,9 +49,10 @@
   overflow: hidden;
   border-radius: 7px;
   background-color: #dce4dc;
-  background-position: center;
-  background-size: cover;
   text-decoration: none;
+}
+.courseCoverImage {
+  object-fit: contain;
 }
 .courseCover[href] {
   transition: filter 160ms ease, transform 160ms ease;
@@ -73,6 +74,8 @@
   pointer-events: none;
 }
 .courseCover > span {
+  position: relative;
+  z-index: 1;
   display: grid;
   width: 76px;
   height: 76px;
@@ -306,7 +309,7 @@
 }
 .moduleGrid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: start;
   gap: 16px;
 }
@@ -333,16 +336,19 @@
   grid-template-columns: minmax(0, 1fr);
 }
 .moduleImage {
+  position: relative;
   display: grid;
   min-height: 84px;
+  overflow: hidden;
   place-items: center;
   border-radius: 3px;
   background-color: #e6ebe5;
-  background-position: center;
-  background-size: cover;
   color: #67786a;
   font-size: 18px;
   font-variant-numeric: tabular-nums;
+}
+.moduleImageAsset {
+  object-fit: contain;
 }
 .moduleImage[href] {
   cursor: pointer;
@@ -1157,7 +1163,7 @@
     align-self: flex-start;
   }
   .moduleGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .moduleList .moduleHead {
     grid-template-columns: 88px minmax(0, 1fr);
@@ -1170,6 +1176,12 @@
     min-height: 210px;
   }
   .loadingModules {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .moduleGrid {
     grid-template-columns: 1fr;
   }
 }

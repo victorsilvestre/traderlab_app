@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wireframe — Gestão de módulos</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 28px; background: #eee; color: #222; font: 14px Arial, sans-serif; }
+    main { width: min(1040px, 100%); margin: auto; }
+    .top, .toolbar, .row, .actions, .form-actions { display: flex; align-items: center; gap: 12px; }
+    .top { justify-content: space-between; margin-bottom: 28px; }
+    .back, .button, .icon, input, textarea, .select { border: 1px solid #888; background: #fff; color: #222; }
+    .back, .button { padding: 10px 14px; text-decoration: none; }
+    h1 { margin: 0 0 7px; font-size: 30px; }
+    p { color: #555; }
+    .toolbar { justify-content: space-between; margin: 22px 0 12px; }
+    .button.primary { background: #444; color: #fff; }
+    .list { border: 1px solid #aaa; background: #fff; }
+    .row { min-height: 104px; padding: 14px; border-bottom: 1px solid #ccc; }
+    .row:last-child { border-bottom: 0; }
+    .order { display: grid; gap: 5px; }
+    .icon { width: 34px; height: 34px; display: grid; place-items: center; }
+    .thumb { width: 112px; height: 64px; display: grid; flex: 0 0 auto; place-items: center; border: 1px solid #999; background: #ddd; color: #555; }
+    .info { flex: 1; min-width: 0; }
+    .info h2 { margin: 0 0 5px; font-size: 16px; }
+    .info p { margin: 0; font-size: 12px; }
+    .meta { display: flex; gap: 18px; align-items: center; min-width: 215px; font-size: 12px; }
+    .badge { padding: 6px 9px; border: 1px solid #888; border-radius: 99px; }
+    .actions { justify-content: flex-end; }
+    .panel { margin-top: 40px; padding: 24px; border: 1px solid #aaa; background: #fff; }
+    .panel h2 { margin-top: 0; }
+    label { display: block; margin: 16px 0 6px; font-weight: 700; }
+    input, textarea { width: 100%; padding: 11px; }
+    textarea { min-height: 95px; resize: vertical; }
+    .upload { display: grid; min-height: 160px; place-items: center; border: 1px dashed #888; background: #eee; }
+    .form-actions { justify-content: flex-end; margin-top: 18px; }
+    @media (max-width: 720px) {
+      body { padding: 18px; }
+      .row { align-items: flex-start; flex-wrap: wrap; }
+      .thumb { width: 92px; height: 52px; }
+      .info { min-width: calc(100% - 150px); }
+      .meta { order: 3; min-width: auto; margin-left: 45px; }
+      .actions { order: 4; margin-left: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="#">← Cursos</a>
+    <div class="top">
+      <div><h1>Módulos</h1><p>Curso: Gestão de Risco na Prática · 3 módulos</p></div>
+      <a class="button primary" href="#module-form">+ Novo módulo</a>
+    </div>
+    <div class="toolbar"><strong>Ordem de exibição</strong><span>As alterações ficam salvas no curso</span></div>
+    <section class="list" aria-label="Módulos do curso">
+      <article class="row">
+        <div class="order"><button class="icon" aria-label="Mover módulo para cima">↑</button><button class="icon" aria-label="Mover módulo para baixo">↓</button></div>
+        <div class="thumb">Imagem 16:9</div>
+        <div class="info"><h2>Fundamentos do risco</h2><p>Conceitos essenciais para definir limites operacionais.</p></div>
+        <div class="meta"><span>4 conteúdos</span><span class="badge">Publicado</span></div>
+        <div class="actions"><button class="icon" aria-label="Editar módulo">✎</button><button class="icon" aria-label="Despublicar módulo">Ⅱ</button></div>
+      </article>
+      <article class="row">
+        <div class="order"><button class="icon" aria-label="Mover módulo para cima">↑</button><button class="icon" aria-label="Mover módulo para baixo">↓</button></div>
+        <div class="thumb">Imagem 16:9</div>
+        <div class="info"><h2>Dimensionamento de posição</h2><p>Como ajustar posição e exposição em cada operação.</p></div>
+        <div class="meta"><span>3 conteúdos</span><span class="badge">Rascunho</span></div>
+        <div class="actions"><button class="icon" aria-label="Editar módulo">✎</button><button class="icon" aria-label="Publicar módulo">▶</button></div>
+      </article>
+    </section>
+    <section class="panel" id="module-form" aria-labelledby="form-title">
+      <h2 id="form-title">Novo módulo</h2>
+      <label for="title">Nome do módulo</label><input id="title" placeholder="Ex.: Fundamentos do risco">
+      <label for="description">Descrição <small>(opcional)</small></label><textarea id="description" placeholder="Apresente o que o aluno encontrará neste módulo"></textarea>
+      <label>Imagem de capa <small>(opcional)</small></label><div class="upload">Enviar imagem JPEG, PNG ou WebP · até 5 MB<br>Proporção 16:9 · recomendado 1920 × 1080 px</div>
+      <div class="form-actions"><a class="button" href="#">Cancelar</a><button class="button primary">Salvar como rascunho</button></div>
+    </section>
+  </main>
+</body>
+</html>

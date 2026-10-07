@@ -19,12 +19,9 @@ export async function homeBannerRoutes(
   },
 ): Promise<void> {
   app.get('/home/banners', async (request) => {
-    const profile = await options.authentication.getCurrentUser(
+    await options.authentication.getCurrentUser(
       accessToken(request),
     );
-    if (profile.role !== 'student') {
-      throw new AuthenticationError('Esta área é exclusiva para alunos.', 403);
-    }
     return options.service.listPublished();
   });
 }

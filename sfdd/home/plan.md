@@ -1,5 +1,9 @@
 # Página inicial do aluno — Plano técnico
 
+## Decisão posterior: acesso à aprendizagem por todos os papéis
+
+O fluxo de aprendizagem existente em `apps/web` atende qualquer perfil autenticado. A entrada `/` encaminha aluno, mentor e administrador para `/home`. As páginas de curso e conteúdo deixam de exigir o papel `student`; a API autentica a identidade e continua aplicando matrícula ativa e publicação às consultas e ações de curso, busca e progresso. Banners publicados são visíveis a todos os perfis autenticados. Notificações e perfil permanecem vinculados à identidade do usuário. O acesso ao `apps/admin` segue restrito a mentor e administrador em sua sessão própria. Esta decisão substitui as orientações anteriores deste plano que reservavam a home exclusivamente ao aluno.
+
 ## Status
 
 Plano atualizado com as decisões de produto recebidas. A primeira entrega da
@@ -10,10 +14,16 @@ registros publicados do banco. Notificações usam persistência, segmentação 
 estado individual de leitura; a criação/envio administrativo fica para uma
 unidade futura.
 
+## Ajustes visuais definidos em 07/10/2026
+
+- A grade de cursos usa três colunas em telas largas, duas em telas intermediárias e uma em telas estreitas.
+- O cabeçalho do aluno aplica explicitamente ao símbolo T o fundo e a forma da marca pública.
+- A busca global abre um painel mais largo, com mais espaço entre os resultados; em telas estreitas, ocupa a largura disponível sem transbordar.
+
 ## Escopo e aderência ao MVP
 
 Esta unidade cobre a experiência inicial do aluno autenticado: cabeçalho,
-pesquisa de conteúdo, notificações, menu da conta, banners de comunicação,
+pesquisa de conteúdo, notificações, menu da conta, perfil, banners de comunicação,
 retomada de estudo e cursos com acesso vigente.
 
 | Necessidade da especificação | Aderência ao MVP e limite |
@@ -24,7 +34,7 @@ retomada de estudo e cursos com acesso vigente.
 | Banner com até cinco comunicações | O carrossel consulta `home_banners` e exibe até cinco registros publicados, usando as três imagens de exemplo em `apps/web/public/banners/`, em um quadro responsivo de altura fixa por breakpoint e recorte `cover`. |
 | “Continue Onde Parou” | Integrado ao módulo `progress`, para até três conteúdos distintos mais recentemente acessados, em ordem decrescente; links levam ao conteúdo real e o estado vazio orienta o aluno a iniciar os estudos. Não introduzir avaliação, anotação ou recomendação. |
 | “Meus Cursos” | Consultar cursos publicados com matrícula ativa do aluno; a API calcula progresso e a home mostra estado vazio ou erro separado. |
-| Acessar Perfil | Link para `/profile`, cuja tela fica fora desta unidade e será implementada depois, conforme indicado na especificação. |
+| Acessar Perfil | Abrir a página completa `/profile` para visualizar e editar nome, telefone e avatar; o e-mail fica visível e bloqueado para edição. |
 | Sair da conta | Reutilizar o logout já implementado no módulo de autenticação. |
 
 ## Aplicações e arquitetura afetadas
@@ -91,8 +101,8 @@ sem concentrar consultas ou regras nos handlers:
 - `notification`: notificações do próprio aluno, contagem de não lidas e ação
   para marcar como lida/não lida e marcar todas como lidas; envio por e-mail e
   tela de gestão administrativa ficam fora desta entrega.
-- `authentication`/`user`: perfil mínimo para o avatar e identificação visual;
-  não implementar a tela de perfil nesta unidade.
+- `authentication`/`user`: autenticação existente e perfil mínimo da home;
+  detalhes de consulta/edição e avatar ficam na seção de Perfil do usuário abaixo.
 - `audit`: registrar operações importantes conforme as regras do módulo quando
   forem definidas para a ação correspondente.
 
@@ -213,8 +223,8 @@ e `access`, inclusive concessões, convites e estados de assinatura.
   existentes, sem criar módulo de dashboard.
 - Banners e cursos demonstrativos não representam cadastro, compra ou acesso
   real; a interface deve deixar claro seu caráter de exemplo nesta etapa.
-- Perfil e logout devem reutilizar autenticação existente; `/profile` é apenas um
-  destino futuro nesta entrega.
+- Perfil e logout reutilizam autenticação existente. A tela `/profile` e sua
+  edição estão especificadas na seção “Perfil do usuário” desta unidade.
 - Busca deve ter limite de resultados e estados de teclado/acessibilidade, a
   definir antes da implementação interativa.
 
@@ -257,6 +267,46 @@ e `access`, inclusive concessões, convites e estados de assinatura.
   sistema administrativo. O estado publicado e o modelo de autoria deixam essa
   futura gestão preparada sem criar rotas de escrita agora.
 
+## Perfil do usuário — visualização e edição
+
+### Escopo e navegação confirmados
+
+- Implementar a rota autenticada /profile, disponível para qualquer usuário autenticado; a navegação atual parte do menu de conta da área do aluno. Mentor e administrador também poderão abrir o próprio perfil sem receber acesso de aluno nem editar outros usuários.
+- A ação “Acessar Perfil” abre a página completa /profile. O modal citado na especificação é o menu de conta que aparece com mouse over no avatar; ele permanece disponível nesse comportamento e também deve funcionar com clique/toque. O menu fecha ao clicar fora ou navegar por uma opção.
+- O perfil apresenta nome, e-mail e telefone que já existem no fluxo de cadastro. Papel e identificador são somente leitura e não aparecem como campos editáveis.
+- Nome e telefone são persistidos em user_profiles; e-mail é identidade do Supabase Auth e permanece travado, exibido de forma discreta como dado não editável. O fluxo não altera o e-mail associado a cursos e pagamentos.
+- A imagem do avatar é carregada pelo usuário, recebe prévia local antes do salvamento e passa a ser usada no menu de conta e nos cabeçalhos que exibem sua identidade. Sem imagem, manter as iniciais do nome.
+- O cabeçalho completo da aplicação, com pesquisa, notificações e conta, é compartilhado entre home, perfil e histórico de notificações. Clicar no avatar navega para /profile; hover ou foco de teclado abre as opções da conta.
+- Implementação: guardar somente avatar_path em user_profiles; armazenar os arquivos no bucket privado traderlab-profile-avatars, com caminho derivado do ID autenticado e URL assinada de leitura por uma hora. O bucket e a API aceitam JPEG, PNG e WebP, com limite de 5 MB.
+
+### Web
+
+- Criar /profile em app/profile/page.tsx como composição Server Component, com autenticação no servidor e carregamento do perfil pela API.
+- Manter AccountMenu como menu compacto junto ao avatar, disponível por mouse over e também por clique/toque; permitir fechar ao clicar fora e ao navegar por uma opção. “Acessar Perfil” navega para a página completa.
+- Atualizar o botão/avatar da conta para exibir a imagem salva, usando iniciais quando ausente.
+- Implementar formulário em componente de components/ui/ ou components/forms/, escolhendo o menor limite que preserve responsabilidades. Usar componente cliente apenas para upload/preview, interação do menu e estado de envio.
+- Exibir estados de carregamento, salvamento, sucesso e falha sem substituir a página inteira por um estado de sessão durante navegação normal.
+- Atualizar o tipo de perfil retornado à UI com e-mail somente leitura e avatarUrl assinado, sem expor avatarPath, credenciais do Supabase ou dados de outros usuários.
+
+### API e persistência
+
+- Criar o módulo user para consultar e alterar o perfil do usuário autenticado. Manter verificação de identidade no módulo authentication; estender a porta do provedor somente para operações de identidade que o caso de uso necessitar.
+- Criar DTO de perfil próprio com id, name, email, phone, avatarUrl e role; não aceitar userId em parâmetros ou corpo para definir o dono da operação.
+- Adicionar avatar_path à tabela user_profiles por migração.
+- Criar casos de uso para consultar perfil e atualizar nome/telefone. O e-mail permanece somente leitura nesta funcionalidade.
+- Expor GET e PATCH em /users/me/profile; derivar sempre a identidade do token. PATCH aceita apenas campos definidos de nome, telefone e referência de avatar, nunca ID ou papel de usuário.
+- Criar porta de armazenamento de avatar e adaptador do Supabase Storage no módulo user; preparar o bucket privado e validar tipo, tamanho, caminho e propriedade no servidor. O navegador recebe apenas token assinado de upload; a chave administrativa permanece na API.
+- Expor POST /users/me/profile/avatar-upload para emitir URL assinada de upload. O navegador envia o arquivo ao Storage, depois atualiza o perfil com a referência autorizada sob o caminho do próprio usuário. A API verifica a existência do objeto e salva somente o caminho no perfil.
+- As rotas devem validar sessão, conteúdo e propriedade; usuários só leem e alteram o próprio perfil. Nenhuma chave secreta ou acesso ao banco chega ao navegador.
+
+### Critérios de validação
+
+- Abrir /profile pela ação no menu e diretamente pela URL; validar carregamento e autorização.
+- Validar abertura do menu do avatar por mouse over e clique/toque, fechamento ao clicar fora e navegação pelas opções.
+- Consultar, alterar e recarregar nome/telefone; verificar mensagem de sucesso e erro.
+- Validar avatar novo, prévia, upload, persistência, exibição nos cabeçalhos, fallback de iniciais e arquivo inválido/grande.
+- Confirmar que aluno, mentor e administrador alteram apenas o próprio perfil; rejeitar acesso a outro userId.
+
 ## Validação
 
 - Validar critérios da especificação e decisões aprovadas desta unidade.
@@ -289,3 +339,27 @@ e `access`, inclusive concessões, convites e estados de assinatura.
 - Conteúdos inacessíveis por matrícula revogada ou publicação removida deixam
   de aparecer no histórico. A rota de destino continua revalidando autorização
   e publicação no módulo `course`.
+
+## Cache das capas de curso
+
+- O bucket `traderlab-course-images` permanece privado; as capas continuam sendo
+  entregues por URLs assinadas para não transformar imagens de cursos em URLs
+  públicas permanentes.
+- O banco guarda o caminho do objeto. Cada troca de imagem gera um caminho novo
+  com UUID, então a URL pode ser reutilizada durante sua validade sem risco de
+  servir uma versão antiga depois que o administrador substituir a capa.
+- A API reutiliza a URL assinada por caminho durante até 50 minutos; a URL vence
+  em 60 minutos, mantendo dez minutos de margem para renovação. Requisições
+  simultâneas para o mesmo caminho compartilham a geração da URL.
+- A API limita esse cache em memória a 1.000 caminhos e remove primeiro o menos
+  recentemente utilizado. Esse cache é por processo e não persiste a reinícios;
+  uma futura implantação com várias instâncias poderá usar cache compartilhado.
+- Uploads novos definem `Cache-Control` de uma hora. A lista usa qualidade 90
+  para reduzir o peso mantendo boa definição em capas com texto.
+- Esta primeira implementação vale para imagens servidas pelo adaptador de
+  capas de curso. Avatares e demais classes de imagem serão padronizados após a
+  validação desta entrega, considerando separadamente privacidade e autorização.
+
+## Ampliação aprovada do padrão de imagens — 07/10/2026
+
+A validação da capa na home aprovou o mesmo padrão de leitura e otimização para imagens de cursos, módulos e conteúdos no bucket privado `traderlab-course-images`. O cache de URLs assinadas do adaptador já se aplica aos três tipos. A interface usa `CourseImage` nas capas da home, do detalhe do curso e dos módulos. A imagem de conteúdo ainda não tem local de exibição implementado; quando a tela a apresentar, deverá reutilizar esse componente. Esta decisão substitui a anotação anterior que limitava o padrão às capas de curso. Avatares seguem fora deste escopo.

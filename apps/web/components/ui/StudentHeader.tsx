@@ -4,14 +4,21 @@ import { AccountMenu } from './AccountMenu';
 import { HomeSearch } from './HomeSearch';
 import { NotificationMenu } from './NotificationMenu';
 import type { NotificationListDto } from '@traderlab/contracts';
+import type { UserProfileDetailsDto } from '@traderlab/contracts';
 import { getCurrentAccessToken } from '../../lib/authentication/getCurrentAccessToken';
 import { getNotifications } from '../../lib/notifications/notificationApi';
 
 export async function StudentHeader({
   name,
+  avatarUrl,
+  role,
+  homeHref,
   notificationInbox,
 }: {
   name: string;
+  avatarUrl?: string | null;
+  role?: UserProfileDetailsDto['role'];
+  homeHref?: string;
   notificationInbox?: NotificationListDto | null;
 }) {
   let inbox = notificationInbox;
@@ -30,7 +37,7 @@ export async function StudentHeader({
     <header className={homeClass('student-header')}>
       <Link
         className={homeClass('brand-mark')}
-        href="/home"
+        href={homeHref ?? '/home'}
         aria-label="TraderLab, início"
       >
         <span className={homeClass('brand-symbol')} aria-hidden="true">
@@ -44,7 +51,19 @@ export async function StudentHeader({
           inbox={inbox ?? { items: [], unreadCount: 0, nextOffset: null }}
           unavailable={inbox === null}
         />
-        <AccountMenu name={name} />
+        <AccountMenu
+          name={name}
+          avatarUrl={avatarUrl}
+          roleLabel={
+            role
+              ? {
+                  student: 'Aluno',
+                  mentor: 'Mentor',
+                  administrator: 'Administrador',
+                }[role]
+              : 'Aluno'
+          }
+        />
       </div>
     </header>
   );

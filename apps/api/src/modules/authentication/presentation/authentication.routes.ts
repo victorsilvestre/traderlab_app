@@ -11,7 +11,7 @@ type SignUpBody = {
 };
 
 type SignInBody = { email: string; password: string };
-type RecoveryBody = { email: string };
+type RecoveryBody = { email: string; destination?: 'web' | 'admin' };
 type ResetBody = { password: string; passwordConfirmation: string };
 
 const emailSchema = { type: 'string', format: 'email', maxLength: 254 } as const;
@@ -71,6 +71,27 @@ export async function authenticationRoutes(
       ),
   );
 
+  app.post<{ Body: SignInBody }>(
+    '/authentication/workspace/sign-in',
+    {
+      schema: {
+        body: {
+          type: 'object',
+          required: ['email', 'password'],
+          additionalProperties: false,
+          properties: {
+            email: emailSchema,
+            password: { type: 'string', minLength: 1, maxLength: 128 },
+          },
+        },
+      },
+    },
+    async (request, reply) =>
+      reply.send(
+        await options.service.signInForWorkspace(request.body.email, request.body.password),
+      ),
+  );
+
   app.post<{ Body: RecoveryBody }>(
     '/authentication/password-recovery',
     {
@@ -79,13 +100,19 @@ export async function authenticationRoutes(
           type: 'object',
           required: ['email'],
           additionalProperties: false,
-          properties: { email: emailSchema },
+          properties: {
+            email: emailSchema,
+            destination: { type: 'string', enum: ['web', 'admin'] },
+          },
         },
       },
     },
     async (request, reply) =>
       reply.code(202).send(
-        await options.service.requestPasswordRecovery(request.body.email),
+        await options.service.requestPasswordRecovery(
+          request.body.email,
+          request.body.destination,
+        ),
       ),
   );
 
@@ -97,13 +124,19 @@ export async function authenticationRoutes(
           type: 'object',
           required: ['email'],
           additionalProperties: false,
-          properties: { email: emailSchema },
+          properties: {
+            email: emailSchema,
+            destination: { type: 'string', enum: ['web', 'admin'] },
+          },
         },
       },
     },
     async (request, reply) =>
       reply.code(202).send(
-        await options.service.resendConfirmation(request.body.email),
+        await options.service.resendConfirmation(
+          request.body.email,
+          request.body.destination,
+        ),
       ),
   );
 
@@ -133,5 +166,9 @@ export async function authenticationRoutes(
 
   app.get('/authentication/me', async (request, reply) =>
     reply.send(await options.service.getCurrentUser(bearerToken(request))),
+  );
+
+  app.get('/authentication/workspace/me', async (request, reply) =>
+    reply.send(await options.service.getCurrentWorkspaceUser(bearerToken(request))),
   );
 }

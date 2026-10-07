@@ -29,7 +29,7 @@ export default async function NotificationsPage({
       : 0;
   const returnTo = `/notifications${filter === 'unread' ? '?filter=unread' : ''}`;
   const signInPath = getSignInPath(returnTo);
-  const { authenticated, accessToken } = await getCurrentUserProfile();
+  const { authenticated, accessToken, profile } = await getCurrentUserProfile();
 
   if (!authenticated || !accessToken) redirect(signInPath);
 
@@ -45,6 +45,7 @@ export default async function NotificationsPage({
         filter={filter}
         offset={offset}
         unavailable={false}
+        profile={profile}
       />
     );
   } catch (error) {
@@ -55,6 +56,7 @@ export default async function NotificationsPage({
         filter={filter}
         offset={offset}
         unavailable
+        profile={profile}
       />
     );
   }

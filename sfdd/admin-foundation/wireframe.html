@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TraderLab — wireframe da fundação administrativa</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #202020;
+        background: #ededed;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px 18px 64px;
+      }
+      .document {
+        max-width: 1180px;
+        margin: auto;
+      }
+      .intro {
+        margin-bottom: 30px;
+      }
+      h1 {
+        font-size: 24px;
+        margin: 0 0 9px;
+      }
+      .intro p,
+      .caption {
+        color: #5c5c5c;
+        line-height: 1.5;
+      }
+      .caption {
+        margin: 0 0 12px;
+        font-size: 14px;
+      }
+      .frame {
+        background: #fff;
+        border: 1px solid #aaa;
+        min-height: 440px;
+        margin-bottom: 38px;
+        box-shadow: 0 8px 24px #0000000d;
+      }
+      .login {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 440px;
+      }
+      .login-side {
+        background: #ddd;
+        padding: 34px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .logo {
+        width: 50px;
+        height: 50px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #777;
+        font-size: 26px;
+        font-weight: 700;
+      }
+      .login-side h2 {
+        font-size: 34px;
+        max-width: 360px;
+        line-height: 1.1;
+        margin: 0 0 12px;
+      }
+      .login-side p {
+        max-width: 360px;
+        line-height: 1.5;
+      }
+      .login-form {
+        display: grid;
+        place-items: center;
+        padding: 40px 24px;
+      }
+      .form-inner {
+        width: min(100%, 340px);
+      }
+      .eyebrow {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.11em;
+        color: #666;
+      }
+      h2 {
+        margin: 8px 0 12px;
+      }
+      .muted {
+        color: #666;
+        line-height: 1.45;
+      }
+      label {
+        display: block;
+        font-weight: 700;
+        font-size: 13px;
+        margin: 20px 0 7px;
+      }
+      input {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #999;
+        background: #fff;
+        font: inherit;
+      }
+      button {
+        padding: 12px 17px;
+        border: 1px solid #555;
+        background: #303030;
+        color: #fff;
+        font: inherit;
+        cursor: pointer;
+      }
+      .submit {
+        width: 100%;
+        margin-top: 22px;
+      }
+      a {
+        color: #333;
+      }
+      .help {
+        margin: 17px 0 0;
+        font-size: 13px;
+      }
+      .workspace {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        min-height: 520px;
+      }
+      aside {
+        border-right: 1px solid #bbb;
+        background: #f4f4f4;
+        padding: 23px 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .brand {
+        font-size: 18px;
+        font-weight: 700;
+        padding: 7px 8px 25px;
+      }
+      nav {
+        display: grid;
+        gap: 7px;
+      }
+      nav span {
+        display: block;
+        padding: 11px 12px;
+        border: 1px solid transparent;
+      }
+      nav .active {
+        border-color: #999;
+        background: #dedede;
+        font-weight: 700;
+      }
+      .side-foot {
+        margin-top: auto;
+        padding: 16px 8px 0;
+        border-top: 1px solid #bbb;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .workspace-main {
+        min-width: 0;
+      }
+      header {
+        min-height: 70px;
+        border-bottom: 1px solid #bbb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 26px;
+        gap: 16px;
+      }
+      header p {
+        margin: 0;
+        font-size: 14px;
+      }
+      .user {
+        border: 1px solid #aaa;
+        padding: 9px 12px;
+        font-size: 13px;
+      }
+      .account {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .sign-out {
+        background: #eee;
+        color: #333;
+        padding: 9px 12px;
+        font-size: 13px;
+      }
+      main {
+        padding: 35px 28px;
+      }
+      main h2 {
+        font-size: 29px;
+      }
+      .notice {
+        max-width: 690px;
+        border: 1px solid #999;
+        background: #f3f3f3;
+        padding: 19px 22px;
+        margin-top: 28px;
+        line-height: 1.5;
+      }
+      .notice strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .note {
+        margin-top: 24px;
+        color: #666;
+        font-size: 13px;
+      }
+      @media (max-width: 760px) {
+        body {
+          padding: 22px 12px 42px;
+        }
+        .login {
+          grid-template-columns: 1fr;
+        }
+        .login-side {
+          min-height: 190px;
+          padding: 22px;
+        }
+        .login-side h2 {
+          font-size: 24px;
+        }
+        .login-form {
+          padding: 30px 22px 40px;
+        }
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          border-right: 0;
+          border-bottom: 1px solid #bbb;
+          padding: 12px 16px;
+        }
+        .brand {
+          padding-bottom: 8px;
+        }
+        nav {
+          display: flex;
+        }
+        .side-foot {
+          display: none;
+        }
+        header {
+          padding: 14px 18px;
+        }
+        main {
+          padding: 25px 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="document">
+      <div class="intro">
+        <h1>Fundação administrativa — wireframe</h1>
+        <p>
+          Dois estados ilustrativos da aplicação de gestão. Conteúdo fictício,
+          sem autenticação ou dados reais.
+        </p>
+      </div>
+
+      <p class="caption">Estado 1 · Entrada no endereço administrativo</p>
+      <section class="frame login" aria-label="Tela de entrada administrativa">
+        <div class="login-side">
+          <div class="logo" aria-hidden="true">T</div>
+          <div>
+            <h2>Ambiente de gestão</h2>
+            <p>
+              Um espaço para administrar e acompanhar o conteúdo do TraderLab.
+            </p>
+          </div>
+          <small>TraderLab · acesso para equipe</small>
+        </div>
+        <div class="login-form">
+          <div class="form-inner">
+            <span class="eyebrow">Acesso administrativo</span>
+            <h2>Entrar</h2>
+            <p class="muted">
+              Use as credenciais da sua conta de administrador ou mentor.
+            </p>
+            <label for="email">E-mail</label>
+            <input id="email" type="email" placeholder="seu@email.com" />
+            <label for="password">Senha</label>
+            <input id="password" type="password" placeholder="Sua senha" />
+            <button class="submit" type="button">Entrar no ambiente</button>
+            <p class="help"><a href="#">Esqueceu sua senha?</a></p>
+          </div>
+        </div>
+      </section>
+
+      <p class="caption">Estado 2 · Página inicial após entrada autorizada</p>
+      <section class="frame workspace" aria-label="Página inicial de gestão">
+        <aside>
+          <div class="brand">TraderLab / Gestão</div>
+          <nav aria-label="Navegação ilustrativa">
+            <span class="active">Início</span>
+          </nav>
+          <div class="side-foot">
+            Os demais destinos aparecem à medida que suas funções forem
+            implementadas e autorizadas para o perfil.
+          </div>
+        </aside>
+        <div class="workspace-main">
+          <header>
+            <p>Ambiente de gestão</p>
+            <div class="account">
+              <div class="user">Nome da pessoa · Administrador</div>
+              <button class="sign-out" type="button">Sair</button>
+            </div>
+          </header>
+          <main>
+            <span class="eyebrow">Início</span>
+            <h2>Olá, nome da pessoa.</h2>
+            <p class="muted">
+              Este é o espaço de trabalho para administrar o TraderLab.
+            </p>
+            <div class="notice">
+              <strong>Estrutura inicial</strong>
+              As funções de gestão serão acrescentadas por etapas. Cada função
+              aparecerá na navegação quando estiver disponível para o seu
+              perfil.
+            </div>
+            <p class="note">
+              Para mentor, a identificação mostra “Mentor” e a navegação
+              respeita seu papel.
+            </p>
+          </main>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

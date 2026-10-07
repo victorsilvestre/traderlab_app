@@ -16,6 +16,7 @@ Retomar Estudos:
 - O usuário poderá retomar o último conteúdo acessado no curso;
 
 Listagem de Módulos
+- Na visualização em grade, organizar três módulos por linha em telas largas e continuar os itens excedentes nas linhas seguintes;
 - O usuário pode clicar na imagem da capa ou no nome do módulo para abrir o primeiro conteúdo publicado daquele módulo, nos modos grade e lista.
 - O usuário deverá visualizar todos os módulos do curso;
 - O usuário deverá visualizar a imagem dos módulos;

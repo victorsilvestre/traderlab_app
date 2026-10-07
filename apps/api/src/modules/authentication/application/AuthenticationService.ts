@@ -16,6 +16,7 @@ export class AuthenticationService {
     private readonly provider: AuthenticationProvider,
     private readonly profiles: UserProfileRepository,
     private readonly webAppUrl: string,
+    private readonly adminAppUrl?: string,
   ) {}
 
   async signUp(input: {
@@ -55,6 +56,22 @@ export class AuthenticationService {
   }
 
   async signIn(email: string, password: string): Promise<SignInDto> {
+    const result = await this.authenticate(email, password);
+    const profile = await this.resolveProfile(result.identity);
+
+    return { session: result.session, user: profile };
+  }
+
+  async signInForWorkspace(email: string, password: string): Promise<SignInDto> {
+    const result = await this.authenticate(email, password);
+    const profile = await this.profiles.findById(result.identity.id);
+    if (!profile || (profile.role !== 'mentor' && profile.role !== 'administrator')) {
+      throw new AuthenticationError('Este perfil não tem acesso ao ambiente de gestão.', 403);
+    }
+    return { session: result.session, user: profile };
+  }
+
+  private async authenticate(email: string, password: string) {
     let result;
     try {
       result = await this.provider.signIn(email.trim().toLowerCase(), password);
@@ -83,19 +100,17 @@ export class AuthenticationService {
       );
     }
 
-    const profile = await this.resolveProfile(result.identity);
-
-    return {
-      session: result.session,
-      user: profile,
-    };
+    return result;
   }
 
-  async resendConfirmation(email: string): Promise<{ message: string }> {
+  async resendConfirmation(
+    email: string,
+    destination: 'web' | 'admin' = 'web',
+  ): Promise<{ message: string }> {
     try {
       await this.provider.resendConfirmation(
         email.trim().toLowerCase(),
-        `${this.webAppUrl}/auth/callback`,
+        `${this.callbackOrigin(destination)}/auth/callback`,
       );
     } catch (cause) {
       throw new AuthenticationError(
@@ -110,11 +125,14 @@ export class AuthenticationService {
     };
   }
 
-  async requestPasswordRecovery(email: string): Promise<{ message: string }> {
+  async requestPasswordRecovery(
+    email: string,
+    destination: 'web' | 'admin' = 'web',
+  ): Promise<{ message: string }> {
     try {
       await this.provider.requestPasswordRecovery(
         email.trim().toLowerCase(),
-        `${this.webAppUrl}/auth/callback?next=/password-reset`,
+        `${this.callbackOrigin(destination)}/auth/callback?next=/password-reset`,
       );
     } catch (cause) {
       const code =
@@ -166,6 +184,37 @@ export class AuthenticationService {
   }
 
   async getCurrentUser(accessToken: string): Promise<UserProfileDto> {
+    return this.resolveProfile(await this.verifyIdentity(accessToken));
+  }
+
+  async getCurrentWorkspaceUser(accessToken: string): Promise<UserProfileDto> {
+    const identity = await this.verifyIdentity(accessToken);
+    const profile = await this.profiles.findById(identity.id);
+    if (!profile || (profile.role !== 'mentor' && profile.role !== 'administrator')) {
+      throw new AuthenticationError('Este perfil não tem acesso ao ambiente de gestão.', 403);
+    }
+    return profile;
+  }
+
+  async getCurrentAdministrator(accessToken: string): Promise<UserProfileDto> {
+    const identity = await this.verifyIdentity(accessToken);
+    const profile = await this.profiles.findById(identity.id);
+    if (!profile || profile.role !== 'administrator') {
+      throw new AuthenticationError(
+        'Esta funcionalidade está disponível somente para administradores.',
+        403,
+      );
+    }
+    return profile;
+  }
+
+  async getCurrentIdentity(accessToken: string): Promise<AuthenticatedIdentity> {
+    const identity = await this.verifyIdentity(accessToken);
+    await this.resolveProfile(identity);
+    return identity;
+  }
+
+  private async verifyIdentity(accessToken: string): Promise<AuthenticatedIdentity> {
     let identity: AuthenticatedIdentity | null;
     try {
       identity = await this.provider.getIdentity(accessToken);
@@ -181,7 +230,7 @@ export class AuthenticationService {
       throw new AuthenticationError('Sua sessão expirou. Entre novamente.', 401);
     }
 
-    return this.resolveProfile(identity);
+    return identity;
   }
 
   private async resolveProfile(
@@ -204,5 +253,11 @@ export class AuthenticationService {
     if (password !== confirmation) {
       throw new AuthenticationError('As senhas informadas não coincidem.', 400);
     }
+  }
+
+  private callbackOrigin(destination: 'web' | 'admin'): string {
+    if (destination === 'web') return this.webAppUrl;
+    if (this.adminAppUrl) return this.adminAppUrl;
+    throw new AuthenticationError('O acesso administrativo não está configurado.', 503);
   }
 }

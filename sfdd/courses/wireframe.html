@@ -187,7 +187,7 @@
       }
       .modules {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 16px;
       }
       .modules.list {
@@ -364,7 +364,7 @@
           width: 100%;
         }
         .modules.grid {
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .modules.list .module-top {
           grid-template-columns: 82px 1fr;
@@ -376,6 +376,9 @@
         .modules.grid .module-image {
           min-height: 165px;
         }
+      }
+      @media (max-width: 560px) {
+        .modules.grid { grid-template-columns: 1fr; }
       }
     </style>
   </head>

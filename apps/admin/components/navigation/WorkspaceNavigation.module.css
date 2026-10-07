@@ -1,0 +1,17 @@
+.nav { display: grid; gap: 6px; }
+.nav a {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 13px;
+  border-radius: 8px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.nav a:hover, .nav a[aria-current='page'] { color: var(--green); background: var(--soft-green); }
+.nav svg { width: 18px; height: 18px; flex: 0 0 auto; }
+

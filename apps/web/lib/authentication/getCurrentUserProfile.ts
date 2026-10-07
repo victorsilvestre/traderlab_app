@@ -1,9 +1,9 @@
-import type { UserProfileDto } from '@traderlab/contracts';
+import type { UserProfileDetailsDto } from '@traderlab/contracts';
 import { createSupabaseServerClient } from '../supabase/server';
 
 export type CurrentUserProfileResult = {
   authenticated: boolean;
-  profile: UserProfileDto | null;
+  profile: UserProfileDetailsDto | null;
   accessToken: string | null;
 };
 
@@ -17,7 +17,7 @@ export async function getCurrentUserProfile(): Promise<CurrentUserProfileResult>
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/authentication/me`,
+      `${process.env.NEXT_PUBLIC_API_URL}/users/me/profile`,
       {
         headers: { authorization: `Bearer ${accessToken}` },
         cache: 'no-store',
@@ -31,7 +31,7 @@ export async function getCurrentUserProfile(): Promise<CurrentUserProfileResult>
     }
     if (!response.ok) return { authenticated: true, profile: null, accessToken };
 
-    const profile = (await response.json()) as UserProfileDto;
+    const profile = (await response.json()) as UserProfileDetailsDto;
     return { authenticated: true, profile, accessToken };
   } catch {
     return { authenticated: true, profile: null, accessToken };

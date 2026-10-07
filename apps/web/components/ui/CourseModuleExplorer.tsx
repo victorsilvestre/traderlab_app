@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { CourseImage } from './CourseImage';
 import {
   useEffect,
   useRef,
@@ -211,12 +212,20 @@ export function CourseModuleExplorer({
                     className={styles.moduleImage}
                     href={`/courses/${encodeURIComponent(courseId)}/contents/${encodeURIComponent(module.contents[0].id)}`}
                     aria-label={`Abrir o primeiro conteúdo do módulo ${module.title}`}
-                    style={
-                      module.imageUrl
-                        ? { backgroundImage: `url(${module.imageUrl})` }
-                        : undefined
-                    }
+                    style={module.imageUrl && !module.imageUrl.includes('/storage/v1/object/sign/traderlab-course-images/')
+                      ? { backgroundImage: `url(${module.imageUrl})` }
+                      : undefined}
                   >
+                    {module.imageUrl && module.imageUrl.includes('/storage/v1/object/sign/traderlab-course-images/') && (
+                      <CourseImage
+                        className={styles.moduleImageAsset ?? ''}
+                        src={module.imageUrl!}
+                        alt=""
+                        sizes={view === 'grid'
+                          ? '(max-width: 560px) calc(100vw - 40px), (max-width: 760px) calc((100vw - 62px) / 2), 33vw'
+                          : '(max-width: 420px) 72px, (max-width: 760px) 88px, 112px'}
+                      />
+                    )}
                     {!module.imageUrl && (
                       <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
                     )}
@@ -226,12 +235,20 @@ export function CourseModuleExplorer({
                     className={styles.moduleImage}
                     role={module.imageUrl ? 'img' : undefined}
                     aria-label={module.imageUrl ? `Imagem do módulo ${module.title}` : undefined}
-                    style={
-                      module.imageUrl
-                        ? { backgroundImage: `url(${module.imageUrl})` }
-                        : undefined
-                    }
+                    style={module.imageUrl && !module.imageUrl.includes('/storage/v1/object/sign/traderlab-course-images/')
+                      ? { backgroundImage: `url(${module.imageUrl})` }
+                      : undefined}
                   >
+                    {module.imageUrl && module.imageUrl.includes('/storage/v1/object/sign/traderlab-course-images/') && (
+                      <CourseImage
+                        className={styles.moduleImageAsset ?? ''}
+                        src={module.imageUrl!}
+                        alt={`Imagem do módulo ${module.title}`}
+                        sizes={view === 'grid'
+                          ? '(max-width: 560px) calc(100vw - 40px), (max-width: 760px) calc((100vw - 62px) / 2), 33vw'
+                          : '(max-width: 420px) 72px, (max-width: 760px) 88px, 112px'}
+                      />
+                    )}
                     {!module.imageUrl && <span>{String(index + 1).padStart(2, '0')}</span>}
                   </div>
                 )}

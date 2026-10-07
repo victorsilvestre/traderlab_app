@@ -28,6 +28,10 @@ exercício e prova continuam fora da implementação funcional do MVP.
 
 ## Escopo e aderência ao MVP
 
+### Grade de módulos
+
+- A grade de módulos usa três colunas em telas largas, duas em telas intermediárias e uma em telas estreitas. A visualização em lista permanece vertical.
+
 Esta unidade entrega a consulta autenticada de um curso adquirido, seus módulos,
 conteúdos publicados, progresso, retomada e pesquisa. O modelo representa
 conteúdos de forma extensível, mas esta primeira implementação só atende os
@@ -242,3 +246,13 @@ navegador para confirmar visualmente a experiência com as novas URLs.
 ## Navegação por módulo
 
 A capa e o título de cada módulo apontam para o primeiro conteúdo publicado desse módulo. Os links permanecem no cabeçalho do módulo nos modos grade e lista. Módulos sem conteúdo publicado não oferecem esses links. O destino continua protegido pela validação de acesso existente na abertura do conteúdo.
+
+## Padrão aprovado de imagens de cursos, módulos e conteúdos — 07/10/2026
+
+- O bucket `traderlab-course-images` permanece privado. O banco persiste o caminho do objeto, e a API só gera URL assinada depois de validar o acesso ao curso.
+- O adaptador `SupabaseCourseImageStorage` atende capas de cursos, imagens de módulos e imagens de conteúdos. Ele reutiliza por caminho a mesma URL assinada por até 50 minutos, renova com margem antes do vencimento de uma hora, compartilha chamadas simultâneas e mantém no máximo 1.000 caminhos em memória por processo.
+- Os caminhos usam UUID; substituir uma imagem cria outro caminho e invalida a associação anterior sem depender de limpeza de cache.
+- Uploads novos devem definir `Cache-Control` de uma hora. O fluxo administrativo de capa já aplica essa configuração; os futuros formulários de módulo/conteúdo devem reutilizar o mesmo bucket e as mesmas opções de upload.
+- `CourseImage` centraliza a exibição com `next/image`, `sizes` responsivos e qualidade 90. A arte usa `object-fit: contain` para evitar corte de texto incorporado. URLs legadas seguem o fallback atual até serem substituídas por arquivos do Storage.
+- O detalhe do curso e as capas de módulo já usam `CourseImage`. A API já retorna URLs assinadas para imagens de conteúdo, mas a interface ainda não tem uma região visual aprovada para exibi-las; quando ela for definida, deve reutilizar `CourseImage`.
+- A aprovação visual da capa na home confirma o padrão de leitura/cache e qualidade. Detalhe do curso e módulos ainda precisam de conferência visual desktop/mobile. Avatar permanece fora desta decisão.

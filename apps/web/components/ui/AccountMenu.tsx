@@ -3,19 +3,41 @@
 import { homeClass } from './homeStyles';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LogoutButton } from '../authentication/LogoutButton';
 
-export function AccountMenu({ name }: { name: string }) {
+export function AccountMenu({
+  name,
+  avatarUrl,
+  roleLabel = 'Aluno',
+}: {
+  name: string;
+  avatarUrl?: string | null;
+  roleLabel?: string;
+}) {
   const [open, setOpen] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function closeOnEscape(event: KeyboardEvent) {
       if (event.key === 'Escape') setOpen(false);
     }
 
+    function closeOnOutside(event: PointerEvent) {
+      if (
+        event.target instanceof Node &&
+        !menuRef.current?.contains(event.target)
+      )
+        setOpen(false);
+    }
+
     window.addEventListener('keydown', closeOnEscape);
-    return () => window.removeEventListener('keydown', closeOnEscape);
+    document.addEventListener('pointerdown', closeOnOutside);
+    return () => {
+      window.removeEventListener('keydown', closeOnEscape);
+      document.removeEventListener('pointerdown', closeOnOutside);
+    };
   }, []);
   const initials = name
     .trim()
@@ -28,30 +50,59 @@ export function AccountMenu({ name }: { name: string }) {
 
   return (
     <div
+      ref={menuRef}
       className={homeClass('header-popover-wrap', 'account-popover-wrap')}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setOpen(false);
+        }
+      }}
     >
-      <button
+      <Link
         className={homeClass('avatar-trigger')}
-        type="button"
-        aria-label="Abrir opções da conta"
-        aria-expanded={open}
-        aria-haspopup="true"
-        onClick={() => setOpen(true)}
+        href="/profile"
+        aria-label="Acessar perfil"
+        onClick={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
       >
-        {avatarLabel}
-      </button>
+        {avatarUrl && !imageFailed ? (
+          <img
+            className={homeClass('account-avatar-image')}
+            src={avatarUrl}
+            alt=""
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          avatarLabel
+        )}
+      </Link>
       {open && (
         <div className={homeClass('header-popover', 'account-popover')}>
           <div className={homeClass('account-summary')}>
-            <span className={homeClass('account-avatar')}>{avatarLabel}</span>
+            <span className={homeClass('account-avatar')}>
+              {avatarUrl && !imageFailed ? (
+                <img
+                  className={homeClass('account-avatar-image')}
+                  src={avatarUrl}
+                  alt=""
+                  onError={() => setImageFailed(true)}
+                />
+              ) : (
+                avatarLabel
+              )}
+            </span>
             <span>
               <strong>{name || 'Aluno TraderLab'}</strong>
-              <small>Aluno</small>
+              <small>{roleLabel}</small>
             </span>
           </div>
-          <Link href="/profile" className={homeClass('account-link')}>
+          <Link
+            href="/profile"
+            className={homeClass('account-link')}
+            onClick={() => setOpen(false)}
+          >
             Acessar Perfil <span aria-hidden="true">↗</span>
           </Link>
           <div className={homeClass('account-logout')}>

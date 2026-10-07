@@ -23,6 +23,7 @@ function mapContent(content: {
   body: string;
   videoUrl: string | null;
   resourceUrl: string | null;
+  imagePath: string | null;
   position: number;
   status: PublicationStatus;
 }): CourseContentRecord {
@@ -39,6 +40,7 @@ function mapModules(
     title: string;
     description: string;
     imageUrl: string | null;
+    imagePath: string | null;
     position: number;
     status: PublicationStatus;
     contents: Array<{
@@ -50,6 +52,7 @@ function mapModules(
       body: string;
       videoUrl: string | null;
       resourceUrl: string | null;
+      imagePath: string | null;
       position: number;
       status: PublicationStatus;
     }>;
@@ -60,6 +63,7 @@ function mapModules(
     title: module.title,
     description: module.description,
     imageUrl: module.imageUrl,
+    imagePath: module.imagePath,
     position: module.position,
     status: module.status,
     contents: module.contents.map(mapContent),
@@ -97,6 +101,7 @@ export class PrismaCourseRepository implements CourseRepository {
       title: course.title,
       description: course.description,
       coverImageUrl: course.coverImageUrl,
+      coverImagePath: course.coverImagePath,
       status: course.status,
       modules: mapModules(course.modules),
     }));
@@ -114,6 +119,7 @@ export class PrismaCourseRepository implements CourseRepository {
       title: course.title,
       description: course.description,
       coverImageUrl: course.coverImageUrl,
+      coverImagePath: course.coverImagePath,
       status: course.status,
       modules: mapModules(course.modules),
     };

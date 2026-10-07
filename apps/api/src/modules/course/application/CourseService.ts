@@ -27,6 +27,7 @@ import type {
   CourseRepository,
   CourseSearchRecord,
   CourseMaterialStorage,
+  CourseImageStorage,
 } from '../domain/Course.js';
 import { CourseError } from '../domain/CourseError.js';
 import { toRichTextDocument } from './RichTextDocument.js';
@@ -95,24 +96,26 @@ function courseSummary(
 function contentDto(
   content: CourseContentLocation,
   progress: ContentProgressRecord | null,
+  imageUrl: string | null,
 ): CourseContentDto {
   return {
     ...toContentSummary(content, progress ?? undefined),
-    courseId: content.courseId,
-    courseTitle: content.courseTitle,
-    moduleId: content.moduleId,
-    moduleTitle: content.moduleTitle,
-    body: toRichTextDocument(content.body),
-    videoUrl: content.videoUrl ?? content.resourceUrl,
-    resourceUrl: content.resourceUrl,
-    materials: content.materials.map(
-      (material): CourseMaterialDto => ({
-        id: material.id,
-        name: material.name,
-        mimeType: material.mimeType,
-        sizeBytes: material.sizeBytes,
-      }),
-    ),
+      courseId: content.courseId,
+      courseTitle: content.courseTitle,
+      moduleId: content.moduleId,
+      moduleTitle: content.moduleTitle,
+      body: toRichTextDocument(content.body),
+      videoUrl: content.videoUrl ?? content.resourceUrl,
+      resourceUrl: content.resourceUrl,
+      imageUrl,
+      materials: content.materials.map(
+        (material): CourseMaterialDto => ({
+          id: material.id,
+          name: material.name,
+          mimeType: material.mimeType,
+          sizeBytes: material.sizeBytes,
+        }),
+      ),
   };
 }
 
@@ -122,6 +125,7 @@ export class CourseService {
     private readonly access: RequireCourseAccess,
     private readonly progress: ContentProgressService,
     private readonly materialStorage: CourseMaterialStorage,
+    private readonly imageStorage: CourseImageStorage,
   ) {}
 
   async listForStudent(studentId: string): Promise<CourseSummaryDto[]> {
@@ -129,7 +133,7 @@ export class CourseService {
     return Promise.all(
       courses.map(async (course) => {
         const records = await this.progress.listForCourse(studentId, course.id);
-        return courseSummary(course, progressByContent(records));
+        return this.toCourseSummary(course, progressByContent(records));
       }),
     );
   }
@@ -147,8 +151,16 @@ export class CourseService {
       courseId,
     );
     const progress = progressByContent(progressRecords);
-    const summary = courseSummary(course, progress);
-    const modules = course.modules.map((module) => moduleDto(module, progress));
+    const summary = await this.toCourseSummary(course, progress);
+    const modules = await Promise.all(course.modules.map(async (module) => {
+      const dto = moduleDto(module, progress);
+      return {
+        ...dto,
+        imageUrl: module.imagePath
+          ? await this.imageStorage.createReadUrl(module.imagePath)
+          : dto.imageUrl,
+      };
+    }));
     const latest = newestAccessed(progressRecords);
     const lastAccessedContent = latest
       ? course.modules
@@ -162,6 +174,19 @@ export class CourseService {
       lastAccessedContent: lastAccessedContent
         ? toContentSummary(lastAccessedContent, latest ?? undefined)
         : null,
+    };
+  }
+
+  private async toCourseSummary(
+    course: CourseRecord,
+    progress: Map<number, ContentProgressRecord>,
+  ): Promise<CourseSummaryDto> {
+    const summary = courseSummary(course, progress);
+    return {
+      ...summary,
+      coverImageUrl: course.coverImagePath
+        ? await this.imageStorage.createReadUrl(course.coverImagePath)
+        : summary.coverImageUrl,
     };
   }
 
@@ -274,7 +299,11 @@ export class CourseService {
     );
     if (!content) throw new CourseError('Conteúdo não encontrado.', 404);
     const progress = await this.progress.recordAccess(studentId, contentId);
-    return contentDto(content, progress);
+    return contentDto(
+      content,
+      progress,
+      content.imagePath ? await this.imageStorage.createReadUrl(content.imagePath) : null,
+    );
   }
 
   async completeContent(
@@ -312,7 +341,7 @@ export class CourseService {
     try {
       bytes = await this.materialStorage.download(material.storagePath);
     } catch {
-      throw new CourseError('NÃ£o foi possÃ­vel acessar este material agora.', 503);
+      throw new CourseError('Não foi possível acessar este material agora.', 503);
     }
     return {
       bytes,

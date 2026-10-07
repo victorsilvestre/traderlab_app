@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TraderLab — wireframe da autenticação administrativa</title>
+    <style>
+      :root {
+        font-family: Arial, Helvetica, sans-serif;
+        color: #252525;
+        background: #ececec;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 30px 18px 64px;
+      }
+      .document {
+        max-width: 1180px;
+        margin: auto;
+      }
+      h1 {
+        font-size: 24px;
+        margin: 0 0 8px;
+      }
+      .intro {
+        color: #5d5d5d;
+        max-width: 720px;
+        line-height: 1.5;
+        margin: 0 0 28px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 26px;
+      }
+      .label {
+        color: #555;
+        font-size: 13px;
+        margin: 0 0 9px;
+      }
+      .screen {
+        min-height: 515px;
+        border: 1px solid #aaa;
+        background: #fff;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #ccc;
+        padding: 17px 24px;
+        gap: 12px;
+      }
+      .brand {
+        font-weight: 700;
+      }
+      .top small {
+        color: #666;
+      }
+      .body {
+        max-width: 380px;
+        padding: 39px 22px 44px;
+        margin: auto;
+      }
+      .eyebrow {
+        color: #666;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+      h2 {
+        margin: 9px 0 11px;
+        font-size: 27px;
+      }
+      p {
+        line-height: 1.48;
+      }
+      .muted {
+        color: #666;
+        margin: 0 0 25px;
+      }
+      label {
+        display: block;
+        font-weight: 700;
+        font-size: 13px;
+        margin: 17px 0 7px;
+      }
+      input {
+        display: block;
+        width: 100%;
+        border: 1px solid #999;
+        padding: 12px;
+        background: #fff;
+        font: inherit;
+      }
+      button {
+        width: 100%;
+        padding: 12px 16px;
+        margin-top: 23px;
+        border: 1px solid #444;
+        background: #353535;
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      a {
+        color: #333;
+      }
+      .link-row {
+        margin-top: 18px;
+        font-size: 13px;
+      }
+      .notice {
+        background: #eee;
+        border: 1px solid #aaa;
+        padding: 13px 15px;
+        margin: 17px 0;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+      .notice strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+      .outline {
+        background: #fff;
+        color: #333;
+      }
+      .footnote {
+        margin-top: 15px;
+        color: #777;
+        font-size: 12px;
+      }
+      @media (max-width: 800px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 480px) {
+        body {
+          padding: 20px 11px 38px;
+        }
+        .top {
+          padding: 15px 17px;
+        }
+        .top small {
+          display: none;
+        }
+        .body {
+          padding: 32px 20px 37px;
+        }
+        .screen {
+          min-height: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="document">
+      <h1>Autenticação do ambiente de gestão</h1>
+      <p class="intro">
+        Wireframe em escala de cinza com estados ilustrativos. Os formulários
+        não fazem chamadas de autenticação e não usam dados reais.
+      </p>
+      <div class="grid">
+        <section aria-label="Tela de entrada">
+          <p class="label">01 · Entrada de administrador ou mentor</p>
+          <div class="screen">
+            <div class="top">
+              <span class="brand">TraderLab / Gestão</span
+              ><small>Acesso da equipe</small>
+            </div>
+            <div class="body">
+              <span class="eyebrow">Ambiente de gestão</span>
+              <h2>Entrar</h2>
+              <p class="muted">Use o e-mail e a senha da sua conta.</p>
+              <label for="email">E-mail</label>
+              <input id="email" type="email" placeholder="seu@email.com" />
+              <label for="password">Senha</label>
+              <input id="password" type="password" placeholder="Sua senha" />
+              <button type="button">Entrar</button>
+              <p class="link-row">
+                <a href="#recovery">Esqueceu sua senha?</a>
+              </p>
+              <p class="footnote">
+                Não há cadastro público no ambiente de gestão.
+              </p>
+            </div>
+          </div>
+        </section>
+        <section id="recovery" aria-label="Tela de recuperação">
+          <p class="label">02 · Solicitação de recuperação</p>
+          <div class="screen">
+            <div class="top">
+              <span class="brand">TraderLab / Gestão</span
+              ><small>Recuperar acesso</small>
+            </div>
+            <div class="body">
+              <span class="eyebrow">Acesso da equipe</span>
+              <h2>Recuperar senha</h2>
+              <p class="muted">
+                Informe seu e-mail para receber as instruções de redefinição.
+              </p>
+              <label for="recovery-email">E-mail</label>
+              <input
+                id="recovery-email"
+                type="email"
+                placeholder="seu@email.com"
+              />
+              <button type="button">Enviar instruções</button>
+              <div class="notice" role="status">
+                <strong>Solicitação recebida</strong>Se houver uma conta
+                associada a esse e-mail, enviaremos as instruções.
+              </div>
+              <p class="link-row"><a href="#">Voltar para entrar</a></p>
+            </div>
+          </div>
+        </section>
+        <section aria-label="Tela de redefinição">
+          <p class="label">03 · Link válido e nova senha</p>
+          <div class="screen">
+            <div class="top">
+              <span class="brand">TraderLab / Gestão</span
+              ><small>Nova senha</small>
+            </div>
+            <div class="body">
+              <span class="eyebrow">Redefinição</span>
+              <h2>Defina uma nova senha</h2>
+              <p class="muted">
+                Use pelo menos seis caracteres. Depois, entre novamente.
+              </p>
+              <label for="new-password">Nova senha</label>
+              <input
+                id="new-password"
+                type="password"
+                placeholder="Nova senha"
+              />
+              <label for="confirm-password">Confirmar nova senha</label>
+              <input
+                id="confirm-password"
+                type="password"
+                placeholder="Repita a senha"
+              />
+              <button type="button">Salvar nova senha</button>
+              <p class="footnote">
+                Se o link expirou, solicite outro na tela de recuperação.
+              </p>
+            </div>
+          </div>
+        </section>
+        <section aria-label="Tela de acesso indisponível">
+          <p class="label">04 · Perfil sem acesso ao ambiente</p>
+          <div class="screen">
+            <div class="top">
+              <span class="brand">TraderLab / Gestão</span
+              ><small>Acesso restrito</small>
+            </div>
+            <div class="body">
+              <span class="eyebrow">Acesso indisponível</span>
+              <h2>Este perfil não pode entrar aqui.</h2>
+              <p class="muted">
+                O ambiente de gestão está disponível para mentores e
+                administradores.
+              </p>
+              <div class="notice" role="alert">
+                <strong>Sua conta está protegida</strong>Seu acesso à plataforma
+                TraderLab continua separado deste endereço.
+              </div>
+              <button class="outline" type="button">
+                Voltar para a entrada
+              </button>
+              <p class="footnote">
+                Em caso de falha temporária da API, apresentar uma mensagem de
+                nova tentativa em vez deste estado.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

@@ -133,6 +133,7 @@
 
 
 ## Navegação dos módulos
+- [x] Exibir três módulos por linha na grade em telas largas e adaptar para duas e uma coluna em telas menores, preservando a visualização em lista.
 
 - [x] Tornar a capa e o nome de cada módulo links para seu primeiro conteúdo publicado, em grade e lista.
 - [x] Validar no navegador os links da capa e do nome nos modos grade e lista.
@@ -142,3 +143,11 @@
 
 - [x] Adicionar a opção “← Voltar” na página do curso, direcionando a Meus cursos.
 - [ ] Validar visualmente os links de retorno nas páginas de curso e conteúdo.
+
+## Imagens de curso, módulo e conteúdo — padrão aprovado
+
+- [x] Reutilizar o adaptador privado de URLs assinadas para capas de cursos, imagens de módulos e imagens de conteúdos.
+- [x] Centralizar qualidade 90 e tamanhos responsivos no componente `CourseImage`.
+- [x] Aplicar `CourseImage` à capa do detalhe do curso e às imagens dos módulos, preservando a proporção da arte.
+- [ ] Validar visualmente detalhe e módulos em desktop e mobile.
+- [ ] Reutilizar `CourseImage` quando a interface passar a exibir a imagem do conteúdo.

@@ -22,19 +22,26 @@ independent from production APIs, databases and authentication.
 
 ## Project architecture
 
-The project uses a monorepo with two applications:
+The project uses a monorepo with three applications:
 
 ```text
 apps/
 ├── web/
+├── admin/
 └── api/
 ```
 
 ### `apps/web`
 
-The web application built with Next.js. It contains pages, layouts, visual
-components and user interaction for public users, students, mentors and
-administrators.
+The student-facing Next.js application. It contains public access and the
+learning experience. An administrator may also enter this application using a
+separate session, subject to API access rules.
+
+### `apps/admin`
+
+The Next.js management application for mentors and administrators. It has its
+own routes, layout, deployment and host-scoped session. It uses the same API,
+Supabase project and product database as `apps/web`.
 
 ### `apps/api`
 
@@ -47,8 +54,8 @@ modules. Do not create separate microservices for MVP features.
 ### `packages`
 
 Contains code shared by more than one application. The initial shared package
-is `packages/contracts`, which contains data contracts shared by the web app and
-the API.
+is `packages/contracts`, which contains data contracts shared by the web apps
+and the API.
 
 Do not place business use cases, database queries, secrets or external service
 integrations in `packages`.
@@ -150,18 +157,22 @@ Use route groups when organizing areas without adding them to the URL:
 ```text
 apps/web/app/
 ├── (public)/
-├── (student)/
+└── (student)/
+
+apps/admin/app/
+├── (public)/
 └── (workspace)/
 ```
 
-The `(student)` area is the student learning experience. The `(workspace)` area
-is shared by mentors and administrators, but menus, routes and actions must be
-filtered by the authenticated user's role.
+The `(student)` area is the student learning experience in `apps/web`. The
+`(workspace)` area in `apps/admin` is shared by mentors and administrators, but
+menus, routes and actions must be filtered by the authenticated user's role.
 
 Do not reduce the mentor experience to a single extra button inside the student
-area. Mentors need a dedicated content-management workspace. Shared visual
-components are encouraged, but student and workspace pages should remain
-separate.
+area. Mentors need a dedicated content-management workspace. Student and
+workspace pages remain in their respective applications. Share contracts
+across applications; share visual code only when it has a genuine common
+responsibility.
 
 For the MVP, use the direct publishing model: mentors may publish and unpublish
 their content without a separate administrator approval step. Administrators
@@ -184,8 +195,7 @@ implementation:
 apps/web/
 ├── app/
 │   ├── (public)/sign-in/page.tsx
-│   ├── (student)/home/page.tsx        # URL: /home
-│   └── (workspace)/workspace/page.tsx # URL: /workspace
+│   └── (student)/home/page.tsx        # URL: /home
 ├── components/
 │   ├── authentication/                # Auth/session components
 │   ├── forms/                         # Reusable form components
@@ -194,13 +204,21 @@ apps/web/
 └── lib/
     ├── authentication/                # Web session helpers and auth flows
     └── <feature>/                     # API clients and web-facing data mapping
+
+apps/admin/
+├── app/
+│   ├── (public)/sign-in/page.tsx
+│   └── (workspace)/page.tsx           # URL: /
+├── components/
+└── lib/
 ```
 
 Route groups organize code and layouts but do not add a URL segment. Add a real
-segment such as `home` or `workspace` when the page needs a distinct URL. Do not
+segment such as `home` when the page needs a distinct URL. Do not
 declare two route groups that resolve to the same URL. If `/` must serve as a
 public entry and authenticated destination, keep its `page.tsx` as a small
-dispatcher; put the actual student and workspace screens on their own routes.
+dispatcher; put the actual student screen on its own route. The admin app owns
+its own root route.
 
 Responsibilities:
 
@@ -208,8 +226,8 @@ Responsibilities:
   helper, and composes the screen. Keep large UI trees, interaction state and
   feature-specific copy out of route files.
 - `layout.tsx` owns persistent layout shared by routes in its area, such as an
-  area header or navigation. Keep student and workspace layouts separate when
-  their navigation or role context differs.
+  area header or navigation. Student and workspace layouts belong to their
+  respective applications.
 - All React components live under `components/`, organized by responsibility
   rather than page or feature. Use the established categories
   `authentication/`, `forms/`, `ui/` and `navigation/`.
@@ -277,6 +295,22 @@ notification
 
 Do not use a different term for the same concept in another module.
 
+## Text encoding and user-facing copy
+
+- Save source code, documentation and configuration files as UTF-8. Do not
+  convert existing files to the Windows/ANSI code page when editing them.
+- Preserve Portuguese accents and punctuation in UI copy, API messages,
+  accessibility labels, tooltips, comments and SFDD documents.
+- When using PowerShell or scripts to edit text, specify UTF-8 explicitly and
+  verify the resulting diff; avoid commands that decode or write using the
+  machine's default encoding.
+- Before completing a change that adds or edits text, run
+  `pnpm check:text-encoding` (also included in the root `pnpm lint`) and inspect
+  the changed lines for mojibake: common signs include accented characters
+  replaced by unrelated Latin letters or punctuation.
+- Treat a failed encoding check as a defect: restore the intended text and
+  rerun the check before delivery.
+
 ## Contracts and data boundaries
 
 Data crossing boundaries must use simple application DTOs or contracts. Do not
@@ -312,3 +346,4 @@ Before completing a change, confirm:
 5. Authorization is enforced by the API.
 6. Naming follows this guide.
 7. The change does not introduce unnecessary layers or packages.
+8. Text files remain UTF-8 and the encoding check passes.

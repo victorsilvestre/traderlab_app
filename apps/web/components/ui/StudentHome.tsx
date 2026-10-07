@@ -4,7 +4,7 @@ import type {
   HomeBannerDto,
   NotificationListDto,
   RecentContentDto,
-  UserProfileDto,
+  UserProfileDetailsDto,
 } from '@traderlab/contracts';
 import { BannerCarousel } from './BannerCarousel';
 import { CourseList } from './CourseList';
@@ -20,7 +20,7 @@ export function StudentHome({
   banners,
   notificationInbox,
 }: {
-  profile: UserProfileDto;
+  profile: UserProfileDetailsDto;
   courses: CourseSummaryDto[];
   coursesUnavailable: boolean;
   recentContents: RecentContentDto[];
@@ -34,6 +34,8 @@ export function StudentHome({
     <main className={homeClass('student-home')}>
       <StudentHeader
         name={profile.name}
+        avatarUrl={profile.avatarUrl}
+        role={profile.role}
         notificationInbox={notificationInbox}
       />
       <div className={homeClass('student-content')}>

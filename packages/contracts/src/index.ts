@@ -11,6 +11,21 @@ export type UserProfileDto = {
   role: UserRole;
 };
 
+export type UserProfileDetailsDto = UserProfileDto & {
+  email: string | null;
+  avatarUrl: string | null;
+};
+
+export type AvatarUploadDto = {
+  path: string;
+  token: string;
+};
+
+export type CourseImageUploadDto = {
+  path: string;
+  token: string;
+};
+
 export type SignInDto = {
   session: {
     accessToken: string;
@@ -67,6 +82,97 @@ export type CourseSummaryDto = {
   contentCount: number;
   completedCount: number;
   progressPercent: number;
+};
+
+export type ManagedCourseStatusDto = 'draft' | 'published';
+
+export type ManagedCourseDto = {
+  id: number;
+  title: string;
+  description: string;
+  coverImageUrl: string | null;
+  coverImagePath: string | null;
+  status: ManagedCourseStatusDto;
+  moduleCount: number;
+  updatedAt: string;
+};
+
+export type ManagedCoursePageDto = {
+  items: ManagedCourseDto[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type ManagedCourseInputDto = {
+  title: string;
+  description: string;
+  coverImagePath?: string | null;
+};
+
+export type ManagedCourseUpdateDto = Partial<ManagedCourseInputDto> & {
+  status?: ManagedCourseStatusDto;
+};
+
+export type ManagedCourseModuleDto = {
+  id: number;
+  courseId: number;
+  title: string;
+  description: string;
+  imageUrl: string | null;
+  imagePath: string | null;
+  position: number;
+  status: ManagedCourseStatusDto;
+  contentCount: number;
+  contents: ManagedCourseContentDto[];
+  updatedAt: string;
+};
+
+export type ManagedCourseContentDto = {
+  id: number;
+  title: string;
+  description: string;
+  kind: CourseContentKindDto;
+  status: ManagedCourseStatusDto;
+  position: number;
+  materials: Array<{
+    id: number;
+    name: string;
+    mimeType: string;
+    sizeBytes: number;
+    position: number;
+  }>;
+};
+
+export type ManagedCourseModulesDto = {
+  course: Pick<ManagedCourseDto, 'id' | 'title' | 'status'>;
+  items: ManagedCourseModuleDto[];
+};
+
+export type ManagedCourseModuleInputDto = {
+  title: string;
+  description?: string;
+};
+
+export type ManagedCourseModuleUpdateDto =
+  Partial<ManagedCourseModuleInputDto> & {
+    imagePath?: string | null;
+    status?: ManagedCourseStatusDto;
+  };
+
+export type ReorderCourseModulesDto = {
+  orderedIds: number[];
+};
+
+export type CourseImageTargetDto = {
+  kind: 'course' | 'module' | 'content';
+  id: number;
+};
+
+export type CourseImageUploadRequestDto = CourseImageTargetDto & {
+  contentType: string;
+  sizeBytes: number;
 };
 
 export type CourseContentSummaryDto = {
@@ -134,6 +240,7 @@ export type CourseContentDto = CourseContentSummaryDto & {
   body: RichTextDocumentDto;
   videoUrl: string | null;
   resourceUrl: string | null;
+  imageUrl: string | null;
   materials: CourseMaterialDto[];
 };
 

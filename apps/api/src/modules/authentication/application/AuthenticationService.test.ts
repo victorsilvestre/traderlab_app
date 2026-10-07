@@ -52,6 +52,7 @@ function setup() {
       provider,
       profiles,
       'http://localhost:3000',
+      'http://admin.localhost:3001',
     ),
   };
 }
@@ -144,10 +145,55 @@ describe('AuthenticationService', () => {
     expect(profiles.findById).toHaveBeenCalledWith(identity.id);
   });
 
+  it('admits existing mentors and administrators without creating a student profile', async () => {
+    const { profiles, service } = setup();
+    for (const role of ['mentor', 'administrator'] as const) {
+      vi.mocked(profiles.findById).mockResolvedValueOnce({
+        id: identity.id, name: identity.name!, phone: identity.phone!, role,
+      });
+      const result = await service.signInForWorkspace(identity.email!, 'secret123');
+      expect(result.user.role).toBe(role);
+      expect(result.session.accessToken).toBe(session.session.accessToken);
+    }
+    expect(profiles.createForStudent).not.toHaveBeenCalled();
+  });
+
+  it('denies workspace tokens to students and identities without a profile', async () => {
+    const { profiles, service } = setup();
+    await expect(service.signInForWorkspace(identity.email!, 'secret123'))
+      .rejects.toMatchObject({ statusCode: 403 });
+    vi.mocked(profiles.findById).mockResolvedValueOnce(null);
+    await expect(service.signInForWorkspace(identity.email!, 'secret123'))
+      .rejects.toMatchObject({ statusCode: 403 });
+    expect(profiles.createForStudent).not.toHaveBeenCalled();
+  });
+
+  it('requires email confirmation before workspace access', async () => {
+    const { provider, profiles, service } = setup();
+    vi.mocked(provider.signIn).mockResolvedValueOnce({
+      ...session, identity: { ...identity, emailConfirmed: false },
+    });
+    await expect(service.signInForWorkspace(identity.email!, 'secret123'))
+      .rejects.toMatchObject({ statusCode: 403 });
+    expect(profiles.findById).not.toHaveBeenCalled();
+  });
+
+  it('checks the current workspace role without recreating a missing profile', async () => {
+    const { profiles, service } = setup();
+    vi.mocked(profiles.findById).mockResolvedValueOnce({
+      id: identity.id, name: identity.name!, phone: identity.phone!, role: 'mentor',
+    });
+    expect((await service.getCurrentWorkspaceUser('access-token')).role).toBe('mentor');
+    vi.mocked(profiles.findById).mockResolvedValueOnce(null);
+    await expect(service.getCurrentWorkspaceUser('access-token'))
+      .rejects.toMatchObject({ statusCode: 403 });
+    expect(profiles.createForStudent).not.toHaveBeenCalled();
+  });
+
   it('returns a generic error for invalid sign-in credentials', async () => {
     const { provider, profiles, service } = setup();
     vi.mocked(provider.signIn).mockRejectedValueOnce(
-      new Error('invalid password'),
+      Object.assign(new Error('invalid password'), { status: 400 }),
     );
 
     await expect(
@@ -180,6 +226,18 @@ describe('AuthenticationService', () => {
     );
     expect(recovery.message).not.toContain(identity.email!);
     expect(confirmation.message).not.toContain(identity.email!);
+  });
+
+  it('uses only the configured admin origin for admin email callbacks', async () => {
+    const { provider, service } = setup();
+    await service.requestPasswordRecovery(identity.email!, 'admin');
+    await service.resendConfirmation(identity.email!, 'admin');
+    expect(provider.requestPasswordRecovery).toHaveBeenCalledWith(
+      identity.email!, 'http://admin.localhost:3001/auth/callback?next=/password-reset',
+    );
+    expect(provider.resendConfirmation).toHaveBeenCalledWith(
+      identity.email!, 'http://admin.localhost:3001/auth/callback',
+    );
   });
 
   it('keeps the provider failure available for server diagnostics without changing the user message', async () => {

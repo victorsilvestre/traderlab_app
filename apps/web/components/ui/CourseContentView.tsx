@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type {
   CourseContentDto,
   CourseDetailDto,
-  UserProfileDto,
+  UserProfileDetailsDto,
 } from '@traderlab/contracts';
 import { CourseBreadcrumbs } from '../navigation/CourseBreadcrumbs';
 import { StudentHeader } from './StudentHeader';
@@ -15,11 +15,11 @@ import styles from './CourseScreen.module.css';
 export function CourseContentLoadError({
   profile,
 }: {
-  profile: UserProfileDto;
+  profile: UserProfileDetailsDto;
 }) {
   return (
     <main className={styles.page}>
-      <StudentHeader name={profile.name} />
+      <StudentHeader name={profile.name} avatarUrl={profile.avatarUrl} role={profile.role} />
       <div className={styles.container}>
         <section className={styles.errorState} role="alert">
           <h1>Não conseguimos carregar esta aula.</h1>
@@ -100,7 +100,7 @@ export function CourseContentView({
   content,
   course,
 }: {
-  profile: UserProfileDto;
+  profile: UserProfileDetailsDto;
   content: CourseContentDto;
   course: CourseDetailDto;
 }) {
@@ -110,7 +110,7 @@ export function CourseContentView({
 
   return (
     <main className={styles.page}>
-      <StudentHeader name={profile.name} />
+      <StudentHeader name={profile.name} avatarUrl={profile.avatarUrl} role={profile.role} />
       <div className={styles.container}>
         <CourseBreadcrumbs
           courseId={content.courseId}
