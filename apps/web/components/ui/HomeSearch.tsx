@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { searchAccessibleCourseContents } from '../../lib/courses/searchAction';
 import type { StudentCourseSearchResultDto } from '@traderlab/contracts';
 import { homeClass } from './homeStyles';
@@ -9,6 +9,7 @@ import { homeClass } from './homeStyles';
 type SearchStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 export function HomeSearch() {
+  const searchRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<StudentCourseSearchResultDto[]>([]);
@@ -32,6 +33,23 @@ export function HomeSearch() {
     window.addEventListener('keydown', handleShortcut);
     return () => window.removeEventListener('keydown', handleShortcut);
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function closeWhenClickingOutside(event: PointerEvent) {
+      if (
+        event.target instanceof Node &&
+        !searchRef.current?.contains(event.target)
+      ) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener('pointerdown', closeWhenClickingOutside);
+    return () =>
+      document.removeEventListener('pointerdown', closeWhenClickingOutside);
+  }, [open]);
 
   useEffect(() => {
     const normalizedQuery = query.trim();
@@ -62,7 +80,7 @@ export function HomeSearch() {
   }, [open, query]);
 
   return (
-    <div className={homeClass('home-search')}>
+    <div className={homeClass('home-search')} ref={searchRef}>
       <button
         className={homeClass('search-trigger', open && 'is-active')}
         type="button"

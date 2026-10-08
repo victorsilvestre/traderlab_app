@@ -36,11 +36,12 @@
   Supabase diretamente.
 - `AdminCourseModules` apresenta card do curso, configurações, seção Conteúdo e
   acordeões de módulos; usa ações de mover para cima/baixo já autorizadas e o
-  modal já aprovado para despublicação.
+  modal já aprovado para despublicação. A navegação usa o componente
+  `AdminBackLink` com o rótulo `← Voltar`, sem breadcrumbs.
 - Exibir conteúdo e materiais anexados somente para leitura. Não apresentar
   botões inertes para funcionalidades futuras.
 - Criar `/courses/[courseId]/settings` reutilizando `AdminCourseForm`.
-  Salvar/cancelar retorna à tela integrada.
+  Salvar retorna à tela integrada; o link `← Voltar` aponta para essa tela.
 - Após criação ou edição de módulo, retornar à tela integrada do curso.
 - Preservar layout responsivo e impedir overflow horizontal no grid principal,
   formulários e lista.

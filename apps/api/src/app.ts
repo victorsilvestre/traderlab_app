@@ -21,9 +21,11 @@ import { ContentProgressService } from './modules/progress/application/ContentPr
 import { PrismaContentProgressRepository } from './modules/progress/infrastructure/PrismaContentProgressRepository.js';
 import { progressRoutes } from './modules/progress/presentation/progress.routes.js';
 import { HomeBannerService } from './modules/notification/application/HomeBannerService.js';
+import { HomeBannerError } from './modules/notification/domain/HomeBannerError.js';
 import { PrismaHomeBannerRepository } from './modules/notification/infrastructure/PrismaHomeBannerRepository.js';
 import { homeBannerRoutes } from './modules/notification/presentation/homeBanner.routes.js';
 import { NotificationService } from './modules/notification/application/NotificationService.js';
+import { NotificationError } from './modules/notification/domain/NotificationError.js';
 import { PrismaNotificationRepository } from './modules/notification/infrastructure/PrismaNotificationRepository.js';
 import { notificationRoutes } from './modules/notification/presentation/notification.routes.js';
 import { UserService } from './modules/user/application/UserService.js';
@@ -31,6 +33,10 @@ import { PrismaUserProfileRepository as UserProfileEditRepository } from './modu
 import { SupabaseProfileAvatarStorage } from './modules/user/infrastructure/SupabaseProfileAvatarStorage.js';
 import { userRoutes } from './modules/user/presentation/user.routes.js';
 import { UserError } from './modules/user/domain/UserError.js';
+import { EnrollmentService } from './modules/enrollment/application/EnrollmentService.js';
+import { EnrollmentError } from './modules/enrollment/domain/EnrollmentError.js';
+import { PrismaEnrollmentRepository } from './modules/enrollment/infrastructure/PrismaEnrollmentRepository.js';
+import { enrollmentRoutes } from './modules/enrollment/presentation/enrollment.routes.js';
 
 const configuredWebAppUrl = process.env.WEB_APP_URL;
 if (!configuredWebAppUrl) {
@@ -41,8 +47,9 @@ const adminAppUrl = process.env.ADMIN_APP_URL?.replace(/\/$/, '');
 
 export function createApp() {
   const app = Fastify({ logger: true });
+  const authenticationProvider = new SupabaseAuthProvider();
   const service = new AuthenticationService(
-    new SupabaseAuthProvider(),
+    authenticationProvider,
     new PrismaUserProfileRepository(),
     webAppUrl,
     adminAppUrl,
@@ -50,11 +57,15 @@ export function createApp() {
   const progressService = new ContentProgressService(
     new PrismaContentProgressRepository(),
   );
+  const courseImageStorage = new SupabaseCourseImageStorage();
   const homeBannerService = new HomeBannerService(
     new PrismaHomeBannerRepository(),
+    courseImageStorage,
+    webAppUrl,
   );
   const notificationService = new NotificationService(
     new PrismaNotificationRepository(),
+    authenticationProvider,
   );
   const userService = new UserService(
     new UserProfileEditRepository(),
@@ -65,12 +76,14 @@ export function createApp() {
     new RequireCourseAccess(new PrismaCourseAccessRepository()),
     progressService,
     new SupabaseCourseMaterialStorage(),
-    new SupabaseCourseImageStorage(),
+    courseImageStorage,
   );
   const courseManagementService = new CourseManagementService(
     new PrismaCourseManagementRepository(),
     new SupabaseCourseImageStorage(),
+    new SupabaseCourseMaterialStorage(),
   );
+  const enrollmentService = new EnrollmentService(new PrismaEnrollmentRepository());
 
   void app.register(cors, {
     origin: adminAppUrl ? [webAppUrl, adminAppUrl] : webAppUrl,
@@ -98,7 +111,14 @@ export function createApp() {
     authentication: service,
     service: notificationService,
   });
-  void app.register(userRoutes, { authentication: service, service: userService });
+  void app.register(userRoutes, {
+    authentication: service,
+    service: userService,
+  });
+  void app.register(enrollmentRoutes, {
+    authentication: service,
+    service: enrollmentService,
+  });
 
   app.get('/health', async () => ({ status: 'ok' as const }));
 
@@ -132,6 +152,15 @@ export function createApp() {
       return reply.code(error.statusCode).send({ message: error.message });
     }
     if (error instanceof CourseError) {
+      return reply.code(error.statusCode).send({ message: error.message });
+    }
+    if (error instanceof NotificationError) {
+      return reply.code(error.statusCode).send({ message: error.message });
+    }
+    if (error instanceof HomeBannerError) {
+      return reply.code(error.statusCode).send({ message: error.message });
+    }
+    if (error instanceof EnrollmentError) {
       return reply.code(error.statusCode).send({ message: error.message });
     }
     if (error instanceof CourseAccessError) {

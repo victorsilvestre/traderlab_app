@@ -11,6 +11,8 @@ import type {
   NewManagedCourse,
   NewManagedCourseModule,
   PublicationState,
+  ManagedLessonChanges,
+  ManagedLessonRecord,
 } from '../domain/Course.js';
 
 function toPublicationStatus(status: PublicationState): PublicationStatus {
@@ -34,12 +36,14 @@ function mapModule(module: {
     id: number;
     title: string;
     description: string;
+    imagePath: string | null;
     kind: 'LESSON' | 'MATERIAL';
     status: PublicationStatus;
     position: number;
     materials: Array<{
       id: number;
       name: string;
+      description: string;
       mimeType: string;
       sizeBytes: number;
       position: number;
@@ -58,6 +62,7 @@ function mapModule(module: {
     contentCount: module._count.contents,
     contents: (module.contents ?? []).map((content) => ({
       ...content,
+      imageUrl: null,
       materials: content.materials,
     })),
     updatedAt: module.updatedAt,
@@ -105,8 +110,8 @@ export class PrismaCourseManagementRepository implements CourseManagementReposit
       );
     }
     return Boolean(
-      await prisma.courseContent.findUnique({
-        where: { id },
+      await prisma.courseContent.findFirst({
+        where: { id, kind: 'LESSON' },
         select: { id: true },
       }),
     );
@@ -145,7 +150,8 @@ export class PrismaCourseManagementRepository implements CourseManagementReposit
         description: input.description,
         coverImageUrl: input.coverImageUrl,
         coverImagePath: input.coverImagePath,
-        status: PublicationStatus.DRAFT,
+        status: PublicationStatus.PUBLISHED,
+        publishedAt: new Date(),
       },
       include: { _count: { select: { modules: true } } },
     });
@@ -221,6 +227,7 @@ export class PrismaCourseManagementRepository implements CourseManagementReposit
                 id: true,
                 title: true,
                 description: true,
+                imagePath: true,
                 kind: true,
                 status: true,
                 position: true,
@@ -229,6 +236,7 @@ export class PrismaCourseManagementRepository implements CourseManagementReposit
                   select: {
                     id: true,
                     name: true,
+                    description: true,
                     mimeType: true,
                     sizeBytes: true,
                     position: true,
@@ -268,7 +276,7 @@ export class PrismaCourseManagementRepository implements CourseManagementReposit
           title: input.title,
           description: input.description,
           position: (lastPosition._max.position ?? -1) + 1,
-          status: PublicationStatus.DRAFT,
+          status: PublicationStatus.PUBLISHED,
         },
         include: { _count: { select: { contents: true } } },
       });
@@ -329,6 +337,193 @@ export class PrismaCourseManagementRepository implements CourseManagementReposit
       await Promise.all(
         orderedIds.map((id, position) =>
           transaction.courseModule.update({
+            where: { id },
+            data: { position },
+          }),
+        ),
+      );
+      return true;
+    });
+  }
+
+  async lessonExists(courseId: number, moduleId: number, contentId: number) {
+    return Boolean(
+      await prisma.courseContent.findFirst({
+        where: {
+          id: contentId,
+          moduleId,
+          kind: 'LESSON',
+          module: { courseId },
+        },
+        select: { id: true },
+      }),
+    );
+  }
+
+  async getManagedLesson(
+    courseId: number,
+    moduleId: number,
+    contentId: number,
+  ): Promise<ManagedLessonRecord | null> {
+    const lesson = await prisma.courseContent.findFirst({
+      where: { id: contentId, moduleId, kind: 'LESSON', module: { courseId } },
+      include: { materials: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+    });
+    return lesson as unknown as ManagedLessonRecord | null;
+  }
+
+  async createManagedLesson(
+    moduleId: number,
+    input: ManagedLessonChanges,
+  ): Promise<ManagedLessonRecord> {
+    return prisma.$transaction(async (transaction) => {
+      const courseModule = await transaction.courseModule.findUnique({
+        where: { id: moduleId },
+        select: { id: true },
+      });
+      if (!courseModule) throw new Error('Course module not found.');
+      const last = await transaction.courseContent.aggregate({
+        where: { moduleId },
+        _max: { position: true },
+      });
+      const created = await transaction.courseContent.create({
+        data: {
+          moduleId,
+          title: input.title,
+          description: input.description,
+          imagePath: input.imagePath,
+          body: input.body,
+          videoUrl: input.videoUrl,
+          kind: 'LESSON',
+          status: PublicationStatus.DRAFT,
+          position: (last._max.position ?? -1) + 1,
+          materials: {
+            create: input.materials.map((material) => ({
+              name: material.name,
+              description: material.description,
+              storagePath: material.storagePath!,
+              mimeType: material.mimeType,
+              sizeBytes: material.sizeBytes,
+              position: material.position,
+            })),
+          },
+        },
+        include: {
+          materials: { orderBy: [{ position: 'asc' }, { id: 'asc' }] },
+        },
+      });
+      return created as unknown as ManagedLessonRecord;
+    });
+  }
+
+  async updateManagedLesson(
+    courseId: number,
+    moduleId: number,
+    contentId: number,
+    changes: ManagedLessonChanges,
+  ): Promise<ManagedLessonRecord | null> {
+    return prisma.$transaction(async (transaction) => {
+      const current = await transaction.courseContent.findFirst({
+        where: {
+          id: contentId,
+          moduleId,
+          kind: 'LESSON',
+          module: { courseId },
+        },
+        select: { id: true, status: true },
+      });
+      if (!current) return null;
+      const materialIds = changes.materials.flatMap((material) =>
+        material.id === undefined ? [] : [material.id],
+      );
+      const ownedMaterialIds = await transaction.courseMaterial.findMany({
+        where: { contentId, id: { in: materialIds } },
+        select: { id: true },
+      });
+      if (ownedMaterialIds.length !== materialIds.length) return null;
+      const publishedAt =
+        changes.status === 'PUBLISHED'
+          ? current.status === PublicationStatus.PUBLISHED
+            ? undefined
+            : new Date()
+          : changes.status === 'DRAFT'
+            ? null
+            : undefined;
+      await transaction.courseContent.update({
+        where: { id: contentId },
+        data: {
+          title: changes.title,
+          description: changes.description,
+          imagePath: changes.imagePath,
+          body: changes.body,
+          videoUrl: changes.videoUrl,
+          ...(changes.status
+            ? { status: toPublicationStatus(changes.status) }
+            : {}),
+          ...(publishedAt !== undefined ? { publishedAt } : {}),
+        },
+      });
+      await transaction.courseMaterial.deleteMany({
+        where: {
+          contentId,
+          ...(materialIds.length ? { id: { notIn: materialIds } } : {}),
+        },
+      });
+      for (const material of changes.materials) {
+        const data = {
+          name: material.name,
+          description: material.description,
+          storagePath: material.storagePath,
+          mimeType: material.mimeType,
+          sizeBytes: material.sizeBytes,
+          position: material.position,
+        };
+        if (material.id) {
+          const { storagePath, ...existingData } = data;
+          await transaction.courseMaterial.update({
+            where: { id: material.id },
+            data: { ...existingData, ...(storagePath ? { storagePath } : {}) },
+          });
+        } else
+          await transaction.courseMaterial.create({
+            data: { ...data, storagePath: data.storagePath!, contentId },
+          });
+      }
+      return (await transaction.courseContent.findUniqueOrThrow({
+        where: { id: contentId },
+        include: {
+          materials: { orderBy: [{ position: 'asc' }, { id: 'asc' }] },
+        },
+      })) as unknown as ManagedLessonRecord;
+    });
+  }
+
+  async reorderManagedLessons(
+    moduleId: number,
+    orderedIds: number[],
+  ): Promise<boolean> {
+    return prisma.$transaction(async (transaction) => {
+      const contents = await transaction.courseContent.findMany({
+        where: { moduleId },
+        orderBy: [{ position: 'asc' }, { id: 'asc' }],
+        select: { id: true, kind: true },
+      });
+      const lessonIds = contents
+        .filter((item) => item.kind === 'LESSON')
+        .map((item) => item.id);
+      if (
+        lessonIds.length !== orderedIds.length ||
+        new Set(orderedIds).size !== orderedIds.length ||
+        orderedIds.some((id) => !lessonIds.includes(id))
+      )
+        return false;
+      let index = 0;
+      const finalOrder = contents.map((item) =>
+        item.kind === 'LESSON' ? orderedIds[index++]! : item.id,
+      );
+      await Promise.all(
+        finalOrder.map((id, position) =>
+          transaction.courseContent.update({
             where: { id },
             data: { position },
           }),

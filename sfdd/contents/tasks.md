@@ -60,9 +60,10 @@ Dependência: concluir decisões necessárias acima e autorizar a implementaçã
 
 - [x] Provisionar o bucket privado `traderlab-course-materials` no Supabase do ambiente antes de disponibilizar downloads.
 - [x] Aplicar a migration ao banco Supabase autorizado; o status final indica schema em dia.
-- [ ] Implementar upload, associação/edição dos arquivos e editor rico na unidade de gestão de conteúdo do mentor.
+- [x] Implementar upload e associação/edição dos arquivos na unidade
+      `admin-content-management`; o formulário preserva o texto rico existente
+      quando ele não é alterado.
 - [ ] Aplicar a migração ao banco autorizado após revisão e janela própria de implantação.
-
 
 ## Ajuste de retorno
 

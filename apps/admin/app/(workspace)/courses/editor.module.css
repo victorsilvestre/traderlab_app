@@ -13,15 +13,6 @@
   color: var(--muted);
   line-height: 1.55;
 }
-.backLink {
-  color: var(--muted);
-  font-size: 13px;
-  text-decoration: none;
-}
-.backLink:hover {
-  color: var(--green);
-  text-decoration: underline;
-}
 .status {
   display: inline-flex;
   margin-top: 22px;

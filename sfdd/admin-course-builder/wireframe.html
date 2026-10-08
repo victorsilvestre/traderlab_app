@@ -31,16 +31,15 @@
         padding: 26px 0 64px;
       }
       .breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 9px;
+        display: inline-flex;
         color: #62686c;
         font-size: 13px;
         margin-bottom: 20px;
-      }
-      .breadcrumb a {
         color: inherit;
         text-decoration: none;
+      }
+      .breadcrumb:hover {
+        text-decoration: underline;
       }
       .course-header {
         display: flex;
@@ -420,10 +419,7 @@
   </head>
   <body>
     <main class="shell">
-      <nav class="breadcrumb" aria-label="Trilha de navegação">
-        <a href="#">Cursos</a><span aria-hidden="true">›</span
-        ><span>Gestão de Risco na Prática</span>
-      </nav>
+      <a class="breadcrumb" href="#">← Voltar</a>
 
       <header class="course-header">
         <div class="cover" aria-label="Espaço reservado para a capa do curso">

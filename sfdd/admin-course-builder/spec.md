@@ -2,9 +2,9 @@
 
 ## Status
 
-Wireframe aprovado. A experiência integrada de curso e a consulta resumida de
-conteúdos existentes foram implementadas. A gestão de aulas e materiais ainda
-será detalhada em uma unidade SFDD própria.
+Wireframe aprovado. A experiência integrada do curso, a consulta de conteúdos
+e a gestão administrativa de aulas e materiais estão documentadas em unidades
+SFDD próprias. As ações de criação e edição são integradas ao construtor.
 
 ## Perfil e objetivo
 
@@ -36,6 +36,8 @@ Curso
 
 - Ao abrir um curso, o administrador encontra um cabeçalho com capa, nome,
   estado e ações gerais do curso.
+- A tela integrada e todas as demais telas secundárias administrativas usam um
+  link `← Voltar` com destino estável; a tela integrada não exibe breadcrumbs.
 - A ação **Configurações do curso** abre a edição dos dados gerais: nome,
   descrição e capa.
 - Abaixo do cabeçalho do curso, a seção **Conteúdo** lista módulos empilhados e
@@ -57,6 +59,7 @@ Curso
 - Estados de vazio orientam a criação no nível certo: primeiro módulo, primeiro
   item do módulo ou primeiro material complementar da aula.
 - A página tem rolagem natural, sem áreas internas com rolagem concorrente.
+- A página inicial do workspace é a única tela sem `← Voltar`.
 
 ## Regras e limites
 

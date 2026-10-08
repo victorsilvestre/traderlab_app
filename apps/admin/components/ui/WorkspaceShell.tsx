@@ -29,7 +29,7 @@ export function WorkspaceShell({
             TraderLab <small>Gestão</small>
           </span>
         </div>
-        <WorkspaceNavigation />
+        <WorkspaceNavigation isAdministrator={profile.role === 'administrator'} />
         <p className={styles.sidebarNote}>
           Novas áreas administrativas serão acrescentadas em etapas.
         </p>

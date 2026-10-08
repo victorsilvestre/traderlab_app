@@ -9,6 +9,7 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:status": "prisma migrate status",
+    "db:seed:demo": "node --env-file=.env prisma/seed-demo-users-and-enrollments.mjs",
     "storage:ensure-course-materials": "node --env-file=.env scripts/provision-course-materials-bucket.mjs",
     "storage:ensure-course-images": "node --env-file=.env scripts/provision-course-images-bucket.mjs",
     "storage:ensure-profile-avatars": "node --env-file=.env scripts/provision-profile-avatars-bucket.mjs",

@@ -43,6 +43,7 @@ export class AuthenticationService {
         id: identity.id,
         name: identity.name ?? input.name.trim(),
         phone: identity.phone ?? input.phone.trim(),
+        email: identity.email,
       });
     } catch {
       await this.provider.deleteUser(identity.id).catch(() => undefined);
@@ -58,6 +59,7 @@ export class AuthenticationService {
   async signIn(email: string, password: string): Promise<SignInDto> {
     const result = await this.authenticate(email, password);
     const profile = await this.resolveProfile(result.identity);
+    await this.recordSuccessfulLogin(result.identity);
 
     return { session: result.session, user: profile };
   }
@@ -68,6 +70,7 @@ export class AuthenticationService {
     if (!profile || (profile.role !== 'mentor' && profile.role !== 'administrator')) {
       throw new AuthenticationError('Este perfil não tem acesso ao ambiente de gestão.', 403);
     }
+    await this.recordSuccessfulLogin(result.identity);
     return { session: result.session, user: profile };
   }
 
@@ -243,7 +246,12 @@ export class AuthenticationService {
       id: identity.id,
       name: identity.name ?? '',
       phone: identity.phone ?? '',
+      email: identity.email,
     });
+  }
+
+  private async recordSuccessfulLogin(identity: AuthenticatedIdentity): Promise<void> {
+    await this.profiles.recordSuccessfulLogin(identity.id, identity.email, new Date());
   }
 
   private validatePassword(password: string, confirmation: string): void {

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wireframe — Gestão de matrículas</title>
+  <style>
+    :root { color-scheme: light; font: 14px Arial, sans-serif; color: #222; background: #eee; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .shell { display: grid; grid-template-columns: 210px minmax(0, 1fr); min-height: 100vh; }
+    aside, header, main, section, .row, .field, .button, .nav-item { border: 1px solid #aaa; background: #f8f8f8; }
+    aside { padding: 20px 14px; background: #e4e4e4; }
+    .brand { margin: 0 0 28px; font-weight: 700; }
+    .nav-item { padding: 12px; margin: 6px 0; }
+    .active { background: #d5d5d5; font-weight: 700; }
+    .main { min-width: 0; padding: 24px clamp(16px, 4vw, 56px); }
+    header { padding: 14px 18px; margin-bottom: 28px; text-align: right; }
+    .heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    h1 { margin: 0 0 6px; font-size: 28px; }
+    p { color: #555; margin: 0; }
+    .button { display: inline-block; padding: 11px 14px; white-space: nowrap; }
+    .filters { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(180px, 240px) minmax(150px, 190px); gap: 12px; margin-bottom: 16px; }
+    .field { padding: 12px; color: #555; }
+    .table { border: 1px solid #aaa; background: #f8f8f8; overflow: hidden; }
+    .row { display: grid; grid-template-columns: minmax(150px, 1.2fr) minmax(170px, 1.3fr) 110px minmax(160px, 1.3fr) 120px 110px; gap: 12px; padding: 14px 16px; align-items: center; border-width: 0 0 1px; }
+    .row:last-child { border-bottom: 0; }
+    .row.head { background: #dedede; font-weight: 700; }
+    .muted { color: #666; font-size: 12px; }
+    .status { display: inline-block; border: 1px solid #999; padding: 5px 8px; border-radius: 20px; }
+    .pagination { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+    .form { max-width: 760px; padding: 22px; border: 1px solid #aaa; background: #f8f8f8; }
+    .form .field { margin: 8px 0 18px; }
+    .autocomplete { position: relative; }
+    .suggestions { position: absolute; z-index: 1; top: calc(100% + 4px); right: 0; left: 0; margin: 0; padding: 4px; border: 1px solid #aaa; background: #f8f8f8; list-style: none; }
+    .suggestions li { padding: 10px; border-bottom: 1px solid #ddd; }
+    .suggestions li:last-child { border-bottom: 0; }
+    .selected { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid #aaa; background: #f8f8f8; }
+    .actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      aside { padding: 12px; }
+      .brand { margin: 0 0 10px; }
+      .nav-item { display: inline-block; margin: 2px; }
+      .filters { grid-template-columns: 1fr 1fr; }
+      .row { grid-template-columns: minmax(130px, 1fr) minmax(150px, 1fr) 90px minmax(140px, 1fr); }
+      .row > :nth-child(5), .row > :nth-child(6) { display: none; }
+    }
+    @media (max-width: 580px) {
+      .heading { align-items: flex-start; flex-direction: column; }
+      .filters { grid-template-columns: 1fr; }
+      .row { min-width: 0; grid-template-columns: 1fr; gap: 7px; padding: 12px; }
+      .row.head { display: none; }
+      .row > span { display: flex; justify-content: space-between; gap: 10px; }
+      .row > span:nth-child(1)::before { content: 'Aluno'; }
+      .row > span:nth-child(2)::before { content: 'E-mail'; }
+      .row > span:nth-child(3)::before { content: 'Papel'; }
+      .row > span:nth-child(4)::before { content: 'Curso'; }
+      .row > span:nth-child(5)::before { content: 'Concedida em'; }
+      .row > span:nth-child(6)::before { content: 'Situação'; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand">TraderLab · Gestão</div>
+      <div class="nav-item">Início</div>
+      <div class="nav-item">Alunos</div>
+      <div class="nav-item active">Matrículas</div>
+      <div class="nav-item">Cursos</div>
+    </aside>
+    <div class="main">
+      <header>Ambiente de gestão · Administrador</header>
+      <main>
+        <section class="heading" style="border:0;background:transparent">
+          <div><h1>Matrículas</h1><p>Consulte acessos aos cursos e matricule usuários cadastrados.</p></div>
+          <span class="button">＋ Matricular usuário</span>
+        </section>
+        <div class="filters">
+          <div class="field">Buscar por aluno, e-mail, telefone ou curso…</div>
+          <div class="field">Todos os cursos　⌄</div>
+          <div class="field">Todas as situações　⌄</div>
+        </div>
+        <div class="table" role="table" aria-label="Matrículas">
+          <div class="row head" role="row"><span>Aluno</span><span>E-mail</span><span>Papel</span><span>Curso</span><span>Concedida em</span><span>Situação</span></div>
+          <div class="row" role="row"><span>Ana Martins</span><span class="muted">ana@example.com</span><span>Aluno</span><span>Day Trade Essencial</span><span>08 out. 2026</span><span class="status">Ativa</span></div>
+          <div class="row" role="row"><span>Victor Silvestre</span><span class="muted">victor@example.com</span><span>Administrador</span><span>Fundamentos do Day Trade</span><span>03 out. 2026</span><span class="status">Ativa</span></div>
+          <div class="row" role="row"><span>Marina Costa</span><span class="muted">marina@example.com</span><span>Mentor</span><span>Leitura de Mercado</span><span>29 set. 2026</span><span class="status">Ativa</span></div>
+        </div>
+        <div class="pagination"><span>12 matrículas</span><span class="button">←　1 de 2　→</span></div>
+        <section style="border:0;background:transparent;margin-top:56px">
+          <h2>Nova matrícula</h2>
+          <div class="form">
+            <label>Usuário cadastrado</label>
+            <div class="autocomplete">
+              <div class="field">Ana Beatriz</div>
+              <ul class="suggestions">
+                <li><strong>Ana Beatriz Souza</strong><br><span class="muted">Aluno · ana@example.com · (11) 99999-0000</span></li>
+                <li><strong>Ana Souza Lima</strong><br><span class="muted">Administrador · ana.lima@example.com · (11) 98888-0000</span></li>
+              </ul>
+            </div>
+            <p class="muted" style="margin: 44px 0 8px">Depois de escolher uma opção:</p>
+            <div class="selected"><span><strong>Ana Beatriz Souza</strong><br><span class="muted">Aluno · ana@example.com · (11) 99999-0000</span></span><span class="button">Trocar</span></div>
+            <label>Curso publicado</label><div class="field">Selecione um curso　⌄</div>
+            <p class="muted">A matrícula libera acesso ao curso imediatamente e é vitalícia nesta versão.</p>
+            <div class="actions"><span class="button">Cancelar</span><span class="button">Matricular usuário</span></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

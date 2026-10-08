@@ -29,7 +29,9 @@ as ações disponíveis.
 - Somente um perfil autenticado com papel administrator pode consultar ou
   alterar o catálogo administrativo.
 - A autorização é conferida pela API em cada requisição.
-- Cursos novos começam como rascunho.
+- Cursos novos são publicados ao salvar. Edições também salvam como publicados;
+  para retirar o curso da área do aluno, o administrador usa a ação explícita de
+  despublicar.
 - Publicar torna o curso elegível para aparecer na plataforma conforme as
   regras de acesso e matrícula já existentes.
 - Despublicar remove o curso da experiência de aprendizagem sem apagar dados.
@@ -38,6 +40,8 @@ as ações disponíveis.
 - Campos obrigatórios: título e descrição. A capa é opcional e enviada pelo painel em JPEG, PNG ou WebP, até 5 MB. O formulário informa proporção 16:9 e resolução recomendada de 1920 × 1080 px; outras dimensões podem ser recortadas na plataforma.
 - A despublicação pede confirmação em modal; o modal explica que o curso deixa de aparecer aos alunos e que matrículas, dados e progresso permanecem.
 - A listagem usa ícones compactos para editar, publicar/despublicar, filtrar e criar curso; cada ação possui rótulo ao passar o mouse e nome acessível.
+- Na página de estrutura do curso, a seção é identificada como “Módulos do curso”. Configurações e criação de módulo usam botões minimalistas somente com ícone, com nome acessível e tooltip em uma linha.
+- A área de trabalho da estrutura permanece centralizada e pode ocupar até 1320 px; a coluna de ordenação do módulo reserva largura própria para que os ícones não se sobreponham ao título ou à descrição.
 - O botão de filtro tem a mesma altura dos campos de busca e publicação. A tabela não possui rolagem vertical própria.
 - No cartão de curso, a capa mantém a proporção 16:9, sem zoom ou recorte no hover, para preservar textos e detalhes incorporados à arte.
 - O catálogo exibe título, estado, quantidade de módulos e última atualização
@@ -48,12 +52,15 @@ as ações disponíveis.
 - Um administrador pode abrir /courses e consultar todos os cursos.
 - Busca e filtro atualizam a listagem sem expor dados de rascunho fora do admin.
 - Cada página contém até 25 resultados filtrados; a navegação mantém os critérios de busca e estado.
-- Criar curso persiste os campos e o curso aparece como rascunho.
-- Editar preserva os campos não alterados e o estado atual.
+- Criar curso persiste os campos e o curso aparece como publicado.
+- Editar preserva os campos não alterados e publica o curso ao salvar.
+- O formulário apresenta uma única ação principal chamada “Salvar”.
 - Publicar/despublicar atualiza o banco e a listagem.
 - Perfil sem autorização recebe 403 mesmo chamando a API diretamente.
 - Falhas de API são apresentadas com uma ação de tentar novamente; não são
   confundidas com catálogo vazio.
+- A tela do curso identifica a seção como “Módulos do curso” e mantém os botões de configurações e adicionar módulo somente com ícones e rótulos acessíveis.
+- Em larguras amplas, a estrutura usa uma área centralizada de até 1320 px e os controles de ordenação não cobrem o texto do módulo.
 
 ## Fora desta entrega
 

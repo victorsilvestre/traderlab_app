@@ -240,6 +240,8 @@
 - [x] Implementar emissão de upload autorizado, validação do arquivo e persistência do caminho do avatar no perfil.
 - [x] Implementar /profile como página completa, protegida para usuário autenticado e acessível diretamente e pelo menu do avatar.
 - [x] Reutilizar o cabeçalho completo da aplicação em home, /profile e /notifications.
+- [x] Filtrar o popover de notificações para mostrar somente itens não lidos,
+      limitado a quatro, sem alterar as ações de leitura existentes.
 - [x] Fazer o avatar navegar diretamente para /profile sem acrescentar símbolos visuais ao lado da imagem; abrir as opções da conta por hover ou foco de teclado.
 - [x] Fechar o menu ao clicar fora e disponibilizar “Acessar Perfil” e logout nas opções da conta.
 - [x] Exibir o avatar persistido nos locais da conta; manter as iniciais como fallback sem imagem.

@@ -26,7 +26,11 @@ export async function StudentHeader({
     try {
       const accessToken = await getCurrentAccessToken();
       inbox = accessToken
-        ? await getNotifications(accessToken, { limit: 5, timeoutMs: 1800 })
+        ? await getNotifications(accessToken, {
+            filter: 'unread',
+            limit: 4,
+            timeoutMs: 1800,
+          })
         : null;
     } catch {
       inbox = null;

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wireframe — edição de aula e materiais</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        color: #222;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      header {
+        background: #ddd;
+        border-bottom: 1px solid #aaa;
+        padding: 16px 24px;
+      }
+      main {
+        width: min(960px, calc(100% - 32px));
+        margin: 28px auto;
+      }
+      nav,
+      .panel,
+      .field,
+      .material,
+      .actions {
+        border: 1px solid #aaa;
+        background: #fafafa;
+      }
+      nav {
+        padding: 12px 16px;
+        margin-bottom: 20px;
+        color: #555;
+      }
+      h1 {
+        font-size: 26px;
+        margin: 0 0 8px;
+      }
+      h2 {
+        font-size: 18px;
+        margin: 0;
+      }
+      p {
+        color: #555;
+      }
+      .panel {
+        padding: 22px;
+        margin-bottom: 16px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .field {
+        min-height: 48px;
+        padding: 12px;
+        color: #777;
+        border-radius: 4px;
+      }
+      .field.large {
+        min-height: 140px;
+      }
+      .field.rich {
+        min-height: 220px;
+      }
+      .cover-preview {
+        display: grid;
+        width: min(360px, 100%);
+        aspect-ratio: 16 / 9;
+        place-items: center;
+        border: 1px solid #aaa;
+        background: #e5e5e5;
+        color: #666;
+      }
+      .label {
+        display: block;
+        margin: 18px 0 7px;
+        font-weight: 700;
+      }
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .material {
+        padding: 14px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .muted {
+        color: #777;
+        font-size: 14px;
+      }
+      button {
+        border: 1px solid #777;
+        background: #eee;
+        border-radius: 4px;
+        padding: 10px 14px;
+        color: #222;
+      }
+      .primary {
+        background: #444;
+        color: white;
+      }
+      .actions {
+        padding: 14px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+      @media (max-width: 640px) {
+        header {
+          padding: 14px 16px;
+        }
+        main {
+          width: calc(100% - 24px);
+          margin: 16px auto;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        .panel {
+          padding: 16px;
+        }
+        .toolbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .actions {
+          position: sticky;
+          bottom: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header><strong>TraderLab · Administração</strong></header>
+    <main>
+      <a href="#">← Voltar</a>
+      <h1>Editar aula</h1>
+      <p>
+        Defina as informações da aula e os arquivos que acompanham o conteúdo.
+      </p>
+
+      <section class="panel" aria-labelledby="lesson-heading">
+        <h2 id="lesson-heading">Informações da aula</h2>
+        <span class="label">Título *</span>
+        <div class="field">Ex.: Introdução à análise técnica</div>
+        <span class="label">Capa da aula * · JPEG, PNG ou WebP · até 5 MB</span>
+        <div class="cover-preview">Prévia da imagem · proporção 16:9</div>
+        <p class="muted">[Escolher imagem]</p>
+        <div class="grid">
+          <div>
+            <span class="label">Descrição</span>
+            <div class="field large">Resumo breve da aula</div>
+          </div>
+          <div>
+            <span class="label">Vídeo do YouTube (opcional)</span>
+            <div class="field">https://youtu.be/...</div>
+          </div>
+        </div>
+        <span class="label">Conteúdo da aula</span>
+        <div class="field" role="toolbar" aria-label="Formatação do conteúdo">
+          Parágrafo　Título　Subtítulo　B　I　U
+        </div>
+        <div class="field rich" contenteditable="true">
+          Área de conteúdo · selecione o texto para formatar
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="student-list-heading">
+        <h2 id="student-list-heading">Conteúdo do curso · visão do aluno</h2>
+        <div class="material" style="align-items: center">
+          <div class="cover-preview" style="width: 64px; flex: 0 0 64px">
+            Miniatura
+          </div>
+          <strong style="flex: 1">[Nome da aula]</strong>
+          <span aria-label="Aula atual">▶</span>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="materials-heading">
+        <div class="toolbar">
+          <div>
+            <h2 id="materials-heading">Materiais complementares</h2>
+            <p class="muted">
+              Qualquer extensão · até 50 MB por arquivo · arquivos disponíveis
+              junto desta aula.
+            </p>
+          </div>
+          <button type="button">+ Adicionar material</button>
+        </div>
+        <div class="material">
+          <div>
+            <strong>[Nome do arquivo]</strong>
+            <div class="muted">[Descrição opcional] · [tipo] · [tamanho]</div>
+          </div>
+          <button type="button" aria-label="Opções do material">
+            ↑ ↓ Editar
+          </button>
+        </div>
+        <div class="panel" aria-labelledby="material-form-heading">
+          <h3 id="material-form-heading">Editando material</h3>
+          <span class="label">Nome do material *</span>
+          <div class="field">[Nome]</div>
+          <span class="label">Descrição (opcional)</span>
+          <div class="field">[Descrição]</div>
+          <span class="label">Arquivo atual</span>
+          <div class="field">
+            [Nome do arquivo] · Selecionar substituto (opcional)
+          </div>
+          <div class="actions">
+            <button type="button">Cancelar edição</button>
+            <button type="button">Salvar material</button>
+          </div>
+        </div>
+        <p class="muted">
+          Sem materiais? Adicione um arquivo para complementar a aula.
+        </p>
+      </section>
+
+      <section class="actions" aria-label="Ações do formulário">
+        <button type="button" class="primary">Salvar</button>
+      </section>
+    </main>
+  </body>
+</html>

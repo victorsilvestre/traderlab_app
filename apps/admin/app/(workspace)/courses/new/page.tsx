@@ -1,14 +1,19 @@
-import Link from 'next/link';
 import { AdminCourseForm } from '../../../../components/forms/AdminCourseForm';
+import { AdminBackLink } from '../../../../components/navigation/AdminBackLink';
 import styles from '../editor.module.css';
+import { safeAdminReturnTo } from '../../../../lib/navigation/safeAdminReturnTo';
 
-export default function NewAdminCoursePage() {
+type PageProps = { searchParams: Promise<{ returnTo?: string }> };
+
+export default async function NewAdminCoursePage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const returnTo = safeAdminReturnTo(params.returnTo, '/courses');
   return (
     <section className={styles.editor}>
-      <Link className={styles.backLink} href="/courses">← Cursos</Link>
+      <AdminBackLink href={returnTo} />
       <h1>Novo curso</h1>
-      <p>Defina as informações principais. O curso começa como rascunho.</p>
-      <AdminCourseForm />
+      <p>Defina as informações. O curso será publicado ao salvar.</p>
+      <AdminCourseForm returnTo={returnTo} />
     </section>
   );
 }

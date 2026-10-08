@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type { AuthenticationService } from '../../authentication/application/AuthenticationService.js';
 import { AuthenticationError } from '../../authentication/domain/AuthenticationError.js';
+import type { ManagedNotificationInputDto } from '@traderlab/contracts';
 import type { NotificationService } from '../application/NotificationService.js';
 
 type NotificationParams = { notificationId: number };
@@ -9,6 +10,8 @@ type NotificationQuery = {
   offset?: number;
   limit?: number;
 };
+type AdminNotificationQuery = { page?: number };
+type AdminNotificationParams = { notificationId: number };
 
 function accessToken(request: FastifyRequest): string {
   const header = request.headers.authorization;
@@ -32,6 +35,31 @@ const notificationParamsSchema = {
   additionalProperties: false,
   properties: { notificationId: { type: 'integer', minimum: 1 } },
 } as const;
+const adminNotificationQuerySchema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: { page: { type: 'integer', minimum: 1, maximum: 100000 } },
+} as const;
+const adminNotificationParamsSchema = {
+  type: 'object',
+  required: ['notificationId'],
+  additionalProperties: false,
+  properties: { notificationId: { type: 'integer', minimum: 1 } },
+} as const;
+const adminNotificationBodySchema = {
+  type: 'object',
+  required: ['title', 'description', 'audience'],
+  additionalProperties: false,
+  properties: {
+    title: { type: 'string', minLength: 1, maxLength: 180 },
+    description: { type: 'string', minLength: 1, maxLength: 3000 },
+    linkUrl: { anyOf: [{ type: 'string', maxLength: 2048 }, { type: 'null' }] },
+    audience: { type: 'string', enum: ['general', 'course'] },
+    courseId: {
+      anyOf: [{ type: 'integer', minimum: 1 }, { type: 'null' }],
+    },
+  },
+} as const;
 
 export async function notificationRoutes(
   app: FastifyInstance,
@@ -40,6 +68,52 @@ export async function notificationRoutes(
     service: NotificationService;
   },
 ): Promise<void> {
+  app.get<{ Querystring: AdminNotificationQuery }>(
+    '/admin/notifications',
+    { schema: { querystring: adminNotificationQuerySchema } },
+    async (request) => {
+      await options.authentication.getCurrentAdministrator(accessToken(request));
+      return options.service.listForAdmin(request.query.page ?? 1);
+    },
+  );
+
+  app.get('/admin/notifications/courses', async (request) => {
+    await options.authentication.getCurrentAdministrator(accessToken(request));
+    return { items: await options.service.listCourses() };
+  });
+
+  app.get<{ Params: AdminNotificationParams; Querystring: AdminNotificationQuery }>(
+    '/admin/notifications/:notificationId',
+    {
+      schema: {
+        params: adminNotificationParamsSchema,
+        querystring: adminNotificationQuerySchema,
+      },
+    },
+    async (request) => {
+      await options.authentication.getCurrentAdministrator(accessToken(request));
+      return options.service.getAdminDetails(
+        request.params.notificationId,
+        request.query.page ?? 1,
+      );
+    },
+  );
+
+  app.post<{ Body: ManagedNotificationInputDto }>(
+    '/admin/notifications',
+    { schema: { body: adminNotificationBodySchema } },
+    async (request, reply) => {
+      const administrator = await options.authentication.getCurrentAdministrator(
+        accessToken(request),
+      );
+      const created = await options.service.createAndSend(
+        request.body,
+        administrator.id,
+      );
+      return reply.code(201).send(created);
+    },
+  );
+
   app.get<{ Querystring: NotificationQuery }>(
     '/notifications',
     {

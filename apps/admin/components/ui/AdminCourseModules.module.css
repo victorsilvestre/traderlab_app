@@ -1,23 +1,8 @@
 .builder {
   width: 100%;
   min-width: 0;
-  max-width: 100%;
-}
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin-bottom: 19px;
-  color: var(--muted);
-  font-size: 12px;
-}
-.breadcrumb a {
-  color: inherit;
-  text-decoration: none;
-}
-.breadcrumb a:hover {
-  color: var(--green);
-  text-decoration: underline;
+  max-width: 1320px;
+  margin-inline: auto;
 }
 .courseCard {
   display: flex;
@@ -58,6 +43,7 @@
   min-width: 0;
   flex: 1;
 }
+.courseActions { display: flex; flex: 0 0 auto; gap: 7px; }
 .eyebrow {
   margin: 0 0 6px;
   color: var(--muted);
@@ -112,13 +98,13 @@
 }
 .settingsButton,
 .primaryButton {
-  display: inline-flex;
+  position: relative;
+  display: inline-grid;
+  width: 40px;
   min-height: 40px;
   flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 0 13px;
+  place-items: center;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--surface);
@@ -183,9 +169,34 @@
   background: var(--green-hover);
   color: #fff;
 }
+.settingsButton svg,
 .primaryButton svg {
   width: 17px;
   height: 17px;
+}
+.settingsButton[data-tooltip]::after,
+.primaryButton[data-tooltip]::after {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 6px);
+  right: 0;
+  width: max-content;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #1e2922;
+  color: white;
+  content: attr(data-tooltip);
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.settingsButton[data-tooltip]:hover::after,
+.settingsButton[data-tooltip]:focus-visible::after,
+.primaryButton[data-tooltip]:hover::after,
+.primaryButton[data-tooltip]:focus-visible::after {
+  opacity: 1;
 }
 .moduleList {
   display: grid;
@@ -194,7 +205,7 @@
 }
 .module {
   min-width: 0;
-  overflow: clip;
+  overflow: visible;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
@@ -202,15 +213,40 @@
 .moduleHeader {
   display: grid;
   min-width: 0;
-  grid-template-columns: 42px minmax(0, 1fr) auto auto;
+  grid-template-columns: 64px minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 12px;
   min-height: 76px;
   padding: 12px 15px;
 }
-.reorderActions {
+.moduleSummary {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+}
+.moduleCover {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(2, 30px);
+  width: 56px;
+  height: 36px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #eef1ec;
+  color: var(--muted);
+  font-size: 13px;
+}
+.moduleCover img,
+.lessonCover img {
+  object-fit: cover;
+}
+.reorderActions {
+  display: flex;
+  min-width: 64px;
+  justify-content: center;
   gap: 2px;
 }
 .moduleInfo {
@@ -240,6 +276,7 @@
 }
 .moduleActions {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 3px;
 }
@@ -275,10 +312,10 @@
   position: absolute;
   z-index: 5;
   top: calc(100% + 6px);
-  left: 50%;
+  right: 0;
   width: max-content;
   padding: 5px 7px;
-  transform: translateX(-50%);
+  transform: translateY(-3px);
   border-radius: 4px;
   background: #1e2922;
   color: white;
@@ -291,7 +328,20 @@
 }
 .iconButton[data-tooltip]:hover::after,
 .iconButton[data-tooltip]:focus-visible::after {
+  transform: translateY(0);
   opacity: 1;
+}
+.moduleList > .module:last-child > .moduleHeader .iconButton[data-tooltip]::after,
+.contentItem:last-child .iconButton[data-tooltip]::after {
+  top: auto;
+  bottom: calc(100% + 6px);
+  transform: translateY(3px);
+}
+.moduleList > .module:last-child > .moduleHeader .iconButton[data-tooltip]:hover::after,
+.moduleList > .module:last-child > .moduleHeader .iconButton[data-tooltip]:focus-visible::after,
+.contentItem:last-child .iconButton[data-tooltip]:hover::after,
+.contentItem:last-child .iconButton[data-tooltip]:focus-visible::after {
+  transform: translateY(0);
 }
 .dangerAction {
   color: #a53e3e;
@@ -308,13 +358,57 @@
 .contentItem {
   display: grid;
   min-width: 0;
-  grid-template-columns: 32px minmax(0, 1fr) auto;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
   align-items: center;
   gap: 11px;
   padding: 10px 11px;
   border: 1px solid #e5e8e5;
   border-radius: 6px;
   background: #fafbf9;
+}
+.lessonCover {
+  position: relative;
+  display: grid;
+  width: 60px;
+  height: 38px;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #eef1ec;
+  color: var(--muted);
+  font-size: 12px;
+}
+.lessonActions {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  grid-column: 3;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 2px;
+}
+.lessonActions .iconButton {
+  width: 30px;
+  height: 30px;
+}
+.materialToggle:disabled {
+  opacity: 0.4;
+}
+.inlineError {
+  position: absolute;
+  z-index: 4;
+  top: calc(100% + 4px);
+  right: 0;
+  width: max-content;
+  max-width: min(260px, calc(100vw - 48px));
+  padding: 7px 9px;
+  border: 1px solid #dfbbbb;
+  border-radius: 5px;
+  background: #fff;
+  color: #8f3434;
+  font-size: 10px;
+  overflow-wrap: anywhere;
 }
 .contentTypeIcon {
   display: grid;
@@ -330,9 +424,17 @@
 .contentInfo {
   min-width: 0;
 }
+.contentMeta {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+}
 .contentType {
   display: block;
-  margin-bottom: 3px;
+  margin: 0;
   color: var(--muted);
   font-size: 9px;
   font-weight: 750;
@@ -346,6 +448,7 @@
   font-size: 12px;
 }
 .contentInfo p {
+  overflow-wrap: anywhere;
   margin: 4px 0 0;
   color: var(--muted);
   font-size: 11px;
@@ -357,6 +460,9 @@
   padding: 9px 11px;
   border-left: 2px solid #bdc5c0;
   background: #f1f3f1;
+}
+.attachments[hidden] {
+  display: none;
 }
 .attachmentsTitle {
   display: flex;
@@ -500,9 +606,16 @@
     margin-left: auto;
   }
   .moduleHeader {
-    grid-template-columns: 36px minmax(0, 1fr) auto;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
     gap: 8px;
     padding: 11px;
+  }
+  .moduleSummary {
+    gap: 8px;
+  }
+  .moduleCover {
+    width: 48px;
+    height: 32px;
   }
   .moduleMeta {
     grid-column: 2;
@@ -512,9 +625,7 @@
   .moduleActions {
     grid-column: 3;
     grid-row: 1 / span 2;
-    flex-wrap: wrap;
     justify-content: flex-end;
-    max-width: 76px;
   }
   .moduleBody {
     padding: 0 10px 12px;
@@ -537,8 +648,8 @@
     font-size: 20px;
   }
   .settingsButton {
-    width: 100%;
-    margin-left: 0;
+    width: 40px;
+    margin-left: auto;
   }
   .contentHeading {
     align-items: flex-start;
@@ -550,25 +661,34 @@
     flex-direction: column;
   }
   .toolbar > .primaryButton {
-    width: 100%;
+    width: 40px;
+    align-self: flex-end;
   }
   .moduleMeta {
     flex-wrap: wrap;
     gap: 6px;
   }
   .contentItem {
-    grid-template-columns: 28px minmax(0, 1fr) auto;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
     gap: 7px;
     padding: 8px;
+  }
+  .lessonCover {
+    width: 44px;
+    height: 30px;
   }
   .contentTypeIcon {
     width: 27px;
     height: 27px;
   }
-  .contentItem > .published,
-  .contentItem > .draft {
-    grid-column: 2;
-    grid-row: 2;
+  .lessonActions {
+    grid-column: 3;
+    justify-content: flex-end;
+    gap: 1px;
+  }
+  .lessonActions .iconButton {
+    width: 27px;
+    height: 27px;
   }
   .attachments {
     grid-column: 1 / -1;

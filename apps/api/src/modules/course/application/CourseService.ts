@@ -37,12 +37,14 @@ const searchLimit = 30;
 function toContentSummary(
   content: CourseContentRecord,
   progress: ContentProgressRecord | undefined,
+  imageUrl: string | null = null,
 ): CourseContentSummaryDto {
   return {
     id: content.id,
     title: content.title,
     description: content.description,
     kind: content.kind.toLowerCase() as CourseContentSummaryDto['kind'],
+    imageUrl,
     completed: Boolean(progress?.completedAt),
     lastAccessedAt: progress?.lastAccessedAt.toISOString() ?? null,
   };
@@ -52,12 +54,19 @@ function progressByContent(records: ContentProgressRecord[]) {
   return new Map(records.map((record) => [record.contentId, record]));
 }
 
-function moduleDto(
+async function moduleDto(
   module: CourseRecord['modules'][number],
   progress: Map<number, ContentProgressRecord>,
-): CourseModuleDto {
-  const contents = module.contents.map((content) =>
-    toContentSummary(content, progress.get(content.id)),
+  images: CourseImageStorage,
+): Promise<CourseModuleDto> {
+  const contents = await Promise.all(
+    module.contents.map(async (content) =>
+      toContentSummary(
+        content,
+        progress.get(content.id),
+        content.imagePath ? await images.createReadUrl(content.imagePath) : null,
+      ),
+    ),
   );
   const completedCount = contents.filter((content) => content.completed).length;
 
@@ -100,22 +109,21 @@ function contentDto(
 ): CourseContentDto {
   return {
     ...toContentSummary(content, progress ?? undefined),
-      courseId: content.courseId,
-      courseTitle: content.courseTitle,
-      moduleId: content.moduleId,
-      moduleTitle: content.moduleTitle,
-      body: toRichTextDocument(content.body),
-      videoUrl: content.videoUrl ?? content.resourceUrl,
-      resourceUrl: content.resourceUrl,
-      imageUrl,
-      materials: content.materials.map(
-        (material): CourseMaterialDto => ({
-          id: material.id,
-          name: material.name,
-          mimeType: material.mimeType,
-          sizeBytes: material.sizeBytes,
-        }),
-      ),
+    courseId: content.courseId,
+    courseTitle: content.courseTitle,
+    moduleId: content.moduleId,
+    moduleTitle: content.moduleTitle,
+    body: toRichTextDocument(content.body),
+    videoUrl: content.videoUrl ?? content.resourceUrl,
+    resourceUrl: content.resourceUrl,
+    imageUrl,
+    materials: content.materials.map((material): CourseMaterialDto => ({
+      id: material.id,
+      name: material.name,
+      description: material.description,
+      mimeType: material.mimeType,
+      sizeBytes: material.sizeBytes,
+    })),
   };
 }
 
@@ -152,15 +160,17 @@ export class CourseService {
     );
     const progress = progressByContent(progressRecords);
     const summary = await this.toCourseSummary(course, progress);
-    const modules = await Promise.all(course.modules.map(async (module) => {
-      const dto = moduleDto(module, progress);
-      return {
-        ...dto,
-        imageUrl: module.imagePath
-          ? await this.imageStorage.createReadUrl(module.imagePath)
-          : dto.imageUrl,
-      };
-    }));
+    const modules = await Promise.all(
+      course.modules.map(async (module) => {
+        const dto = await moduleDto(module, progress, this.imageStorage);
+        return {
+          ...dto,
+          imageUrl: module.imagePath
+            ? await this.imageStorage.createReadUrl(module.imagePath)
+            : dto.imageUrl,
+        };
+      }),
+    );
     const latest = newestAccessed(progressRecords);
     const lastAccessedContent = latest
       ? course.modules
@@ -172,7 +182,15 @@ export class CourseService {
       ...summary,
       modules,
       lastAccessedContent: lastAccessedContent
-        ? toContentSummary(lastAccessedContent, latest ?? undefined)
+        ? toContentSummary(
+            lastAccessedContent,
+            latest ?? undefined,
+            lastAccessedContent.imagePath
+              ? await this.imageStorage.createReadUrl(
+                  lastAccessedContent.imagePath,
+                )
+              : null,
+          )
         : null,
     };
   }
@@ -210,7 +228,9 @@ export class CourseService {
     const progress = progressByContent(
       await this.progress.listForCourse(studentId, courseId),
     );
-    const modulesById = new Map(course.modules.map((module) => [module.id, module]));
+    const modulesById = new Map(
+      course.modules.map((module) => [module.id, module]),
+    );
     const rankedMatches = matches
       .map((match) => ({ match, rank: this.searchRank(match, query) }))
       .sort(
@@ -225,7 +245,8 @@ export class CourseService {
       results: rankedMatches.map(({ match }) => {
         if (match.resultType === 'MODULE') {
           const courseModule = modulesById.get(match.id);
-          if (!courseModule) throw new CourseError('Módulo não encontrado.', 404);
+          if (!courseModule)
+            throw new CourseError('Módulo não encontrado.', 404);
           return this.toModuleSearchResult(courseModule, progress);
         }
 
@@ -302,7 +323,9 @@ export class CourseService {
     return contentDto(
       content,
       progress,
-      content.imagePath ? await this.imageStorage.createReadUrl(content.imagePath) : null,
+      content.imagePath
+        ? await this.imageStorage.createReadUrl(content.imagePath)
+        : null,
     );
   }
 
@@ -329,7 +352,12 @@ export class CourseService {
     courseId: number,
     contentId: number,
     materialId: number,
-  ): Promise<{ bytes: Uint8Array; name: string; mimeType: string; sizeBytes: number }> {
+  ): Promise<{
+    bytes: Uint8Array;
+    name: string;
+    mimeType: string;
+    sizeBytes: number;
+  }> {
     await this.access.execute(studentId, courseId);
     const material = await this.courses.findPublishedMaterial(
       courseId,
@@ -341,7 +369,10 @@ export class CourseService {
     try {
       bytes = await this.materialStorage.download(material.storagePath);
     } catch {
-      throw new CourseError('Não foi possível acessar este material agora.', 503);
+      throw new CourseError(
+        'Não foi possível acessar este material agora.',
+        503,
+      );
     }
     return {
       bytes,
@@ -379,11 +410,17 @@ export class CourseService {
       moduleTitle: module.title,
       contentCount: module.contents.length,
       completedCount,
-      progressPercent: toProgressPercent(module.contents.length, completedCount),
+      progressPercent: toProgressPercent(
+        module.contents.length,
+        completedCount,
+      ),
     };
   }
 
-  private searchRank(record: CourseCatalogSearchRecord | CourseSearchRecord, query: string) {
+  private searchRank(
+    record: CourseCatalogSearchRecord | CourseSearchRecord,
+    query: string,
+  ) {
     const normalizedTitle = record.title.toLocaleLowerCase('pt-BR');
     const normalizedQuery = query.toLocaleLowerCase('pt-BR');
     if (normalizedTitle.startsWith(normalizedQuery)) return 0;

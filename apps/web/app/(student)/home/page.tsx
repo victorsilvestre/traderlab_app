@@ -33,7 +33,7 @@ export default async function StudentHomePage() {
       getStudentCourses(accessToken),
       getStudentRecentContents(accessToken),
       getHomeBanners(accessToken),
-      getNotifications(accessToken, { limit: 5 }),
+      getNotifications(accessToken, { filter: 'unread', limit: 4 }),
     ]);
   if (
     (coursesResult.status === 'rejected' &&

@@ -43,6 +43,7 @@ function setup() {
   const profiles: UserProfileRepository = {
     createForStudent: vi.fn(async () => profile),
     findById: vi.fn(async () => profile),
+    recordSuccessfulLogin: vi.fn(async () => undefined),
   };
 
   return {
@@ -84,6 +85,7 @@ describe('AuthenticationService', () => {
       id: identity.id,
       name: identity.name,
       phone: identity.phone,
+      email: identity.email,
     });
     expect(result.message).toContain('e-mail');
   });

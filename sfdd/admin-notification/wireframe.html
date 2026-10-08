@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wireframe — Notificações</title>
+  <style>
+    :root { color-scheme: light; font-family: Arial, sans-serif; color: #222; background: #f4f4f4; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .shell { min-height: 100vh; display: grid; grid-template-columns: 220px minmax(0, 1fr); }
+    aside { padding: 24px 16px; background: #e4e4e4; border-right: 1px solid #c8c8c8; }
+    .brand, .nav a, .toolbar, .row-head, .actions { display: flex; align-items: center; }
+    .brand { gap: 10px; margin-bottom: 34px; font-weight: 700; }
+    .mark { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid #888; border-radius: 50%; }
+    .nav { display: grid; gap: 8px; }
+    .nav a { padding: 11px; gap: 10px; color: inherit; text-decoration: none; border-radius: 5px; }
+    .nav a.active { background: #d1d1d1; font-weight: 700; }
+    main { min-width: 0; padding: 28px clamp(18px, 4vw, 56px); }
+    .top { display: flex; justify-content: flex-end; padding-bottom: 18px; border-bottom: 1px solid #ccc; }
+    .account, .panel, .notification, .form { border: 1px solid #c8c8c8; background: #fff; border-radius: 7px; }
+    .account { padding: 9px 13px; }
+    .heading { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin: 30px 0 22px; }
+    h1 { margin: 0; font-size: clamp(26px, 3vw, 34px); }
+    h2 { margin: 0; font-size: 18px; }
+    p { color: #555; }
+    button, input, textarea, select { font: inherit; }
+    button { min-height: 40px; padding: 8px 14px; border: 1px solid #888; border-radius: 5px; background: #f7f7f7; cursor: pointer; }
+    .primary { background: #d9d9d9; font-weight: 700; }
+    .toolbar { justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .toolbar span { color: #555; font-size: 14px; }
+    .list { display: grid; gap: 12px; }
+    .notification { padding: 18px; }
+    .row-head { justify-content: space-between; gap: 12px; }
+    .row-head strong { font-size: 16px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 10px 0; color: #555; font-size: 13px; }
+    .description { margin: 8px 0; line-height: 1.5; }
+    .recipients { margin-top: 14px; padding: 14px; background: #f0f0f0; border-left: 3px solid #999; }
+    .recipient { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 18px; padding: 9px 0; border-top: 1px solid #d0d0d0; font-size: 13px; }
+    .recipient-table { width: 100%; border-collapse: collapse; background: #fff; }
+    .recipient-table th, .recipient-table td { padding: 12px; border: 1px solid #ccc; text-align: left; }
+    .panel { margin-top: 30px; padding: 22px; }
+    .form { display: grid; gap: 16px; padding: 18px; margin-top: 16px; }
+    label { display: grid; gap: 7px; font-weight: 700; }
+    input, textarea, select { width: 100%; min-width: 0; padding: 10px; border: 1px solid #aaa; border-radius: 4px; background: #fff; }
+    textarea { min-height: 100px; resize: vertical; }
+    .hint { margin: -8px 0 0; font-size: 13px; }
+    .estimate { padding: 12px; background: #eee; border-radius: 4px; }
+    .actions { justify-content: flex-end; gap: 9px; }
+    .view[hidden] { display: none; }
+    .back { display: inline-block; margin: 26px 0 12px; color: #444; text-decoration: none; }
+    @media (max-width: 760px) {
+      .shell { grid-template-columns: 1fr; }
+      aside { padding: 14px 16px; border-right: 0; border-bottom: 1px solid #c8c8c8; }
+      .brand { margin-bottom: 12px; }
+      .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      main { padding: 18px 14px; }
+      .heading { align-items: start; flex-direction: column; }
+      .recipient { grid-template-columns: minmax(0, 1fr) auto; }
+      .recipient span:last-child { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand"><span class="mark">T</span><span>TraderLab<br><small>Gestão</small></span></div>
+      <nav class="nav" aria-label="Navegação de gestão">
+        <a href="#inicio"><span aria-hidden="true">⌂</span> Início</a>
+        <a href="#cursos"><span aria-hidden="true">▤</span> Cursos</a>
+        <a href="#notificacoes" class="active" aria-current="page"><span aria-hidden="true">▣</span> Notificações</a>
+      </nav>
+    </aside>
+    <main>
+      <div class="top"><div class="account">Victor Silvestre · Administrador　[ Sair ]</div></div>
+      <section id="history-view" class="view">
+      <div class="heading">
+        <div><h1>Notificações</h1><p>Consulte os disparos e envie uma comunicação aos usuários.</p></div>
+        <button class="primary" type="button" data-open-form>＋ Nova notificação</button>
+      </div>
+
+      <section aria-labelledby="history-title">
+        <div class="toolbar"><h2 id="history-title">Enviadas</h2><span>Mais recentes primeiro</span></div>
+        <div class="list">
+          <article class="notification">
+            <div class="row-head"><strong>Nova aula disponível</strong><button type="button" data-open-details>Ver detalhes</button></div>
+            <div class="meta"><span>Disparada em 08/10/2026 às 14:30</span><span>Público: Curso</span><span>Curso: Fundamentos do Day Trade</span><span>12 destinatários</span></div>
+            <p class="description">Confira a nova aula e continue seus estudos.</p>
+          </article>
+          <article class="notification">
+            <div class="row-head"><strong>Atualização importante</strong><button type="button" data-open-details>Ver detalhes</button></div>
+            <div class="meta"><span>Disparada em 06/10/2026 às 09:10</span><span>Público: Geral</span><span>24 destinatários</span></div>
+            <p class="description">Uma mensagem de exemplo para demonstrar o histórico.</p>
+          </article>
+        </div>
+      </section>
+
+      </section>
+
+      <section id="details-view" class="view" hidden>
+        <a href="#history" class="back" data-back>← Voltar</a>
+        <div class="heading"><div><h1>Detalhes da notificação</h1><p>Nova aula disponível</p></div></div>
+        <section class="panel" aria-label="Informações do disparo">
+          <div class="meta"><span>Disparada em 08/10/2026 às 14:30</span><span>Público: Curso</span><span>Curso: Fundamentos do Day Trade</span><span>12 destinatários</span></div>
+          <p><strong>Descrição:</strong> Confira a nova aula e continue seus estudos.</p>
+          <p><strong>Link:</strong> https://plataforma.exemplo/aulas/1</p>
+        </section>
+        <section class="panel" aria-labelledby="recipient-title">
+          <div class="toolbar"><h2 id="recipient-title">Destinatários</h2><span>12 alunos</span></div>
+          <table class="recipient-table">
+            <thead><tr><th>Aluno</th><th>E-mail</th><th>Enviado em</th></tr></thead>
+            <tbody>
+              <tr><td>Nome do aluno</td><td>aluno1@exemplo.com</td><td>08/10/2026 14:30</td></tr>
+              <tr><td>Nome do aluno</td><td>aluno2@exemplo.com</td><td>08/10/2026 14:30</td></tr>
+              <tr><td>Nome do aluno</td><td>aluno3@exemplo.com</td><td>08/10/2026 14:30</td></tr>
+            </tbody>
+          </table>
+          <p>Paginação da lista de destinatários</p>
+        </section>
+      </section>
+
+      <section id="form-view" class="view" hidden>
+        <a href="#history" class="back" data-back>← Voltar</a>
+        <div class="heading">
+          <div><h1>Nova notificação</h1><p>Preencha os dados e confirme o público antes do disparo.</p></div>
+        </div>
+        <div class="panel" aria-labelledby="new-title">
+        <h2 id="new-title">Nova notificação</h2>
+        <p>O envio será imediato para o público selecionado.</p>
+        <form class="form">
+          <label>Título <input placeholder="Ex.: Nova aula disponível" maxlength="180"></label>
+          <label>Descrição <textarea placeholder="Escreva a mensagem para os alunos" maxlength="3000"></textarea></label>
+          <label>Link de destino (opcional) <input type="text" placeholder="https://…, www.exemplo.com.br ou /caminho"></label>
+          <label>Público
+            <select><option>Todos os usuários cadastrados</option><option>Alunos com matrícula no curso</option></select>
+          </label>
+          <label>Curso <select><option>Selecione um curso</option><option>Fundamentos do Day Trade</option></select></label>
+          <div class="estimate">Geral: todos os usuários cadastrados. Curso: todas as pessoas com matrícula ativa no curso selecionado, independentemente do perfil.</div>
+          <div class="actions"><button type="button" data-back>Cancelar</button><button class="primary" type="button">Enviar notificação</button></div>
+        </form>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const historyView = document.querySelector('#history-view');
+    const detailsView = document.querySelector('#details-view');
+    const formView = document.querySelector('#form-view');
+    function showView(view) {
+      historyView.hidden = view !== historyView;
+      detailsView.hidden = view !== detailsView;
+      formView.hidden = view !== formView;
+    }
+    document.querySelector('[data-open-form]').addEventListener('click', () => {
+      showView(formView);
+      formView.querySelector('input').focus();
+    });
+    document.querySelectorAll('[data-open-details]').forEach((control) => {
+      control.addEventListener('click', () => showView(detailsView));
+    });
+    document.querySelectorAll('[data-back]').forEach((control) => {
+      control.addEventListener('click', (event) => {
+        event.preventDefault();
+        showView(historyView);
+        historyView.querySelector('[data-open-form]').focus();
+      });
+    });
+  </script>
+</body>
+</html>

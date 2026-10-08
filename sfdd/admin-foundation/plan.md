@@ -22,6 +22,21 @@ mesma forma da plataforma. Ícones SVG simples identificam apenas ações reais.
 O wireframe permanece em escala de cinza e a navegação continua limitada às
 rotas já implementadas.
 
+O shell do workspace tem altura limitada à janela. A sidebar e o cabeçalho ficam
+estáveis; a rolagem vertical pertence ao contêiner da área principal. Assim, a
+expansão de aulas, materiais ou outras listas não aumenta a página nem desloca
+a nota inferior da navegação.
+
+A raiz da aplicação administrativa deve impedir rolagem horizontal no
+documento, mantendo a rolagem vertical natural. O shell usa colunas com mínimo
+zero e os componentes precisam caber na área principal sem criar overflow
+horizontal global.
+
+O shell do workspace tem altura limitada à janela. A sidebar e o cabeçalho ficam
+estáveis; a rolagem vertical pertence ao contêiner da área principal. Assim, a
+expansão de aulas, materiais ou outras listas não aumenta a página nem desloca
+a nota inferior da navegação.
+
 ## Base existente e decisão arquitetural
 
 Antes desta unidade, o monorepo continha `apps/web` (Next.js 16), `apps/api`

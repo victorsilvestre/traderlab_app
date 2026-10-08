@@ -55,8 +55,10 @@ model UserProfile {
   id        String   @id @db.Uuid
   name      String   @db.VarChar(120)
   phone     String   @db.VarChar(30)
+  email     String?  @db.VarChar(254)
   avatarPath String?  @map("avatar_path") @db.VarChar(512)
   role      UserRole @default(STUDENT)
+  lastLoginAt DateTime? @map("last_login_at") @db.Timestamptz(6)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
@@ -74,7 +76,11 @@ model UserProfile {
 
 model HomeBanner {
   id             Int               @id @default(autoincrement())
+  internalName   String            @map("internal_name") @db.VarChar(180)
   title          String            @db.VarChar(180)
+  description    String            @default("") @db.Text
+  eyebrowText    String?           @map("eyebrow_text") @db.VarChar(180)
+  overlayText    String?           @map("overlay_text") @db.VarChar(500)
   imagePath      String            @map("image_path") @db.VarChar(2048)
   destinationUrl String?           @map("destination_url") @db.VarChar(2048)
   altText        String            @map("alt_text") @db.VarChar(500)
@@ -118,6 +124,7 @@ model Notification {
 model NotificationRecipient {
   notificationId Int       @map("notification_id")
   userId         String    @map("user_id") @db.Uuid
+  recipientEmail String?   @map("recipient_email") @db.VarChar(254)
   deliveredAt    DateTime  @default(now()) @map("delivered_at") @db.Timestamptz(6)
   readAt         DateTime? @map("read_at") @db.Timestamptz(6)
 
@@ -198,6 +205,7 @@ model CourseMaterial {
   id          Int      @id @default(autoincrement())
   contentId   Int      @map("content_id")
   name        String   @db.VarChar(240)
+  description String   @default("") @db.VarChar(500)
   storagePath String   @map("storage_path") @db.VarChar(1024)
   mimeType    String   @map("mime_type") @db.VarChar(160)
   sizeBytes   Int      @map("size_bytes")

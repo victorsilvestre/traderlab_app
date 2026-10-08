@@ -19,6 +19,7 @@
 - [x] Listar aulas, materiais independentes e complementos em modo somente leitura.
 - [x] Preservar ordenação, publicação, edição e criação de módulos.
 - [x] Mover os dados gerais do curso para `/courses/[courseId]/settings`.
+- [x] Remover breadcrumbs e padronizar telas secundárias com `← Voltar`.
 - [x] Redirecionar a rota antiga da lista de módulos.
 - [x] Remover overflow horizontal estrutural dos containers e formulários.
 

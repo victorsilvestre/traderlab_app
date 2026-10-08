@@ -1,0 +1,36 @@
+.catalog { width: 100%; min-width: 0; }
+.heading { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 16px; margin: 18px 0 24px; }
+.heading h1 { margin: 0; font-size: 34px; letter-spacing: -.03em; }
+.heading p { margin: 8px 0 0; color: var(--muted); line-height: 1.5; }
+.addButton { position: relative; display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border: 1px solid var(--green); border-radius: 7px; background: var(--green); color: white; }
+.addButton svg { width: 20px; height: 20px; }
+.addButton[data-tooltip]::after { position: absolute; z-index: 4; top: calc(100% + 7px); right: 0; padding: 6px 9px; border-radius: 5px; background: #18231d; color: white; content: attr(data-tooltip); font-size: 11px; white-space: nowrap; opacity: 0; pointer-events: none; }
+.addButton:hover::after, .addButton:focus-visible::after { opacity: 1; }
+.filters { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(180px, 1fr) minmax(140px, .65fr) auto auto; align-items: end; gap: 10px; margin: 24px 0 16px; color: var(--ink); font-size: 12px; font-weight: 700; }
+.filters label { display: grid; min-width: 0; gap: 7px; }
+.filters input, .filters select { width: 100%; min-width: 0; min-height: 42px; padding: 0 11px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--ink); font: inherit; font-weight: 400; }
+.filters button { min-height: 42px; padding: 0 14px; border: 1px solid var(--green); border-radius: 7px; background: var(--green); color: white; font: inherit; cursor: pointer; }
+.filters > a { padding-bottom: 12px; color: var(--green); white-space: nowrap; }
+.count { margin: 16px 0 10px; color: var(--muted); font-size: 12px; }
+.tableWrap { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.table th, .table td { padding: 12px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.table th { background: #f6f7f5; color: var(--muted); font-size: 10px; font-weight: 700; }
+.table th:nth-child(1) { width: 16%; }.table th:nth-child(2) { width: 17%; }.table th:nth-child(3) { width: 12%; }.table th:nth-child(4) { width: 18%; }.table th:nth-child(5) { width: 12%; }.table th:nth-child(6) { width: 9%; }.table th:nth-child(7) { width: 10%; }.table th:nth-child(8) { width: 6%; }
+.table td { overflow: hidden; color: var(--ink); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.table tbody tr:last-child td { border-bottom: 0; }
+.table tbody tr:hover { background: #f8faf8; }
+.userLink, .courseLink { color: var(--ink); font-weight: 700; text-decoration: none; }
+.userLink:hover, .courseLink:hover { text-decoration: underline; }
+.role, .active, .revoked { display: inline-flex; max-width: 100%; align-items: center; padding: 4px 7px; border-radius: 999px; font-size: 10px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.role, .active { background: var(--soft-green); color: var(--green); }.revoked { background: #f2e9e7; color: #88493e; }
+.viewLink { display: inline-grid; width: 30px; height: 30px; place-items: center; border: 1px solid var(--line); border-radius: 6px; color: var(--green); }
+.viewLink svg { width: 17px; height: 17px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.empty, .feedback { margin-top: 18px; padding: 22px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.empty h2 { margin: 0 0 8px; font-size: 18px; }.empty p, .feedback p { margin: 0; color: var(--muted); }
+.empty a, .feedback a { display: inline-block; margin-top: 12px; color: var(--green); font-weight: 700; }.feedback { color: var(--error); }
+.pagination { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; color: var(--muted); font-size: 12px; }
+.pagination div { display: flex; gap: 8px; }.pagination a, .pagination span { padding: 9px 11px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); text-decoration: none; }.pagination span { opacity: .45; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+@media (max-width: 1000px) { .filters { grid-template-columns: minmax(180px, 1fr) minmax(160px, 1fr) minmax(130px, .7fr) auto; }.filters > a { grid-column: 4; justify-self: center; padding: 0; } .table th, .table td { padding-inline: 5px; font-size: 10px; } }
+@media (max-width: 760px) { .heading { align-items: flex-start; }.heading h1 { font-size: 29px; }.filters { grid-template-columns: 1fr 1fr; }.filters .search { grid-column: 1 / -1; }.filters button { min-height: 40px; }.filters > a { grid-column: auto; }.tableWrap { border: 0; background: transparent; }.table, .table tbody { display: grid; gap: 10px; }.table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }.table tr { display: grid; gap: 0; padding: 9px 13px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }.table td { display: flex; min-width: 0; justify-content: space-between; gap: 12px; padding: 7px 0; border: 0; overflow-wrap: anywhere; text-align: right; white-space: normal; }.table td::before { flex: 0 0 auto; color: var(--muted); content: attr(data-label); font-size: 11px; font-weight: 700; text-align: left; }.pagination { align-items: flex-start; flex-direction: column; } }

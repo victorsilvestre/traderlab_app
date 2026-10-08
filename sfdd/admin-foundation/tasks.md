@@ -25,6 +25,15 @@ unidades SFDD posteriores.
       o uso de `apps/web` e `apps/api`.
 - [x] Criar layout e página inicial de gestão responsivos, com identidade,
       papel, navegação real e estado inicial honesto para funções pendentes.
+- [x] Ajustar o cabeçalho do workspace e o catálogo para evitar largura mínima
+      excedente em telas estreitas; permitir que a barra do editor de aula quebre
+      linha em vez de ampliar a página.
+- [x] Limitar o shell à altura da janela e manter a rolagem vertical na área
+      principal, sem deslocar a barra lateral ao expandir conteúdo.
+- [x] Definir no CSS global o padrão de não permitir rolagem horizontal no
+      documento, preservando a rolagem vertical normal.
+- [ ] Validar visualmente todas as telas administrativas em larguras menores e
+      confirmar que nenhum conteúdo ou controle fica cortado.
 - [x] Mostrar apenas destinos disponíveis ao papel autenticado, sem apresentar
       itens de gestão inexistentes como ações funcionais.
 - [x] Integrar as rotas protegidas e o layout com os fluxos de

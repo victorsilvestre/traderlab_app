@@ -5,6 +5,8 @@ import type { UserService } from '../application/UserService.js';
 
 type ProfileBody = { name?: string; phone?: string; avatarPath?: string };
 type AvatarUploadBody = { contentType: string; sizeBytes: number };
+type AdminUsersQuery = { query?: string; page?: number };
+type AdminUserParams = { userId: string };
 
 function bearerToken(request: FastifyRequest): string {
   const header = request.headers.authorization;
@@ -16,6 +18,44 @@ export async function userRoutes(
   app: FastifyInstance,
   options: { authentication: AuthenticationService; service: UserService },
 ): Promise<void> {
+  app.get<{ Querystring: AdminUsersQuery }>(
+    '/admin/users',
+    {
+      schema: {
+        querystring: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            query: { type: 'string', maxLength: 120 },
+            page: { type: 'integer', minimum: 1, maximum: 10000 },
+          },
+        },
+      },
+    },
+    async (request) => {
+      await options.authentication.getCurrentAdministrator(bearerToken(request));
+      return options.service.listAdminUsers(request.query);
+    },
+  );
+
+  app.get<{ Params: AdminUserParams }>(
+    '/admin/users/:userId',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          required: ['userId'],
+          additionalProperties: false,
+          properties: { userId: { type: 'string', format: 'uuid' } },
+        },
+      },
+    },
+    async (request) => {
+      await options.authentication.getCurrentAdministrator(bearerToken(request));
+      return options.service.getAdminUser(request.params.userId);
+    },
+  );
+
   app.get('/users/me/profile', async (request) => {
     const identity = await options.authentication.getCurrentIdentity(bearerToken(request));
     return options.service.getProfile(identity);

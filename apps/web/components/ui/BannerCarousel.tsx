@@ -35,7 +35,7 @@ export function BannerCarousel({ banners }: { banners: HomeBannerDto[] }) {
         <>
           <div
             className={homeClass('featured-art')}
-            style={{ backgroundImage: `url(${activeBanner.imagePath})` }}
+            style={{ backgroundImage: `url(${activeBanner.imageUrl})` }}
             role="img"
             aria-label={activeBanner.altText}
           />
@@ -48,11 +48,14 @@ export function BannerCarousel({ banners }: { banners: HomeBannerDto[] }) {
               aria-label={`Abrir ${activeBanner.title} em uma nova aba`}
             />
           )}
-          <div className={homeClass('featured-shade')} aria-hidden="true" />
-          <div className={homeClass('featured-copy')} key={activeIndex}>
-            <p className={homeClass('featured-eyebrow')}><span /> COMUNICAÇÃO</p>
-            <h2>{activeBanner.title}</h2>
-          </div>
+          {activeBanner.overlayText && <>
+            <div className={homeClass('featured-shade')} aria-hidden="true" />
+            <div className={homeClass('featured-copy')} key={activeIndex}>
+              {activeBanner.eyebrowText && <p className={homeClass('featured-eyebrow')}><span /> {activeBanner.eyebrowText}</p>}
+              <h2>{activeBanner.overlayText}</h2>
+              {activeBanner.description && <p>{activeBanner.description}</p>}
+            </div>
+          </>}
           <CarouselControls
             activeIndex={activeIndex}
             itemCount={banners.length}

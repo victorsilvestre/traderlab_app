@@ -9,16 +9,20 @@ import type {
   ManagedCourseModuleDto,
   ManagedCourseModulesDto,
 } from '@traderlab/contracts';
+import { AdminBackLink } from '../navigation/AdminBackLink';
 import styles from './AdminCourseModules.module.css';
 
 export function AdminCourseModules({
   course,
   data,
+  isAdministrator,
+  returnTo,
 }: {
   course: ManagedCourseDto;
   data: ManagedCourseModulesDto;
+  isAdministrator: boolean;
+  returnTo: string;
 }) {
-  const router = useRouter();
   const [items, setItems] = useState(data.items);
   const [expandedIds, setExpandedIds] = useState(
     () => new Set(data.items.slice(0, 1).map((item) => item.id)),
@@ -32,6 +36,7 @@ export function AdminCourseModules({
   const managedStorageImage = course.coverImageUrl?.includes(
     '/storage/v1/object/sign/traderlab-course-images/',
   );
+  const currentCourseHref = `/courses/${course.id}?returnTo=${encodeURIComponent(returnTo)}`;
 
   async function move(moduleId: number, offset: -1 | 1) {
     const index = items.findIndex((item) => item.id === moduleId);
@@ -60,7 +65,7 @@ export function AdminCourseModules({
           body.message ?? 'Não foi possível salvar a ordem dos módulos.',
         );
       setItems(next);
-      router.refresh();
+      window.location.reload();
     } catch (cause) {
       setError(
         cause instanceof Error
@@ -83,12 +88,7 @@ export function AdminCourseModules({
 
   return (
     <section className={styles.builder} aria-labelledby="course-title">
-      <nav className={styles.breadcrumb} aria-label="Trilha de navegação">
-        <Link href="/courses">Cursos</Link>
-        <span aria-hidden="true">›</span>
-        <span>{course.title}</span>
-      </nav>
-
+      <AdminBackLink href={returnTo} />
       <header className={styles.courseCard}>
         <div className={styles.courseCover}>
           {managedStorageImage && course.coverImageUrl ? (
@@ -130,24 +130,26 @@ export function AdminCourseModules({
             </span>
           </div>
         </div>
-        <Link
-          className={styles.settingsButton}
-          href={`/courses/${course.id}/settings`}
-        >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
-            <path d="m19.4 15 .1.1a1.8 1.8 0 0 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3.1 1.3v.2a1.8 1.8 0 0 1-3.6 0v-.2a1.8 1.8 0 0 0-3.1-1.3l-.1.1a1.8 1.8 0 0 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-1.3-3.1h-.2a1.8 1.8 0 0 1 0-3.6h.2a1.8 1.8 0 0 0 1.3-3.1l-.1-.1a1.8 1.8 0 0 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3.1-1.3v-.2a1.8 1.8 0 0 1 3.6 0v.2a1.8 1.8 0 0 0 3.1 1.3l.1-.1a1.8 1.8 0 0 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 1.3 3.1h.2a1.8 1.8 0 0 1 0 3.6h-.2a1.8 1.8 0 0 0-1.3 3.1Z" />
-          </svg>
-          Configurações do curso
-        </Link>
+        <div className={styles.courseActions}>
+          {isAdministrator && <>
+            <Link className={styles.settingsButton} href={`/enrollments?courseId=${course.id}&returnTo=${encodeURIComponent(currentCourseHref)}`} aria-label="Ver matrículas do curso" data-tooltip="Ver matrículas">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="10" cy="7" r="4" /><path d="M20 8v6M17 11h6" />
+              </svg>
+            </Link>
+            {course.status === 'published' && <Link className={styles.settingsButton} href={`/enrollments/new?courseId=${course.id}&returnTo=${encodeURIComponent(currentCourseHref)}`} aria-label="Matricular usuário neste curso" data-tooltip="Matricular usuário">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="10" cy="7" r="4" /><path d="M19 8v6M16 11h6" />
+              </svg>
+            </Link>}
+          </>}
+          <Link className={styles.settingsButton} href={`/courses/${course.id}/settings?returnTo=${encodeURIComponent(currentCourseHref)}`} aria-label="Configurações do curso" data-tooltip="Configurações do curso">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
+              <path d="m19.4 15 .1.1a1.8 1.8 0 0 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3.1 1.3v.2a1.8 1.8 0 0 1-3.6 0v-.2a1.8 1.8 0 0 0-3.1-1.3l-.1.1a1.8 1.8 0 0 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-1.3-3.1h-.2a1.8 1.8 0 0 1 0-3.6h.2a1.8 1.8 0 0 0 1.3-3.1l-.1-.1a1.8 1.8 0 0 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3.1-1.3v-.2a1.8 1.8 0 0 1 3.6 0v.2a1.8 1.8 0 0 0 3.1 1.3l.1-.1a1.8 1.8 0 0 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 1.3 3.1h.2a1.8 1.8 0 0 1 0 3.6h-.2a1.8 1.8 0 0 0-1.3 3.1Z" />
+            </svg>
+          </Link>
+        </div>
       </header>
 
       <header className={styles.contentHeading}>
@@ -157,7 +159,7 @@ export function AdminCourseModules({
 
       <div className={styles.toolbar}>
         <div>
-          <h3>Estrutura do curso</h3>
+          <h3>Módulos do curso</h3>
           <p>
             Expanda um módulo para consultar as aulas e os materiais
             cadastrados.
@@ -165,7 +167,9 @@ export function AdminCourseModules({
         </div>
         <Link
           className={styles.primaryButton}
-          href={`/courses/${course.id}/modules/new`}
+          href={`/courses/${course.id}/modules/new?returnTo=${encodeURIComponent(currentCourseHref)}`}
+          aria-label="Adicionar módulo"
+          data-tooltip="Adicionar módulo"
         >
           <svg
             aria-hidden="true"
@@ -177,7 +181,6 @@ export function AdminCourseModules({
           >
             <path d="M12 5v14M5 12h14" />
           </svg>
-          Adicionar módulo
         </Link>
       </div>
 
@@ -194,7 +197,7 @@ export function AdminCourseModules({
           </p>
           <Link
             className={styles.primaryButton}
-            href={`/courses/${course.id}/modules/new`}
+            href={`/courses/${course.id}/modules/new?returnTo=${encodeURIComponent(currentCourseHref)}`}
           >
             Adicionar módulo
           </Link>
@@ -208,6 +211,7 @@ export function AdminCourseModules({
               index={index}
               count={items.length}
               courseId={course.id}
+              returnTo={currentCourseHref}
               busy={busy}
               expanded={expandedIds.has(module.id)}
               onToggle={() => toggleExpanded(module.id)}
@@ -232,6 +236,7 @@ function ModuleCard({
   index,
   count,
   courseId,
+  returnTo,
   busy,
   expanded,
   onToggle,
@@ -242,6 +247,7 @@ function ModuleCard({
   index: number;
   count: number;
   courseId: number;
+  returnTo: string;
   busy: boolean;
   expanded: boolean;
   onToggle: () => void;
@@ -253,6 +259,19 @@ function ModuleCard({
 }) {
   const moduleContents = module.contents ?? [];
   const label = module.contentCount === 1 ? 'conteúdo' : 'conteúdos';
+  const [expandedMaterialIds, setExpandedMaterialIds] = useState(
+    () => new Set<number>(),
+  );
+
+  function toggleMaterials(contentId: number) {
+    setExpandedMaterialIds((current) => {
+      const next = new Set(current);
+      if (next.has(contentId)) next.delete(contentId);
+      else next.add(contentId);
+      return next;
+    });
+  }
+
   return (
     <article className={styles.module}>
       <div className={styles.moduleHeader}>
@@ -281,9 +300,24 @@ function ModuleCard({
             ↓
           </button>
         </div>
-        <div className={styles.moduleInfo}>
-          <h3>{module.title}</h3>
-          {module.description && <p>{module.description}</p>}
+        <div className={styles.moduleSummary}>
+          <div className={styles.moduleCover} aria-hidden="true">
+            {module.imageUrl ? (
+              <Image
+                src={module.imageUrl}
+                alt=""
+                fill
+                sizes="56px"
+                quality={90}
+              />
+            ) : (
+              <span>▧</span>
+            )}
+          </div>
+          <div className={styles.moduleInfo}>
+            <h3>{module.title}</h3>
+            {module.description && <p>{module.description}</p>}
+          </div>
         </div>
         <div className={styles.moduleMeta}>
           <span>
@@ -301,7 +335,15 @@ function ModuleCard({
         <div className={styles.moduleActions}>
           <Link
             className={styles.iconButton}
-            href={`/courses/${courseId}/modules/${module.id}`}
+            href={`/courses/${courseId}/modules/${module.id}/lessons/new?returnTo=${encodeURIComponent(returnTo)}`}
+            aria-label={`Criar aula no módulo ${module.title}`}
+            data-tooltip="Criar aula"
+          >
+            <ActionIcon kind="plus" />
+          </Link>
+          <Link
+            className={styles.iconButton}
+            href={`/courses/${courseId}/modules/${module.id}?returnTo=${encodeURIComponent(returnTo)}`}
             aria-label={`Editar ${module.title}`}
             data-tooltip="Editar módulo"
           >
@@ -319,6 +361,7 @@ function ModuleCard({
               expanded ? `Recolher ${module.title}` : `Expandir ${module.title}`
             }
             aria-expanded={expanded}
+            data-tooltip={expanded ? 'Recolher módulo' : 'Expandir módulo'}
             onClick={onToggle}
           >
             <svg
@@ -341,31 +384,68 @@ function ModuleCard({
             <div className={styles.contentList}>
               {moduleContents.map((content) => (
                 <article className={styles.contentItem} key={content.id}>
-                  <span className={styles.contentTypeIcon} aria-hidden="true">
-                    {content.kind === 'lesson' ? '▶' : '▤'}
-                  </span>
-                  <div className={styles.contentInfo}>
-                    <span className={styles.contentType}>
-                      {content.kind === 'lesson'
-                        ? 'Aula'
-                        : 'Material independente'}
+                  {content.kind === 'lesson' ? (
+                    <div className={styles.lessonCover} aria-hidden="true">
+                      {content.imageUrl ? (
+                        <Image
+                          src={content.imageUrl}
+                          alt=""
+                          fill
+                          sizes="64px"
+                          quality={90}
+                        />
+                      ) : (
+                        <span>▶</span>
+                      )}
+                    </div>
+                  ) : (
+                    <span className={styles.contentTypeIcon} aria-hidden="true">
+                      ▤
                     </span>
+                  )}
+                  <div className={styles.contentInfo}>
+                    <div className={styles.contentMeta}>
+                      <span className={styles.contentType}>
+                        {content.kind === 'lesson'
+                          ? 'Aula'
+                          : 'Material independente'}
+                      </span>
+                      <span
+                        className={
+                          content.status === 'published'
+                            ? styles.published
+                            : styles.draft
+                        }
+                      >
+                        <span aria-hidden="true" />
+                        {content.status === 'published'
+                          ? 'Publicado'
+                          : 'Rascunho'}
+                      </span>
+                    </div>
                     <strong>{content.title}</strong>
                     {content.description && <p>{content.description}</p>}
                   </div>
-                  <span
-                    className={
-                      content.status === 'published'
-                        ? styles.published
-                        : styles.draft
-                    }
-                  >
-                    <span aria-hidden="true" />
-                    {content.status === 'published' ? 'Publicado' : 'Rascunho'}
-                  </span>
+                  {content.kind === 'lesson' && (
+                    <LessonActions
+                      courseId={courseId}
+                      moduleId={module.id}
+                      returnTo={returnTo}
+                      content={content}
+                      lessons={moduleContents.filter(
+                        (item) => item.kind === 'lesson',
+                      )}
+                      materialsExpanded={expandedMaterialIds.has(content.id)}
+                      onToggleMaterials={() => toggleMaterials(content.id)}
+                    />
+                  )}
                   {content.kind === 'lesson' &&
                     content.materials.length > 0 && (
-                      <div className={styles.attachments}>
+                      <div
+                        id={`lesson-materials-${content.id}`}
+                        className={styles.attachments}
+                        hidden={!expandedMaterialIds.has(content.id)}
+                      >
                         <div className={styles.attachmentsTitle}>
                           Materiais complementares{' '}
                           <span>{content.materials.length}</span>
@@ -373,7 +453,12 @@ function ModuleCard({
                         {content.materials.map((material) => (
                           <div className={styles.attachment} key={material.id}>
                             <span aria-hidden="true">▤</span>
-                            <span>{material.name}</span>
+                            <span>
+                              {material.name}
+                              {material.description
+                                ? ` — ${material.description}`
+                                : ''}
+                            </span>
                             <span>{formatFileSize(material.sizeBytes)}</span>
                           </div>
                         ))}
@@ -387,12 +472,274 @@ function ModuleCard({
               Este módulo ainda não tem aulas ou materiais cadastrados.
             </p>
           )}
-          <p className={styles.readOnlyNote}>
-            A gestão de aulas e materiais será habilitada nesta próxima etapa.
-          </p>
         </div>
       )}
     </article>
+  );
+}
+
+function LessonActions({
+  courseId,
+  moduleId,
+  returnTo,
+  content,
+  lessons,
+  materialsExpanded,
+  onToggleMaterials,
+}: {
+  courseId: number;
+  moduleId: number;
+  returnTo: string;
+  content: ManagedCourseModuleDto['contents'][number];
+  lessons: ManagedCourseModuleDto['contents'];
+  materialsExpanded: boolean;
+  onToggleMaterials: () => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const lessonIndex = lessons.findIndex((item) => item.id === content.id);
+  const published = content.status === 'published';
+  const dialogId = `unpublish-lesson-${content.id}`;
+
+  async function save(body: object, suffix = '') {
+    setBusy(true);
+    setError('');
+    try {
+      const response = await fetch(
+        `/api/admin/courses/${courseId}/modules/${moduleId}/lessons/${content.id}${suffix}`,
+        {
+          method: 'PATCH',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body),
+        },
+      );
+      const result = (await response.json().catch(() => ({}))) as {
+        message?: string;
+      };
+      if (!response.ok)
+        throw new Error(result.message ?? 'Não foi possível atualizar a aula.');
+      (document.getElementById(dialogId) as HTMLDialogElement | null)?.close();
+      window.location.reload();
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : 'Não foi possível atualizar a aula.',
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function move(direction: -1 | 1) {
+    const next = [...lessons];
+    const target = lessonIndex + direction;
+    if (target < 0 || target >= next.length) return;
+    [next[lessonIndex], next[target]] = [next[target]!, next[lessonIndex]!];
+    setBusy(true);
+    setError('');
+    try {
+      const response = await fetch(
+        `/api/admin/courses/${courseId}/modules/${moduleId}/lessons/order`,
+        {
+          method: 'PATCH',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ orderedIds: next.map((item) => item.id) }),
+        },
+      );
+      const result = (await response.json().catch(() => ({}))) as {
+        message?: string;
+      };
+      if (!response.ok)
+        throw new Error(
+          result.message ?? 'Não foi possível salvar a ordem das aulas.',
+        );
+      window.location.reload();
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : 'Não foi possível salvar a ordem das aulas.',
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className={styles.lessonActions}>
+      <Link
+        className={styles.iconButton}
+        href={`/courses/${courseId}/modules/${moduleId}/lessons/${content.id}?returnTo=${encodeURIComponent(returnTo)}`}
+        aria-label={`Editar aula ${content.title}`}
+        data-tooltip="Editar aula"
+      >
+        <ActionIcon kind="edit" />
+      </Link>
+      <button
+        className={styles.iconButton}
+        type="button"
+        disabled={busy || lessonIndex === 0}
+        aria-label={`Mover aula ${content.title} para cima`}
+        data-tooltip="Mover para cima"
+        onClick={() => void move(-1)}
+      >
+        <ActionIcon kind="up" />
+      </button>
+      <button
+        className={styles.iconButton}
+        type="button"
+        disabled={busy || lessonIndex === lessons.length - 1}
+        aria-label={`Mover aula ${content.title} para baixo`}
+        data-tooltip="Mover para baixo"
+        onClick={() => void move(1)}
+      >
+        <ActionIcon kind="down" />
+      </button>
+      <button
+        className={`${styles.iconButton} ${published ? styles.dangerAction : ''}`}
+        type="button"
+        disabled={busy}
+        aria-label={
+          published
+            ? `Despublicar aula ${content.title}`
+            : `Publicar aula ${content.title}`
+        }
+        data-tooltip={published ? 'Despublicar aula' : 'Publicar aula'}
+        onClick={(event) => {
+          setError('');
+          if (published)
+            event.currentTarget.parentElement
+              ?.querySelector('dialog')
+              ?.showModal();
+          else void save({ status: 'published' });
+        }}
+      >
+        <ActionIcon kind={published ? 'pause' : 'play'} />
+      </button>
+      <button
+        className={`${styles.iconButton} ${styles.materialToggle}`}
+        type="button"
+        aria-label={
+          content.materials.length === 0
+            ? `A aula ${content.title} não possui materiais`
+            : materialsExpanded
+              ? `Recolher materiais de ${content.title}`
+              : `Mostrar materiais de ${content.title}`
+        }
+        aria-expanded={materialsExpanded}
+        aria-controls={
+          content.materials.length > 0
+            ? `lesson-materials-${content.id}`
+            : undefined
+        }
+        data-tooltip={
+          content.materials.length === 0
+            ? 'Nenhum material disponível'
+            : materialsExpanded
+              ? 'Recolher materiais'
+              : 'Mostrar materiais'
+        }
+        disabled={content.materials.length === 0}
+        onClick={onToggleMaterials}
+      >
+        <ActionIcon
+          kind={materialsExpanded ? 'materialsOpen' : 'materialsClosed'}
+        />
+      </button>
+      {error && (
+        <span className={styles.inlineError} role="alert">
+          {error}
+        </span>
+      )}
+      {published && (
+        <dialog
+          id={dialogId}
+          className={styles.dialog}
+          aria-labelledby={`${dialogId}-title`}
+        >
+          <h2 id={`${dialogId}-title`}>Despublicar aula?</h2>
+          <p>
+            <strong>{content.title}</strong> deixará de aparecer aos alunos. O
+            conteúdo, os anexos e o progresso serão preservados.
+          </p>
+          {error && (
+            <p className={styles.dialogError} role="alert">
+              {error}
+            </p>
+          )}
+          <div className={styles.dialogActions}>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              disabled={busy}
+              onClick={(event) =>
+                event.currentTarget.closest('dialog')?.close()
+              }
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className={styles.confirmButton}
+              disabled={busy}
+              onClick={() => void save({ status: 'draft' })}
+            >
+              {busy ? 'Despublicando…' : 'Confirmar despublicação'}
+            </button>
+          </div>
+        </dialog>
+      )}
+    </div>
+  );
+}
+
+function ActionIcon({
+  kind,
+}: {
+  kind:
+    | 'edit'
+    | 'up'
+    | 'down'
+    | 'pause'
+    | 'play'
+    | 'plus'
+    | 'materialsClosed'
+    | 'materialsOpen';
+}) {
+  const paths = {
+    edit: <path d="m14 5 5 5M4 20l4.2-.8L19 8.4 15.6 5 4.8 15.8 4 20Z" />,
+    up: <path d="M12 19V5m-6 6 6-6 6 6" />,
+    down: <path d="M12 5v14m6-6-6 6-6-6" />,
+    pause: <path d="M8 5v14M16 5v14" />,
+    play: <path d="m8 5 12 7-12 7V5Z" />,
+    plus: <path d="M12 5v14m-7-7h14" />,
+    materialsClosed: (
+      <>
+        <path d="M4 6h6l2 2h8v10H4z" />
+        <path d="m9 11 3 3 3-3" />
+      </>
+    ),
+    materialsOpen: (
+      <>
+        <path d="M4 6h6l2 2h8v10H4z" />
+        <path d="m9 14 3-3 3 3" />
+      </>
+    ),
+  };
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {paths[kind]}
+    </svg>
   );
 }
 

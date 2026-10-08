@@ -1,0 +1,17 @@
+.link {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+.link:hover {
+  color: var(--green);
+  text-decoration: underline;
+}
+.link:focus-visible {
+  outline: 3px solid #8bb49a;
+  outline-offset: 3px;
+}

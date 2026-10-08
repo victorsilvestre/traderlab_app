@@ -65,6 +65,25 @@ O visual inicial pode usar a identidade já presente na plataforma TraderLab:
 marca verde, superfícies claras e ícones discretos. Esse tratamento ajuda a
 reconhecer o produto, sem definir o layout final do ambiente de gestão.
 
+Todas as telas administrativas devem se ajustar à largura disponível sem
+criar rolagem horizontal na página. Tabelas e grupos de ações devem se adaptar
+à área útil, preservando todos os dados e controles.
+
+A aplicação define esse comportamento no nível global: a rolagem vertical
+permanece no documento e qualquer excesso horizontal é recortado no limite da
+janela, sem deslocar o shell ou ocultar a barra lateral. Componentes devem se
+ajustar à largura disponível em vez de criar uma segunda faixa de rolagem.
+
+O shell administrativo ocupa a altura da janela. A barra lateral e o cabeçalho
+permanecem estáveis enquanto apenas a área principal de conteúdo rola; expandir
+uma aula ou outro conteúdo longo não deve aumentar a página inteira nem deslocar
+a navegação ou as informações fixadas no rodapé da barra lateral.
+
+O shell administrativo ocupa a altura da janela. A barra lateral e o cabeçalho
+permanecem estáveis enquanto apenas a área principal de conteúdo rola; expandir
+uma aula ou outro conteúdo longo não deve aumentar a página inteira nem deslocar
+a navegação ou as informações fixadas no rodapé da barra lateral.
+
 ## Regras de acesso e sessão
 
 - O mesmo cadastro no Supabase Auth e o mesmo perfil do produto identificam a
@@ -104,6 +123,14 @@ reconhecer o produto, sem definir o layout final do ambiente de gestão.
       `apps/web` no mesmo monorepo e preparada para publicação própria.
 - [x] O endereço administrativo mostra entrada e ambiente de gestão próprios,
       com layout e navegação distintos da plataforma do aluno.
+- [ ] As telas administrativas se ajustam a larguras menores sem rolagem
+      horizontal e sem ocultar conteúdo ou ações.
+- [ ] Nenhuma rota administrativa permite deslocamento horizontal do documento;
+      a rolagem vertical continua sendo a rolagem natural da página.
+- [ ] O shell permanece limitado à altura da janela; conteúdo longo rola na
+      área principal sem mover a barra lateral ou seu rodapé.
+- [ ] O shell permanece limitado à altura da janela; conteúdo longo rola na
+      área principal sem mover a barra lateral ou seu rodapé.
 - [ ] Uma conta `administrator` existente entra e sai do admin.
 - [ ] Uma conta `mentor` existente entra no admin e vê uma navegação adequada ao
       papel.

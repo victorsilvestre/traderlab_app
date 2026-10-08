@@ -13,7 +13,8 @@
 - [x] Criar contratos para consulta, criação e atualização do catálogo.
 - [x] Implementar autorização administrativa nas rotas de catálogo.
 - [x] Implementar listagem com busca e filtro de publicação.
-- [x] Implementar criação em rascunho, edição e publicação/despublicação.
+- [x] Implementar criação publicada, edição e publicação/despublicação.
+- [x] Usar uma única ação “Salvar” no formulário de curso.
 - [x] Persistir autoria e data de publicação no servidor.
 
 ## Aplicação administrativa — primeira entrega
@@ -34,7 +35,8 @@
 ## Próximas etapas de conteúdo
 
 - [ ] Especificar e implementar módulos, ordenação e publicação.
-- [ ] Especificar e implementar aulas e materiais, incluindo editor de conteúdo.
+- [x] Especificar e implementar aulas e materiais na unidade
+      `admin-content-management`.
 - [ ] Definir upload e validação de capas e arquivos de material.
 
 ## Ajustes da experiência e capas
@@ -63,6 +65,13 @@
 - [x] Informar 16:9 e resolução recomendada de 1920 × 1080 px no formulário, mantendo os limites atuais de tipo e tamanho.
 - [x] Preservar proporção 16:9 na capa do cartão, remover zoom no hover e usar otimização responsiva com qualidade máxima.
 - [ ] Conferir visualmente a imagem cadastrada em resolução comum e tela de alta densidade após atualização do cartão.
+
+## Ajustes da página de estrutura do curso
+
+- [x] Renomear “Estrutura do curso” para “Módulos do curso”.
+- [x] Exibir somente ícones nos botões de configurações do curso e adicionar módulo, preservando nomes acessíveis e tooltips.
+- [x] Ampliar a área centralizada da estrutura e reservar largura para os controles de ordenação dos módulos.
+- [ ] Conferir visualmente em tela ampla e estreita que a coluna de ordenação não sobrepõe o texto.
 
 ## Padrão de imagens aprovado para módulo e conteúdo
 

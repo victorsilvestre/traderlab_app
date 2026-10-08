@@ -19,7 +19,11 @@ export function CourseContentLoadError({
 }) {
   return (
     <main className={styles.page}>
-      <StudentHeader name={profile.name} avatarUrl={profile.avatarUrl} role={profile.role} />
+      <StudentHeader
+        name={profile.name}
+        avatarUrl={profile.avatarUrl}
+        role={profile.role}
+      />
       <div className={styles.container}>
         <section className={styles.errorState} role="alert">
           <h1>Não conseguimos carregar esta aula.</h1>
@@ -34,19 +38,20 @@ export function CourseContentLoadError({
   );
 }
 
-export function StudentSessionUnavailable({
-  returnTo,
-}: {
-  returnTo: string;
-}) {
+export function StudentSessionUnavailable({ returnTo }: { returnTo: string }) {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
         <section className={styles.errorState} role="alert">
           <h1>Não foi possível verificar sua sessão agora.</h1>
-          <p>Tente novamente em instantes. Seus dados de acesso foram mantidos.</p>
+          <p>
+            Tente novamente em instantes. Seus dados de acesso foram mantidos.
+          </p>
           <RetryPageButton />
-          <Link className={styles.backLink} href={`/sign-in?next=${encodeURIComponent(returnTo)}`}>
+          <Link
+            className={styles.backLink}
+            href={`/sign-in?next=${encodeURIComponent(returnTo)}`}
+          >
             Entrar novamente
           </Link>
         </section>
@@ -69,7 +74,11 @@ function youtubeVideoId(value: string | null): string | null {
         id = url.pathname.split('/')[2] ?? null;
       }
     }
-    if (url.searchParams.has('list') || !id || !/^[A-Za-z0-9_-]{11}$/.test(id)) {
+    if (
+      url.searchParams.has('list') ||
+      !id ||
+      !/^[A-Za-z0-9_-]{11}$/.test(id)
+    ) {
       return null;
     }
     return id;
@@ -104,13 +113,18 @@ export function CourseContentView({
   content: CourseContentDto;
   course: CourseDetailDto;
 }) {
-  const videoId = content.kind === 'lesson' ? youtubeVideoId(content.videoUrl) : null;
+  const videoId =
+    content.kind === 'lesson' ? youtubeVideoId(content.videoUrl) : null;
   const legacyMaterialUrl =
     content.kind === 'material' ? safeExternalUrl(content.resourceUrl) : null;
 
   return (
     <main className={styles.page}>
-      <StudentHeader name={profile.name} avatarUrl={profile.avatarUrl} role={profile.role} />
+      <StudentHeader
+        name={profile.name}
+        avatarUrl={profile.avatarUrl}
+        role={profile.role}
+      />
       <div className={styles.container}>
         <CourseBreadcrumbs
           courseId={content.courseId}
@@ -118,7 +132,10 @@ export function CourseContentView({
           currentTitle={content.title}
         />
         <header className={styles.lessonHeading}>
-          <Link className={styles.lessonBackLink} href={`/courses/${encodeURIComponent(content.courseId)}`}>
+          <Link
+            className={styles.lessonBackLink}
+            href={`/courses/${encodeURIComponent(content.courseId)}`}
+          >
             ← Voltar
           </Link>
           <h1>{content.title}</h1>
@@ -149,14 +166,19 @@ export function CourseContentView({
               </section>
             )}
 
-            <section className={styles.lessonSection} aria-labelledby="lesson-body-title">
+            <section
+              className={styles.lessonSection}
+              aria-labelledby="lesson-body-title"
+            >
               <h2 id="lesson-body-title">Sobre esta aula</h2>
               {content.body.children.length ? (
                 <div className={styles.richText}>
                   <RichTextRenderer document={content.body} />
                 </div>
               ) : (
-                <p className={styles.mutedText}>Ainda não há conteúdo complementar nesta aula.</p>
+                <p className={styles.mutedText}>
+                  Ainda não há conteúdo complementar nesta aula.
+                </p>
               )}
               {legacyMaterialUrl && (
                 <a
@@ -170,19 +192,33 @@ export function CourseContentView({
               )}
             </section>
 
-            <section className={styles.lessonSection} aria-labelledby="materials-title">
+            <section
+              className={styles.lessonSection}
+              aria-labelledby="materials-title"
+            >
               <h2 id="materials-title">Materiais de apoio</h2>
               {content.materials.length ? (
                 <ul className={styles.materialList}>
                   {content.materials.map((material) => (
                     <li className={styles.materialItem} key={material.id}>
-                      <span className={styles.materialFileIcon} aria-hidden="true">
-                        {material.name.split('.').pop()?.toUpperCase().slice(0, 4) ?? 'FILE'}
+                      <span
+                        className={styles.materialFileIcon}
+                        aria-hidden="true"
+                      >
+                        {material.name
+                          .split('.')
+                          .pop()
+                          ?.toUpperCase()
+                          .slice(0, 4) ?? 'FILE'}
                       </span>
                       <span className={styles.materialDetails}>
                         <strong>{material.name}</strong>
+                        {material.description && (
+                          <span>{material.description}</span>
+                        )}
                         <small>
-                          {material.mimeType} · {formatBytes(material.sizeBytes)}
+                          {material.mimeType} ·{' '}
+                          {formatBytes(material.sizeBytes)}
                         </small>
                       </span>
                       <a
@@ -196,7 +232,9 @@ export function CourseContentView({
                   ))}
                 </ul>
               ) : (
-                <p className={styles.mutedText}>Esta aula não possui materiais de apoio.</p>
+                <p className={styles.mutedText}>
+                  Esta aula não possui materiais de apoio.
+                </p>
               )}
             </section>
 

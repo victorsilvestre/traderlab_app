@@ -28,9 +28,12 @@ export class PrismaUserProfileRepository implements UserProfileRepository {
         id: profile.id,
         name: profile.name,
         phone: profile.phone,
+        email: profile.email?.trim().toLowerCase() ?? null,
         role: UserRole.STUDENT,
       },
-      update: {},
+      update: profile.email
+        ? { email: profile.email.trim().toLowerCase() }
+        : {},
     });
     return toDto(saved);
   }
@@ -38,5 +41,15 @@ export class PrismaUserProfileRepository implements UserProfileRepository {
   async findById(id: string): Promise<UserProfileDto | null> {
     const profile = await prisma.userProfile.findUnique({ where: { id } });
     return profile ? toDto(profile) : null;
+  }
+
+  async recordSuccessfulLogin(id: string, email: string | null, loggedInAt: Date) {
+    await prisma.userProfile.update({
+      where: { id },
+      data: {
+        ...(email ? { email: email.trim().toLowerCase() } : {}),
+        lastLoginAt: loggedInAt,
+      },
+    });
   }
 }

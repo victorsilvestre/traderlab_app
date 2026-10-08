@@ -99,7 +99,8 @@ sem concentrar consultas ou regras nos handlers:
 - `enrollment` e `access`: cursos aos quais o aluno tem direito vigente.
 - `progress`: últimos conteúdos acessados do próprio aluno.
 - `notification`: notificações do próprio aluno, contagem de não lidas e ação
-  para marcar como lida/não lida e marcar todas como lidas; envio por e-mail e
+  para marcar como lida/não lida e marcar todas como lidas; o popover consulta
+  somente não lidas, limitado a quatro itens; envio por e-mail e
   tela de gestão administrativa ficam fora desta entrega.
 - `authentication`/`user`: autenticação existente e perfil mínimo da home;
   detalhes de consulta/edição e avatar ficam na seção de Perfil do usuário abaixo.

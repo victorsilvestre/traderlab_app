@@ -16,6 +16,86 @@ export type UserProfileDetailsDto = UserProfileDto & {
   avatarUrl: string | null;
 };
 
+export type AdminUserSummaryDto = {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string;
+  role: string;
+  createdAt: string;
+  lastLoginAt: string | null;
+};
+
+export type AdminUserPageDto = {
+  items: AdminUserSummaryDto[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type AdminUserEnrollmentDto = {
+  courseId: number;
+  courseTitle: string;
+  status: 'active' | 'revoked';
+  source: string;
+  grantedAt: string;
+};
+
+export type AdminUserDetailsDto = AdminUserSummaryDto & {
+  avatarUrl: string | null;
+  enrollments: AdminUserEnrollmentDto[];
+  progressSummary: {
+    accessedContents: number;
+    completedContents: number;
+    lastActivityAt: string | null;
+  };
+  notificationSummary: {
+    receivedCount: number;
+    unreadCount: number;
+  };
+};
+
+export type AdminEnrollmentDto = {
+  id: number;
+  userId: string;
+  userName: string;
+  userEmail: string | null;
+  userPhone: string;
+  userRole: string;
+  courseId: number;
+  courseTitle: string;
+  source: 'purchase' | 'invitation' | 'manual';
+  status: 'active' | 'revoked';
+  grantedAt: string;
+};
+
+export type AdminEnrollmentPageDto = {
+  items: AdminEnrollmentDto[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type AdminEnrollmentUserOptionDto = {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string;
+  role: string;
+};
+
+export type AdminEnrollmentOptionsDto = {
+  users: AdminEnrollmentUserOptionDto[];
+  courses: Array<{ id: number; title: string }>;
+  publishedCourses: Array<{ id: number; title: string }>;
+};
+
+export type AdminEnrollmentInputDto = { userId: string; courseId: number };
+
+export type AdminEnrollmentCreatedDto = { id: number; grantedAt: string };
+
 export type AvatarUploadDto = {
   path: string;
   token: string;
@@ -42,10 +122,49 @@ export type MessageDto = {
 export type HomeBannerDto = {
   id: number;
   title: string;
-  imagePath: string;
+  eyebrowText: string | null;
+  description: string;
+  overlayText: string | null;
+  imageUrl: string;
   destinationUrl: string | null;
   altText: string;
   displayOrder: number;
+};
+
+export type ManagedHomeBannerDto = HomeBannerDto & {
+  internalName: string;
+  description: string;
+  status: 'published' | 'draft';
+  imagePath: string;
+};
+
+export type ManagedHomeBannersDto = {
+  items: ManagedHomeBannerDto[];
+  activeCount: number;
+  activeLimit: 5;
+};
+
+export type ManagedHomeBannerInputDto = {
+  internalName: string;
+  title: string;
+  description: string;
+  eyebrowText: string;
+  overlayText: string;
+  imagePath: string;
+  destinationUrl: string;
+  altText: string;
+};
+
+export type ReorderHomeBannersDto = { ids: number[] };
+
+export type HomeBannerImageUploadRequestDto = {
+  contentType: string;
+  sizeBytes: number;
+};
+
+export type HomeBannerImageUploadDto = {
+  path: string;
+  token: string;
 };
 
 export type NotificationAudienceDto = 'general' | 'course';
@@ -66,6 +185,61 @@ export type NotificationListDto = {
   items: NotificationDto[];
   unreadCount: number;
   nextOffset: number | null;
+};
+
+export type ManagedNotificationAudienceDto = 'general' | 'course';
+
+export type ManagedNotificationDto = {
+  id: number;
+  title: string;
+  description: string;
+  linkUrl: string | null;
+  audience: ManagedNotificationAudienceDto;
+  courseId: number | null;
+  courseTitle: string | null;
+  sentAt: string;
+  recipientCount: number;
+};
+
+export type ManagedNotificationPageDto = {
+  items: ManagedNotificationDto[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type ManagedNotificationRecipientDto = {
+  name: string;
+  email: string | null;
+  sentAt: string;
+};
+
+export type ManagedNotificationDetailsDto = ManagedNotificationDto & {
+  recipients: ManagedNotificationRecipientDto[];
+  recipientPage: number;
+  recipientPageSize: number;
+  totalRecipients: number;
+  totalRecipientPages: number;
+};
+
+export type ManagedNotificationCourseDto = {
+  id: number;
+  title: string;
+};
+
+export type ManagedNotificationInputDto = {
+  title: string;
+  description: string;
+  linkUrl?: string | null;
+  audience: ManagedNotificationAudienceDto;
+  courseId?: number | null;
+};
+
+export type ManagedNotificationCreatedDto = {
+  id: number;
+  sentAt: string;
+  recipientCount: number;
 };
 
 export type ApiErrorDto = {
@@ -133,17 +307,73 @@ export type ManagedCourseContentDto = {
   id: number;
   title: string;
   description: string;
+  imageUrl: string | null;
+  imagePath: string | null;
   kind: CourseContentKindDto;
   status: ManagedCourseStatusDto;
   position: number;
   materials: Array<{
     id: number;
     name: string;
+    description: string;
     mimeType: string;
     sizeBytes: number;
     position: number;
   }>;
 };
+
+export type ManagedLessonDto = {
+  id: number;
+  moduleId: number;
+  title: string;
+  description: string;
+  body: string;
+  videoUrl: string | null;
+  imageUrl: string | null;
+  imagePath: string | null;
+  status: ManagedCourseStatusDto;
+  position: number;
+  materials: ManagedLessonMaterialDto[];
+};
+
+export type ManagedLessonMaterialDto = {
+  id: number;
+  name: string;
+  description: string;
+  mimeType: string;
+  sizeBytes: number;
+  position: number;
+};
+
+export type ManagedLessonMaterialInputDto = Partial<
+  Pick<ManagedLessonMaterialDto, 'id'>
+> &
+  Omit<ManagedLessonMaterialDto, 'id'> & { uploadPath?: string };
+
+export type ManagedLessonInputDto = {
+  title: string;
+  description?: string;
+  body?: string;
+  videoUrl?: string | null;
+  materials?: ManagedLessonMaterialInputDto[];
+};
+
+export type ManagedLessonUpdateDto = Partial<ManagedLessonInputDto> & {
+  imagePath?: string | null;
+  status?: ManagedCourseStatusDto;
+};
+
+export type ReorderCourseLessonsDto = { orderedIds: number[] };
+
+export type CourseMaterialUploadRequestDto = {
+  courseId: number;
+  moduleId: number;
+  contentId: number;
+  contentType: string;
+  sizeBytes: number;
+};
+
+export type CourseMaterialUploadDto = { path: string; token: string };
 
 export type ManagedCourseModulesDto = {
   course: Pick<ManagedCourseDto, 'id' | 'title' | 'status'>;
@@ -180,6 +410,7 @@ export type CourseContentSummaryDto = {
   title: string;
   description: string;
   kind: CourseContentKindDto;
+  imageUrl: string | null;
   completed: boolean;
   lastAccessedAt: string | null;
 };
@@ -263,6 +494,7 @@ export type RichTextDocumentDto = {
 export type CourseMaterialDto = {
   id: number;
   name: string;
+  description: string;
   mimeType: string;
   sizeBytes: number;
 };

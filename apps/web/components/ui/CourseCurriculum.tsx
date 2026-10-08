@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { CourseDetailDto } from '@traderlab/contracts';
 import styles from './CourseScreen.module.css';
 
@@ -66,16 +67,36 @@ export function CourseCurriculum({
                         aria-current={isCurrent ? 'page' : undefined}
                       >
                         <span
-                          className={styles.curriculumLessonState}
-                          aria-label={
-                            lesson.completed ? 'Aula concluída' : 'Aula não concluída'
-                          }
+                          className={styles.curriculumLessonCover}
+                          aria-hidden="true"
                         >
-                          {lesson.completed ? '✓' : isCurrent ? '▶' : ''}
+                          {lesson.imageUrl ? (
+                            <Image
+                              src={lesson.imageUrl}
+                              alt=""
+                              fill
+                              sizes="52px"
+                              quality={90}
+                            />
+                          ) : (
+                            <span>▶</span>
+                          )}
                         </span>
                         <span className={styles.curriculumLessonName}>
                           {lesson.title}
                           {isCurrent && <small>Aula atual</small>}
+                        </span>
+                        <span
+                          className={styles.curriculumLessonState}
+                          aria-label={
+                            lesson.completed
+                              ? 'Aula concluída'
+                              : isCurrent
+                                ? 'Aula atual'
+                                : 'Aula não concluída'
+                          }
+                        >
+                          {lesson.completed ? '✓' : isCurrent ? '▶' : ''}
                         </span>
                       </Link>
                     </li>

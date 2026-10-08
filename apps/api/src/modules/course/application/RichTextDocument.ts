@@ -4,11 +4,7 @@ import type {
   RichTextNodeDto,
 } from '@traderlab/contracts';
 
-const allowedMarks = new Set<RichTextMarkDto>([
-  'bold',
-  'italic',
-  'underline',
-]);
+const allowedMarks = new Set<RichTextMarkDto>(['bold', 'italic', 'underline']);
 const maximumNodes = 3000;
 const maximumDepth = 12;
 
@@ -41,7 +37,7 @@ export function toRichTextDocument(value: string): RichTextDocumentDto {
     !Array.isArray(input.children)
   ) {
     const paragraphs = value
-      .split(/\r?\n\s*\r?\n/)
+      .split(/\r?\n/)
       .map((text) => text.trim())
       .filter(Boolean)
       .map((text): RichTextNodeDto => ({
@@ -68,11 +64,13 @@ export function toRichTextDocument(value: string): RichTextDocumentDto {
                 allowedMarks.has(mark as RichTextMarkDto),
             )
           : [];
-        return [{
-          type: 'text' as const,
-          text: node.text.slice(0, 20000),
-          ...(marks.length ? { marks } : {}),
-        }];
+        return [
+          {
+            type: 'text' as const,
+            text: node.text.slice(0, 20000),
+            ...(marks.length ? { marks } : {}),
+          },
+        ];
       }
       if (node.type === 'link' && typeof node.text === 'string') {
         const href = safeLink(node.href);
@@ -90,11 +88,13 @@ export function toRichTextDocument(value: string): RichTextDocumentDto {
         case 'blockquote':
           return [{ type: node.type, children } as RichTextNodeDto];
         case 'heading':
-          return [{
-            type: 'heading',
-            level: node.level === 3 ? 3 : 2,
-            children,
-          }];
+          return [
+            {
+              type: 'heading',
+              level: node.level === 3 ? 3 : 2,
+              children,
+            },
+          ];
         default:
           return [];
       }

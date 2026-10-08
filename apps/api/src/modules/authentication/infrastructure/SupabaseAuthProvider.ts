@@ -56,6 +56,28 @@ function toIdentity(user: User): AuthenticatedIdentity {
 }
 
 export class SupabaseAuthProvider implements AuthenticationProvider {
+  async listAll() {
+    const perPage = 1000;
+    const users: Array<{
+      id: string;
+      email: string | null;
+    }> = [];
+    for (let page = 1; ; page += 1) {
+      const { data, error } = await adminClient.auth.admin.listUsers({
+        page,
+        perPage,
+      });
+      if (error) throw error;
+      users.push(
+        ...data.users.map((user) => ({
+          id: user.id,
+          email: user.email ?? null,
+        })),
+      );
+      if (data.users.length < perPage) return users;
+    }
+  }
+
   async signUp(input: {
     name: string;
     email: string;

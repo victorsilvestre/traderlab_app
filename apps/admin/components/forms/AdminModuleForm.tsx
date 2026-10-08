@@ -19,9 +19,11 @@ const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
 export function AdminModuleForm({
   courseId,
   module,
+  returnTo,
 }: {
   courseId: number;
   module?: ManagedCourseModuleDto;
+  returnTo: string;
 }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -134,7 +136,9 @@ export function AdminModuleForm({
         {
           method: module ? 'PATCH' : 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(body),
+          body: JSON.stringify(
+            module ? { ...body, status: 'published' } : body,
+          ),
         },
       );
       const result = (await response
@@ -151,7 +155,7 @@ export function AdminModuleForm({
         const imagePath = await uploadCover(savedModuleId);
         await associateImage(savedModuleId, imagePath);
       }
-      router.push(`/courses/${courseId}`);
+      router.push(returnTo);
       router.refresh();
     } catch (cause) {
       const message =
@@ -160,7 +164,7 @@ export function AdminModuleForm({
           : 'Não foi possível salvar o módulo.';
       setError(
         savedModuleId && !module
-          ? `${message} O módulo foi criado como rascunho; retome a edição para concluir o envio da imagem.`
+          ? `${message} O módulo foi salvo; retome a edição para concluir o envio da imagem.`
           : message,
       );
     } finally {
@@ -266,11 +270,6 @@ export function AdminModuleForm({
         )}
       </div>
 
-      {!module && (
-        <p className={styles.draftNote}>
-          O módulo será salvo como rascunho no final da ordem atual.
-        </p>
-      )}
       {error && (
         <p className={styles.error} role="alert">
           {error}
@@ -282,9 +281,8 @@ export function AdminModuleForm({
         </p>
       )}
       <div className={styles.actions}>
-        <Link href={`/courses/${courseId}`}>Cancelar</Link>
         <button type="submit" disabled={busy}>
-          {busy ? 'Salvando…' : module ? 'Salvar alterações' : 'Criar módulo'}
+          {busy ? 'Salvando…' : 'Salvar'}
         </button>
       </div>
     </form>

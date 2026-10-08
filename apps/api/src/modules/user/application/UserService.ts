@@ -1,7 +1,14 @@
-import type { UserProfileDetailsDto } from '@traderlab/contracts';
+import type {
+  AdminUserDetailsDto,
+  AdminUserPageDto,
+  UserProfileDetailsDto,
+} from '@traderlab/contracts';
 import type { AuthenticatedIdentity } from '../../authentication/application/AuthenticationProvider.js';
 import type { ProfileAvatarStorage, UserProfileRepository } from '../domain/UserProfile.js';
 import { UserError } from '../domain/UserError.js';
+
+const adminPageSize = 25;
+const maximumQueryLength = 120;
 
 const allowedTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const maximumBytes = 5 * 1024 * 1024;
@@ -68,6 +75,61 @@ export class UserService {
     const path = `${identity.id}/avatar-${crypto.randomUUID()}.${extensionByType[input.contentType]}`;
     const { token } = await this.avatars.createUpload(path);
     return { path, token };
+  }
+
+  async listAdminUsers(input: { query?: string; page?: number }): Promise<AdminUserPageDto> {
+    const query = input.query?.trim().slice(0, maximumQueryLength) ?? '';
+    const page = Math.max(1, Math.floor(input.page ?? 1));
+    const { items, totalItems } = await this.profiles.listAdminUsers({
+      query,
+      offset: (page - 1) * adminPageSize,
+      limit: adminPageSize,
+    });
+    return {
+      items: items.map((profile) => ({
+        id: profile.id,
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        role: profile.role,
+        createdAt: profile.createdAt.toISOString(),
+        lastLoginAt: profile.lastLoginAt?.toISOString() ?? null,
+      })),
+      page,
+      pageSize: adminPageSize,
+      totalItems,
+      totalPages: Math.ceil(totalItems / adminPageSize),
+    };
+  }
+
+  async getAdminUser(userId: string): Promise<AdminUserDetailsDto> {
+    const profile = await this.profiles.findAdminUser(userId);
+    if (!profile) throw new UserError('Usuário não encontrado.', 404);
+    return {
+      id: profile.id,
+      name: profile.name,
+      email: profile.email,
+      phone: profile.phone,
+      role: profile.role,
+      createdAt: profile.createdAt.toISOString(),
+      lastLoginAt: profile.lastLoginAt?.toISOString() ?? null,
+      avatarUrl: profile.avatarPath
+        ? await this.avatars.createReadUrl(profile.avatarPath)
+        : null,
+      enrollments: profile.enrollments.map((enrollment) => ({
+        courseId: enrollment.courseId,
+        courseTitle: enrollment.courseTitle,
+        status: enrollment.status.toLowerCase() as 'active' | 'revoked',
+        source: enrollment.source,
+        grantedAt: enrollment.grantedAt.toISOString(),
+      })),
+      progressSummary: {
+        accessedContents: profile.progressSummary.accessedContents,
+        completedContents: profile.progressSummary.completedContents,
+        lastActivityAt: profile.progressSummary.lastActivityAt?.toISOString() ?? null,
+      },
+      notificationSummary: profile.notificationSummary,
+    };
   }
 
   private async requireProfile(id: string) {

@@ -99,11 +99,6 @@
   text-decoration: underline;
   cursor: pointer;
 }
-.draftNote {
-  margin: 6px 0 0;
-  color: var(--muted);
-  font-size: 12px;
-}
 .error {
   margin: 5px 0;
   padding: 11px 12px;

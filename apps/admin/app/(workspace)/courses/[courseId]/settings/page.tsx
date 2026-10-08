@@ -1,16 +1,18 @@
 import { notFound, redirect } from 'next/navigation';
-import Link from 'next/link';
 import type { ManagedCourseDto } from '@traderlab/contracts';
 import { AdminCourseForm } from '../../../../../components/forms/AdminCourseForm';
+import { AdminBackLink } from '../../../../../components/navigation/AdminBackLink';
 import { getAdminCourse } from '../../../../../lib/courses/adminCourseApi';
+import { safeAdminReturnTo } from '../../../../../lib/navigation/safeAdminReturnTo';
 import styles from '../../editor.module.css';
 
-type PageProps = { params: Promise<{ courseId: string }> };
+type PageProps = { params: Promise<{ courseId: string }>; searchParams: Promise<{ returnTo?: string }> };
 
-export default async function AdminCourseSettingsPage({ params }: PageProps) {
-  const { courseId: rawCourseId } = await params;
+export default async function AdminCourseSettingsPage({ params, searchParams }: PageProps) {
+  const [{ courseId: rawCourseId }, query] = await Promise.all([params, searchParams]);
   const courseId = Number(rawCourseId);
   if (!Number.isSafeInteger(courseId) || courseId < 1) notFound();
+  const returnTo = safeAdminReturnTo(query.returnTo, `/courses/${courseId}`);
 
   const response = await getAdminCourse(courseId);
   if (response.status === 401) redirect('/sign-in');
@@ -20,9 +22,7 @@ export default async function AdminCourseSettingsPage({ params }: PageProps) {
   if (!response.ok || !payload || !('id' in payload)) {
     return (
       <section className={styles.editor} role="alert">
-        <Link className={styles.backLink} href={`/courses/${courseId}`}>
-          ← Voltar ao conteúdo do curso
-        </Link>
+        <AdminBackLink href={returnTo} />
         <h1>Não foi possível abrir as configurações</h1>
         <p>
           {payload && 'message' in payload
@@ -35,16 +35,17 @@ export default async function AdminCourseSettingsPage({ params }: PageProps) {
 
   return (
     <section className={styles.editor}>
-      <Link className={styles.backLink} href={`/courses/${courseId}`}>
-        ← {payload.title}
-      </Link>
+      <AdminBackLink href={returnTo} />
       <h1>Configurações do curso</h1>
-      <p>Edite o nome, a descrição e a imagem de capa.</p>
+      <p>
+        Edite o nome, a descrição e a imagem de capa. Ao salvar, o curso será
+        publicado.
+      </p>
       <div className={styles.status}>
         Estado atual:{' '}
         {payload.status === 'published' ? 'Publicado' : 'Rascunho'}
       </div>
-      <AdminCourseForm course={payload} cancelHref={`/courses/${courseId}`} />
+      <AdminCourseForm course={payload} returnTo={returnTo} />
     </section>
   );
 }

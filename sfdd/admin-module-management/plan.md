@@ -22,7 +22,7 @@
   os módulos ordenados por `position`, depois `id`; cada item inclui contagem de
   conteúdos, resumos de conteúdo ordenados e metadados mínimos dos materiais
   complementares, além da URL assinada de leitura opcional da capa.
-- `POST /admin/courses/:courseId/modules`: cria módulo como rascunho no final da
+- `POST /admin/courses/:courseId/modules`: cria módulo publicado no final da
   ordem; recebe título e descrição opcional.
 - `PATCH /admin/courses/:courseId/modules/:moduleId`: altera título, descrição,
   caminho da capa e/ou estado de publicação. Caminho de capa deve pertencer ao
@@ -38,11 +38,29 @@
 
 - `/courses/[courseId]` é a tela de gestão do curso: cabeçalho com capa, título,
   estado, contagens e acesso a configurações; abaixo, módulos expansíveis.
+- A tela integrada e todas as telas secundárias administrativas usam o link
+  comum `← Voltar`; não há breadcrumbs. A entrada `/` é a única exceção.
 - A página `/courses/[courseId]/settings` reutiliza o formulário de dados gerais
-  do curso. Salvar ou cancelar retorna à gestão integrada do curso.
-- Ao expandir módulo, mostrar aulas e materiais independentes somente para
-  leitura; materiais complementares aparecem agrupados sob a aula. Não exibir
-  ações de edição/publicação de conteúdo até a entrega da gestão de conteúdo.
+  do curso. Salvar retorna à gestão integrada do curso.
+- O formulário de módulo tem uma única ação `Salvar`; novo e editado são
+  publicados ao salvar, e despublicar permanece uma ação explícita.
+- Ao expandir módulo, mostrar aulas e materiais independentes; materiais
+  complementares aparecem agrupados sob a aula. A linha da aula oferece editar,
+  reordenar, publicar/despublicar e recolher/expandir os materiais por ícones.
+  Materiais e conteúdos independentes permanecem somente para leitura nesta
+  tela.
+- Cada aula usa uma linha horizontal: ícone/tipo e informações à esquerda;
+  status junto aos dados; ações compactas sem texto visível à direita. A linha
+  não quebra as ações para uma segunda faixa.
+- A lista de materiais de cada aula começa recolhida. Um botão de ícone alterna
+  sua visibilidade, informa `aria-expanded` e aponta para a lista por
+  `aria-controls`; o botão aparece em todas as aulas e fica desabilitado com
+  menor opacidade quando não há materiais.
+- A criação da aula fica no grupo de ações do módulo como ícone `+`, antes de
+  editar, publicar/despublicar e recolher. O subtítulo redundante da lista é
+  removido.
+- Tooltips dos ícones permanecem em uma linha; quando o controle está no fim da
+  lista, o tooltip aparece acima para permanecer legível.
 - A rota antiga `/courses/[courseId]/modules` redireciona à tela integrada.
 - `page.tsx` valida parâmetros, carrega dados pela API e compõe os componentes.
 - A lista é um Server Component na leitura inicial. Ações de ordem e publicação

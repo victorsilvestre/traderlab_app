@@ -2,8 +2,9 @@ import { redirect } from 'next/navigation';
 import type { ManagedCoursePageDto, ManagedCourseStatusDto } from '@traderlab/contracts';
 import { AdminCourseCatalog } from '../../../components/ui/AdminCourseCatalog';
 import { getAdminCourses } from '../../../lib/courses/adminCourseApi';
+import { safeAdminReturnTo } from '../../../lib/navigation/safeAdminReturnTo';
 
-type PageProps = { searchParams: Promise<{ query?: string; status?: string; page?: string }> };
+type PageProps = { searchParams: Promise<{ query?: string; status?: string; page?: string; returnTo?: string }> };
 
 export default async function AdminCoursesPage({ searchParams }: PageProps) {
   const params = await searchParams;
@@ -26,6 +27,7 @@ export default async function AdminCoursesPage({ searchParams }: PageProps) {
     : errorPayload?.message
       ? errorPayload.message
       : 'Não foi possível carregar os cursos agora.';
+  const returnTo = safeAdminReturnTo(params.returnTo, params.returnTo ? '/courses' : '/');
 
   return (
     <AdminCourseCatalog
@@ -33,6 +35,7 @@ export default async function AdminCoursesPage({ searchParams }: PageProps) {
       pageData={pageData}
       query={query}
       status={status}
+      returnTo={returnTo}
       errorMessage={errorMessage}
     />
   );

@@ -16,13 +16,7 @@ const bucket =
 const maximumFileSize = 5 * 1024 * 1024;
 const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
-export function AdminCourseForm({
-  course,
-  cancelHref,
-}: {
-  course?: ManagedCourseDto;
-  cancelHref?: string;
-}) {
+export function AdminCourseForm({ course, returnTo }: { course?: ManagedCourseDto; returnTo: string }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -80,6 +74,7 @@ export function AdminCourseForm({
     const body = {
       title: String(fields.get('title') ?? ''),
       description: String(fields.get('description') ?? ''),
+      ...(editing ? { status: 'published' as const } : {}),
     };
     let savedCourseId = course?.id;
     try {
@@ -118,7 +113,7 @@ export function AdminCourseForm({
               'O curso foi salvo, mas não foi possível associar a capa. Tente enviá-la novamente.',
           );
       }
-      router.push(savedCourseId ? `/courses/${savedCourseId}` : '/courses');
+      router.push(savedCourseId ? `/courses/${savedCourseId}?returnTo=${encodeURIComponent(returnTo)}` : returnTo);
       router.refresh();
     } catch (cause) {
       const message =
@@ -127,7 +122,7 @@ export function AdminCourseForm({
           : 'Não foi possível salvar o curso.';
       setError(
         savedCourseId && !editing
-          ? `${message} O curso foi criado como rascunho. Acesse a edição do curso para retomar o envio da capa.`
+          ? `${message} O curso foi salvo. Acesse a gestão do curso para concluir o envio da capa.`
           : message,
       );
     } finally {
@@ -244,9 +239,6 @@ export function AdminCourseForm({
           </button>
         )}
       </div>
-      {!editing && (
-        <p className={styles.draftNote}>O curso será salvo como rascunho.</p>
-      )}
       {error && (
         <p className={styles.error} role="alert">
           {error}{' '}
@@ -256,16 +248,8 @@ export function AdminCourseForm({
         </p>
       )}
       <div className={styles.actions}>
-        <Link
-          href={
-            cancelHref ??
-            (editing && course ? `/courses/${course.id}` : '/courses')
-          }
-        >
-          Cancelar
-        </Link>
         <button type="submit" disabled={busy}>
-          {busy ? 'Salvando…' : editing ? 'Salvar alterações' : 'Criar curso'}
+          {busy ? 'Salvando…' : 'Salvar'}
         </button>
       </div>
     </form>

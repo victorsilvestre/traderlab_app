@@ -42,13 +42,15 @@ export type ManagedCourseContent = {
   id: number;
   title: string;
   description: string;
+  imageUrl: string | null;
+  imagePath: string | null;
   kind: CourseContentKind;
   status: PublicationState;
   position: number;
   materials: Array<
     Pick<
       CourseMaterialRecord,
-      'id' | 'name' | 'mimeType' | 'sizeBytes' | 'position'
+      'id' | 'name' | 'description' | 'mimeType' | 'sizeBytes' | 'position'
     >
   >;
 };
@@ -96,8 +98,61 @@ export interface CourseManagementRepository {
     courseId: number,
     orderedIds: number[],
   ): Promise<boolean>;
+  lessonExists(
+    courseId: number,
+    moduleId: number,
+    contentId: number,
+  ): Promise<boolean>;
+  getManagedLesson(
+    courseId: number,
+    moduleId: number,
+    contentId: number,
+  ): Promise<ManagedLessonRecord | null>;
+  createManagedLesson(
+    moduleId: number,
+    input: ManagedLessonChanges,
+  ): Promise<ManagedLessonRecord>;
+  updateManagedLesson(
+    courseId: number,
+    moduleId: number,
+    contentId: number,
+    changes: ManagedLessonChanges,
+  ): Promise<ManagedLessonRecord | null>;
+  reorderManagedLessons(
+    moduleId: number,
+    orderedIds: number[],
+  ): Promise<boolean>;
   imageTargetExists(kind: CourseImageTarget, id: number): Promise<boolean>;
 }
+
+export type ManagedLessonMaterial = {
+  id?: number;
+  name: string;
+  description: string;
+  storagePath: string;
+  mimeType: string;
+  sizeBytes: number;
+  position: number;
+};
+
+export type ManagedLessonChanges = {
+  title: string;
+  description: string;
+  body: string;
+  videoUrl: string | null;
+  imagePath: string | null;
+  status?: PublicationState;
+  materials: Array<
+    Omit<ManagedLessonMaterial, 'storagePath'> & { storagePath?: string }
+  >;
+};
+
+export type ManagedLessonRecord = Omit<ManagedLessonChanges, 'materials'> & {
+  id: number;
+  moduleId: number;
+  position: number;
+  materials: Array<ManagedLessonMaterial & { id: number }>;
+};
 
 export type CourseContentRecord = {
   id: number;
@@ -145,6 +200,7 @@ export type CourseMaterialRecord = {
   id: number;
   contentId: number;
   name: string;
+  description: string;
   storagePath: string;
   mimeType: string;
   sizeBytes: number;
@@ -204,6 +260,8 @@ export interface CourseRepository {
 
 export interface CourseMaterialStorage {
   download(storagePath: string): Promise<Uint8Array>;
+  createUpload(path: string): Promise<{ token: string }>;
+  exists(storagePath: string): Promise<boolean>;
 }
 
 export interface CourseImageStorage {

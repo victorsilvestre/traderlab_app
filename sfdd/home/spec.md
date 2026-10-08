@@ -20,7 +20,11 @@ Notificação
 - O menu do sino deverá fechar ao clicar fora dele, pressionar Escape ou navegar por um link do próprio menu;
 - O usuário deverá visualizar o símbolo de notificação;
 - O usuário deverá visualizar a quantidade de notificações não lidas;
-- O usuário poderá visualizar no sino as notificações recentes, com largura e espaço suficientes para ler título e descrição;
+- Ao abrir o sino, o usuário visualizará somente notificações não lidas, com
+  no máximo quatro itens; ao marcar uma como lida, a lista será atualizada e
+  poderá preencher a vaga com outra notificação ainda não lida;
+- O usuário poderá visualizar no sino as notificações não lidas mais recentes,
+  com largura e espaço suficientes para ler título e descrição;
 - O usuário poderá acessar uma página com todas as notificações recebidas, ordenadas das mais recentes para as mais antigas;
 - A página deverá permitir filtrar notificações não lidas, marcar uma notificação como lida ou não lida e marcar todas como lidas; não haverá exclusão pelo usuário;
 - Em cada card, a ação de marcar como lida/não lida ficará à esquerda e o link opcional ficará à direita;

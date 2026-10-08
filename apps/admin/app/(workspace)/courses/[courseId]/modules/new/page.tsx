@@ -1,16 +1,18 @@
 import { notFound, redirect } from 'next/navigation';
-import Link from 'next/link';
 import type { ManagedCourseModulesDto } from '@traderlab/contracts';
 import { AdminModuleForm } from '../../../../../../components/forms/AdminModuleForm';
+import { AdminBackLink } from '../../../../../../components/navigation/AdminBackLink';
 import { getAdminCourseModules } from '../../../../../../lib/courses/adminCourseApi';
 import styles from '../../../editor.module.css';
+import { safeAdminReturnTo } from '../../../../../../lib/navigation/safeAdminReturnTo';
 
-type PageProps = { params: Promise<{ courseId: string }> };
+type PageProps = { params: Promise<{ courseId: string }>; searchParams: Promise<{ returnTo?: string }> };
 
-export default async function NewAdminModulePage({ params }: PageProps) {
-  const { courseId: rawId } = await params;
+export default async function NewAdminModulePage({ params, searchParams }: PageProps) {
+  const [{ courseId: rawId }, query] = await Promise.all([params, searchParams]);
   const courseId = Number(rawId);
   if (!Number.isSafeInteger(courseId) || courseId < 1) notFound();
+  const returnTo = safeAdminReturnTo(query.returnTo, `/courses/${courseId}`);
   const response = await getAdminCourseModules(courseId);
   if (response.status === 401) redirect('/sign-in');
   if (response.status === 404) notFound();
@@ -19,9 +21,7 @@ export default async function NewAdminModulePage({ params }: PageProps) {
   if (!response.ok || !payload || !('course' in payload)) {
     return (
       <section className={styles.editor} role="alert">
-        <Link className={styles.backLink} href={`/courses/${courseId}`}>
-          ← Conteúdo do curso
-        </Link>
+        <AdminBackLink href={returnTo} />
         <h1>Não foi possível abrir este curso</h1>
         <p>
           {payload && 'message' in payload
@@ -33,12 +33,10 @@ export default async function NewAdminModulePage({ params }: PageProps) {
   }
   return (
     <section className={styles.editor}>
-      <Link className={styles.backLink} href={`/courses/${courseId}`}>
-        ← {payload.course.title}
-      </Link>
+      <AdminBackLink href={returnTo} />
       <h1>Novo módulo</h1>
-      <p>Defina as informações. O módulo começa como rascunho.</p>
-      <AdminModuleForm courseId={courseId} />
+      <p>Defina as informações. O módulo será publicado ao salvar.</p>
+      <AdminModuleForm courseId={courseId} returnTo={returnTo} />
     </section>
   );
 }

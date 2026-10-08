@@ -184,6 +184,7 @@ export class PrismaCourseRepository implements CourseRepository {
         id: true,
         contentId: true,
         name: true,
+        description: true,
         storagePath: true,
         mimeType: true,
         sizeBytes: true,

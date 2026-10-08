@@ -1,0 +1,45 @@
+.details { width: 100%; min-width: 0; }
+.heading { display: flex; align-items: center; gap: 15px; margin: 20px 0 24px; }
+.avatar, .avatarFallback { display: grid; width: 58px; height: 58px; flex: 0 0 auto; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--soft-green); color: var(--green); object-fit: cover; font-size: 22px; font-weight: 750; }
+.heading h1 { margin: 0; font-size: 32px; letter-spacing: -.03em; line-height: 1.2; overflow-wrap: anywhere; }
+.heading p { margin: 6px 0 0; color: var(--muted); }
+.sections { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.card { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); }
+.card h2 { margin: 0 0 16px; font-size: 17px; }
+.cardHeading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cardHeading h2 { margin-bottom: 16px; }
+.enrollmentHeading { display: flex; align-items: center; gap: 9px; }
+.enrollmentHeading h2 { margin-bottom: 16px; }
+.enrollmentHeading > span { margin: 0 0 16px; color: var(--muted); font-size: 12px; }
+.addEnrollment { display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center; margin-top: -8px; border: 1px solid var(--line); border-radius: 6px; color: var(--green); }
+.addEnrollment svg { width: 17px; height: 17px; }
+.card dl { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px 20px; margin: 0; }
+.card dl > div { display: grid; min-width: 0; gap: 6px; }
+.card dt { color: var(--muted); font-size: 11px; font-weight: 700; }
+.card dd { margin: 0; color: var(--ink); font-size: 13px; overflow-wrap: anywhere; }
+.enrollmentList { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.enrollmentList li { display: grid; gap: 7px; padding: 12px 0; border-top: 1px solid var(--line); }
+.enrollmentList li:first-child { padding-top: 0; border-top: 0; }
+.enrollmentMain, .enrollmentMeta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.enrollmentMain strong { min-width: 0; color: var(--ink); font-size: 13px; overflow-wrap: anywhere; }
+.enrollmentMeta { color: var(--muted); font-size: 11px; }
+.active, .revoked { padding: 4px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+.active { background: var(--soft-green); color: var(--green); }
+.revoked { background: #f2e9e7; color: #88493e; }
+.empty, .lastActivity { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.metrics { display: flex; flex-wrap: wrap; gap: 16px 36px; }
+.metrics > div { display: grid; gap: 4px; }
+.metrics strong { font-size: 25px; line-height: 1; }
+.metrics span { color: var(--muted); font-size: 12px; }
+.lastActivity { margin-top: 18px; }
+@media (max-width: 1050px) {
+  .card dl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .heading h1 { font-size: 27px; }
+  .card { padding: 17px; }
+  .card dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+}
+@media (max-width: 420px) {
+  .card dl { grid-template-columns: minmax(0, 1fr); }
+}
