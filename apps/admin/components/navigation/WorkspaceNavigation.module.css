@@ -1,17 +1,24 @@
-.nav { display: grid; gap: 6px; }
+.nav { display: grid; gap: 7px; padding-top: 5px; }
 .nav a {
   display: flex;
-  min-height: 44px;
+  min-height: 46px;
   align-items: center;
-  gap: 11px;
-  padding: 10px 13px;
-  border-radius: 8px;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 11px;
   color: var(--muted);
   background: transparent;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
+  transition: color .16s ease, background-color .16s ease, transform .16s ease;
 }
-.nav a:hover, .nav a[aria-current='page'] { color: var(--green); background: var(--soft-green); }
+.nav a:hover { color: var(--ink); background: #f5f3ef; }
+.nav a[aria-current='page'] { color: var(--ink); background: var(--soft-green); font-weight: 700; }
 .nav svg { width: 18px; height: 18px; flex: 0 0 auto; }
-
+.nav a[aria-current='page'] svg { color: var(--green-ink); }
+@media (max-width: 740px) {
+  .nav { display: flex; gap: 6px; overflow-x: auto; padding: 0 0 4px; scrollbar-width: thin; }
+  .nav a { min-height: 40px; flex: 0 0 auto; gap: 8px; padding: 8px 11px; white-space: nowrap; }
+  .nav svg { width: 16px; height: 16px; }
+}

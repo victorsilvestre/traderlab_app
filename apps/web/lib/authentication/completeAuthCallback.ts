@@ -26,6 +26,9 @@ export async function completeAuthCallback(
 
   let callbackError =
     url.searchParams.get('error_description') ?? hash.get('error_description');
+  if (url.searchParams.get('error') === 'access_denied') {
+    callbackError = 'O acesso com Google foi cancelado. Tente novamente ou entre com e-mail e senha.';
+  }
 
   if (!callbackError && code) {
     const { error } = await auth.exchangeCodeForSession(code);

@@ -16,8 +16,7 @@
   height: 44px;
   border: 0;
   border-radius: 50% 50% 50% 10%;
-  background: var(--green);
-  color: white;
+  background: var(--green); color: var(--ink);
   display: grid;
   place-items: center;
   font-size: 25px;
@@ -25,7 +24,7 @@
 }
 .eyebrow {
   margin: 36px 0 6px;
-  color: var(--green);
+  color: var(--green-ink);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.1em;

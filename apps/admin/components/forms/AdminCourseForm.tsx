@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Image from 'next/image';
@@ -212,17 +213,7 @@ export function AdminCourseForm({ course, returnTo }: { course?: ManagedCourseDt
           onClick={() => inputRef.current?.click()}
           disabled={busy}
         >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 16V4m-4 4 4-4 4 4M4 16v4h16v-4" />
-          </svg>
+          <Upload aria-hidden="true" size={18} strokeWidth={1.8} />
           {file
             ? 'Trocar imagem'
             : course?.coverImagePath

@@ -1,14 +1,28 @@
 :root {
   color-scheme: light;
-  --ink: #18211d;
-  --muted: #657169;
-  --paper: #f5f5f0;
-  --surface: #fff;
-  --line: #dfe4de;
-  --green: #1e5a42;
-  --green-hover: #174833;
-  --soft-green: #e8efe8;
-  --error: #a23535;
+  --ink: #0c0d0e;
+  --muted: #6e6d6b;
+  --paper: #f5f3ef;
+  --surface: #fffbf7;
+  --line: #e5e1dc;
+  --green: #a2cb10;
+  --green-hover: #8bae0b;
+  --green-ink: #354604;
+  --soft-green: #eff6d9;
+  --red: #a71619;
+  --error: #a71619;
+  --shadow-card: 0 12px 30px rgb(37 31 22 / 7%);
+  --shadow-float: 0 20px 52px rgb(37 31 22 / 14%);
+  --radius-card: 14px;
+  --radius-control: 9px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 18px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-page-heading: var(--space-4);
+  --space-section: var(--space-5);
 }
 
 * { box-sizing: border-box; }
@@ -22,15 +36,22 @@ body {
   min-height: 100vh;
   color: var(--ink);
   background: var(--paper);
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-roboto), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 button, input { font: inherit; }
 button { cursor: pointer; }
-a { color: var(--green); text-underline-offset: 3px; }
-a:hover { color: var(--green-hover); }
-::selection { color: var(--ink); background: #cbdccf; }
-:focus-visible { outline: 3px solid #90ad8e; outline-offset: 3px; }
+a { color: var(--green-ink); text-underline-offset: 3px; }
+a:hover { color: #263500; }
+::selection { color: var(--ink); background: #dff09f; }
+:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
 html {
   scrollbar-gutter: stable;
+}
+body, button, input, select, textarea { font-family: var(--font-roboto), ui-sans-serif, system-ui, sans-serif; }
+h1, h2, h3, h4 { font-family: var(--font-roboto-serif), Georgia, serif; }
+main [class*="tableWrap"] {
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
 }

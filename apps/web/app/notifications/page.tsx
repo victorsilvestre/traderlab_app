@@ -32,6 +32,7 @@ export default async function NotificationsPage({
   const { authenticated, accessToken, profile } = await getCurrentUserProfile();
 
   if (!authenticated || !accessToken) redirect(signInPath);
+  if (profile && !profile.phone.trim()) redirect('/profile?complete=1');
 
   try {
     const inbox = await getNotifications(accessToken, {

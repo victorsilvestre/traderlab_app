@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Eye, Plus } from 'lucide-react';
 import type { AdminEnrollmentPageDto } from '@traderlab/contracts';
 import { AdminBackLink } from '../navigation/AdminBackLink';
 import styles from './AdminEnrollmentCatalog.module.css';
@@ -57,7 +58,7 @@ export function AdminEnrollmentCatalog({
       <div className={styles.heading}>
         <div><h1 id="enrollments-title">Matrículas</h1><p>Consulte o acesso aos cursos e matricule usuários cadastrados.</p></div>
         <Link className={styles.addButton} href={newEnrollmentHref} aria-label="Matricular usuário" data-tooltip="Matricular usuário">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
+          <Plus aria-hidden="true" size={20} strokeWidth={1.8} />
         </Link>
       </div>
       <form
@@ -105,7 +106,7 @@ export function AdminEnrollmentCatalog({
             <table className={styles.table}>
               <thead><tr><th>Aluno</th><th>E-mail</th><th>Papel</th><th>Curso</th><th>Concedida em</th><th>Origem</th><th>Situação</th><th><span className={styles.srOnly}>Ações</span></th></tr></thead>
               <tbody>{pageData.items.map((item) => (
-                <tr key={item.id}>
+                <tr key={item.id} className={styles.enrollmentRow}>
                   <td data-label="Aluno"><Link className={styles.userLink} href={userDetailsHref(item.userId)}>{item.userName || 'Nome não informado'}</Link></td>
                   <td data-label="E-mail">{item.userEmail || 'Indisponível'}</td>
                   <td data-label="Papel"><span className={styles.role}>{roleLabel(item.userRole)}</span></td>
@@ -113,7 +114,7 @@ export function AdminEnrollmentCatalog({
                   <td data-label="Concedida em">{formatDate(item.grantedAt)}</td>
                   <td data-label="Origem">{{ manual: 'Manual', purchase: 'Compra', invitation: 'Convite' }[item.source]}</td>
                   <td data-label="Situação"><span className={item.status === 'active' ? styles.active : styles.revoked}>{item.status === 'active' ? 'Ativa' : 'Revogada'}</span></td>
-                  <td data-label="Ações"><Link className={styles.viewLink} href={userDetailsHref(item.userId)} aria-label={`Visualizar ${item.userName}`} title="Visualizar usuário"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></Link></td>
+                  <td data-label="Ações"><Link className={styles.viewLink} href={userDetailsHref(item.userId)} aria-label={`Visualizar ${item.userName}`} title="Visualizar usuário" data-tooltip="Visualizar usuário"><Eye aria-hidden="true" size={18} strokeWidth={1.8} /></Link></td>
                 </tr>
               ))}</tbody>
             </table>

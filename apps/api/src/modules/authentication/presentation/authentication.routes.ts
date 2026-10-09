@@ -168,6 +168,10 @@ export async function authenticationRoutes(
     reply.send(await options.service.getCurrentUser(bearerToken(request))),
   );
 
+  app.post('/authentication/external-sign-in', async (request, reply) =>
+    reply.send(await options.service.completeExternalSignIn(bearerToken(request))),
+  );
+
   app.get('/authentication/workspace/me', async (request, reply) =>
     reply.send(await options.service.getCurrentWorkspaceUser(bearerToken(request))),
   );

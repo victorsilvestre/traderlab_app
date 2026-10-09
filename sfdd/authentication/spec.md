@@ -17,6 +17,14 @@ no painel Supabase. A autorização por papel em rotas de produto será aplicada
 quando esses endpoints forem implementados. O fluxo também inclui encerrar a
 sessão local e retornar ao login.
 
+## Evolução proposta — login com Google
+
+O login social Google está especificado separadamente em
+`sfdd/authentication-login-google/`. A implementação atual continua usando
+e-mail e senha; o botão social permanece indisponível até aprovação e execução
+daquela unidade. A nova unidade define como manter uma única identidade Auth,
+aproveitar nome/foto opcionais e completar o telefone quando necessário.
+
 ## Perfil do usuário
 
 - Visitante que deseja criar uma conta ou entrar na plataforma.

@@ -42,10 +42,10 @@
 - [x] Executar lint da API e do admin e revisar textos corrompidos.
 - [x] Integrar a consulta e as ações de módulo ao construtor do curso.
 - [ ] Conferir autorização e isolamento de módulos entre cursos.
-- [ ] Conferir persistência da ordem e estados de publicação.
+- [x] Conferir persistência da ordem e estados de publicação.
 - [ ] Validar visualmente lista e formulários em desktop e mobile.
 - [ ] Validar visualmente linha de aula e expansão dos materiais em desktop e
       mobile.
 - [ ] Confirmar que a linha horizontal cabe em larguras estreitas sem barra de
       rolagem e que as ações continuam alcançáveis.
-- [ ] Conferir que despublicar não apaga conteúdos ou progresso.
+- [x] Conferir que despublicar não apaga conteúdos ou progresso.

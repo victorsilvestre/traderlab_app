@@ -61,7 +61,7 @@
   white-space: nowrap;
 }
 .fileInput:focus-visible + .coverButton {
-  outline: 3px solid #91b79c;
+  outline: 3px solid var(--green);
   outline-offset: 2px;
 }
 .coverButton {
@@ -186,9 +186,8 @@
 }
 .materialPrimary {
   flex: 0 0 auto;
-  border-color: var(--green);
-  background: var(--green);
-  color: #fff;
+  border-color: var(--green-ink);
+  background: var(--green); color: var(--ink);
 }
 .materialButton:disabled,
 .materialPrimary:disabled {
@@ -241,9 +240,8 @@
   cursor: wait;
 }
 .primary {
-  border-color: var(--green);
-  background: var(--green);
-  color: #fff;
+  border-color: var(--green-ink);
+  background: var(--green); color: var(--ink);
 }
 .remove {
   min-height: 32px;

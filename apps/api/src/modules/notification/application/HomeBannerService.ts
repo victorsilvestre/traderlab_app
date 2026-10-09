@@ -34,7 +34,6 @@ export class HomeBannerService {
     const banners = await this.repository.listPublished(activeLimit);
     return Promise.all(banners.map(async (banner) => ({
       id: banner.id,
-      title: banner.title,
       eyebrowText: banner.eyebrowText,
       description: banner.description,
       overlayText: banner.overlayText,
@@ -50,7 +49,6 @@ export class HomeBannerService {
     const items: ManagedHomeBannerDto[] = await Promise.all(banners.map(async (banner) => ({
       id: banner.id,
       internalName: banner.internalName,
-      title: banner.title,
       description: banner.description,
       eyebrowText: banner.eyebrowText,
       overlayText: banner.overlayText,
@@ -68,7 +66,7 @@ export class HomeBannerService {
     const banner = await this.repository.findForAdmin(id);
     if (!banner) return null;
     return {
-      id: banner.id, internalName: banner.internalName, title: banner.title, description: banner.description,
+      id: banner.id, internalName: banner.internalName, description: banner.description,
       eyebrowText: banner.eyebrowText, overlayText: banner.overlayText, imageUrl: await this.imageUrl(banner.imagePath),
       imagePath: banner.imagePath, destinationUrl: banner.destinationUrl, altText: banner.altText,
       displayOrder: banner.displayOrder, status: banner.status === 'PUBLISHED' ? 'published' : 'draft',
@@ -88,7 +86,6 @@ export class HomeBannerService {
 
   async create(input: ManagedHomeBannerInputDto, administratorId: string) {
     const internalName = this.requiredText(input.internalName, 'o nome interno', 180);
-    const title = this.requiredText(input.title, 'o título', 180);
     const description = (input.description ?? '').trim();
     const eyebrowText = (input.eyebrowText ?? '').trim() || null;
     const overlayText = (input.overlayText ?? '').trim() || null;
@@ -102,14 +99,13 @@ export class HomeBannerService {
     }
     const destinationUrl = this.normalizeDestination(input.destinationUrl);
     const result = await this.runWithConflictMessage(() => this.repository.create({
-      internalName, title, description, eyebrowText, overlayText, imagePath, destinationUrl, altText, administratorId,
+      internalName, description, eyebrowText, overlayText, imagePath, destinationUrl, altText, administratorId,
     }));
     if (result.limitReached) throw new HomeBannerError('Já existem cinco banners ativos. Inative um banner antes de cadastrar outro.', 409);
     const banner = result.banner;
     return {
       id: banner.id,
       internalName: banner.internalName,
-      title: banner.title,
       description: banner.description,
       eyebrowText: banner.eyebrowText,
       overlayText: banner.overlayText,
@@ -130,7 +126,6 @@ export class HomeBannerService {
 
   async update(id: number, input: ManagedHomeBannerInputDto, administratorId: string) {
     const internalName = this.requiredText(input.internalName, 'o nome interno', 180);
-    const title = this.requiredText(input.title, 'o título', 180);
     const description = (input.description ?? '').trim();
     const eyebrowText = (input.eyebrowText ?? '').trim() || null;
     const overlayText = (input.overlayText ?? '').trim() || null;
@@ -145,11 +140,11 @@ export class HomeBannerService {
     }
     const destinationUrl = this.normalizeDestination(input.destinationUrl);
     const banner = await this.runWithConflictMessage(() => this.repository.update(id, {
-      internalName, title, description, eyebrowText, overlayText, imagePath, destinationUrl, altText, administratorId,
+      internalName, description, eyebrowText, overlayText, imagePath, destinationUrl, altText, administratorId,
     }));
     if (!banner) throw new HomeBannerError('Banner não encontrado.', 404);
     return {
-      id: banner.id, internalName: banner.internalName, title: banner.title, description: banner.description,
+      id: banner.id, internalName: banner.internalName, description: banner.description,
       eyebrowText: banner.eyebrowText, overlayText: banner.overlayText, imageUrl: await this.imageUrl(banner.imagePath),
       imagePath: banner.imagePath, destinationUrl: banner.destinationUrl, altText: banner.altText,
       displayOrder: banner.displayOrder, status: banner.status === 'PUBLISHED' ? 'published' as const : 'draft' as const,

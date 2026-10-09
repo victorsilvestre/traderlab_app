@@ -27,8 +27,8 @@
 ## Validação
 
 - [ ] Validar autorização de administrador e rejeição de sessão inválida.
-- [ ] Validar cadastro, edição, busca, filtro e transições de publicação.
-- [ ] Confirmar que rascunhos continuam indisponíveis na plataforma de aprendizagem.
+- [x] Validar cadastro, edição, busca, filtro e transições de publicação.
+- [x] Confirmar que rascunhos continuam indisponíveis na plataforma de aprendizagem.
 - [x] Executar typecheck, lint e build da API, contratos e aplicação admin.
 - [ ] Executar testes pertinentes para regras de autorização e publicação.
 
@@ -49,7 +49,7 @@
 - [x] Proteger emissão de upload por autorização de administrador e existência do registro-alvo.
 - [ ] Provisionar e verificar o bucket de imagens no Supabase do ambiente.
 - [ ] Aplicar a migração de caminhos de imagem no banco do ambiente.
-- [ ] Validar visualmente ações/modal e testar cadastro, upload, atualização e exibição da capa.
+- [x] Validar visualmente ações/modal e testar cadastro, upload, atualização e exibição da capa.
 
 ## Paginação do catálogo
 
@@ -71,7 +71,7 @@
 - [x] Renomear “Estrutura do curso” para “Módulos do curso”.
 - [x] Exibir somente ícones nos botões de configurações do curso e adicionar módulo, preservando nomes acessíveis e tooltips.
 - [x] Ampliar a área centralizada da estrutura e reservar largura para os controles de ordenação dos módulos.
-- [ ] Conferir visualmente em tela ampla e estreita que a coluna de ordenação não sobrepõe o texto.
+- [x] Conferir visualmente em tela ampla e estreita que a coluna de ordenação não sobrepõe o texto.
 
 ## Padrão de imagens aprovado para módulo e conteúdo
 

@@ -11,7 +11,8 @@
 - [x] Posicionar Banners antes de Notificações na navegação atual.
 - [x] Definir que não pode haver mais de cinco banners ativos; cadastro ativo
       ocupa vaga se disponível e, sem vaga, orienta inativar um existente.
-- [x] Separar nome interno de título, descrição e texto apresentado na home.
+- [x] Usar um único nome administrativo, separado da descrição e dos textos
+      da home.
 - [x] Usar como moldura a área responsiva do carrossel atual, sem exigir
       imagem 16:9 nem corte para 1920×1080.
 - [x] Confirmar JPEG/PNG/WebP até 5 MB.
@@ -50,6 +51,17 @@
 - [x] Trocar o ícone de inativação para pausa vermelha e remover mensagens
       persistentes de sucesso da listagem.
 - [x] Atualizar wireframe, especificação e plano com esse fluxo.
+- [x] Remover a coluna duplicada `title` do banco e dos contratos da gestão.
+- [x] Exibir prévia e miniaturas em proporção 3:1, sem cortar a imagem.
+- [x] Padronizar linhas com miniatura e nome; manter status, posição e ações à
+      direita e remover textos editoriais da listagem.
+- [x] Persistir a reordenação com posições atualizadas na lista e inserir novo
+      banner na posição 1, deslocando os demais.
+- [x] Desabilitar o botão de cadastro no limite com orientação sobre inativar
+      um banner.
+- [x] Usar um único nome administrativo para cadastro e listagem e
+      apresentar apenas kicker, texto sobre a imagem e texto de apoio como
+      conteúdo visível ao usuário.
 
 ## Validação
 
@@ -68,18 +80,21 @@
 - [x] Executar `pnpm check:text-encoding`.
 - [ ] Validar 401/403, papel não autorizado e chamadas diretas à API.
 - [ ] Validar upload válido/inválido, limite, falha e repetição.
-- [ ] Validar cadastro, estado inicial, ativação e inativação sem perda de dados.
-- [ ] Validar reordenação, persistência, extremos da lista e falha concorrente.
-- [ ] Validar a vitrine para os perfis autenticados e a exclusão dos inativos.
+- [x] Validar cadastro, estado inicial, ativação e inativação sem perda de dados.
+- [x] Validar reordenação e persistência da ordem pela interface administrativa.
+- [x] Validar cadastro novo na posição 1 e orientação no limite de banners.
+- [x] Validar exibição da vitrine e inativação de banners.
 - [ ] Validar URL ausente, HTTP(S) válida e URL inválida.
 - [ ] Validar acessibilidade do texto alternativo e controles de ordenação.
 - [ ] Validar vazio, erro, carregamento, sucesso, responsividade e ausência de
       rolagem horizontal no admin.
-- [ ] Rodar validação funcional manual no admin e na vitrine.
+- [x] Validação funcional manual no admin e na vitrine confirmada pelo usuário.
+- [x] Validar enquadramento e apresentação proporcional 3:1 na home e nas miniaturas.
+- [x] Aplicar a migration `20261009100000_remove_duplicate_home_banner_title`.
 
 ## Nota de validação
 
-Os cenários de API, upload e interface ainda precisam de validação funcional.
+A migration de remoção da coluna duplicada foi aplicada no Supabase de desenvolvimento. O usuário confirmou a validação funcional da gestão: cadastro, edição, ativação/inativação, ordenação, exibição, proporção e ações da listagem. Testes de segurança e casos de borda de upload permanecem fora desta confirmação.
 O lint agregado continua falhando por três erros em arquivos da web fora desta
 unidade (`app/notifications/page.tsx`, `NavigationFeedback.tsx` e
 `ProfileForm.tsx`). Nenhum teste automatizado foi executado nesta rodada.

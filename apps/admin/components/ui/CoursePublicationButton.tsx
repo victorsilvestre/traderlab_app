@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { CircleAlert, Pause, Play } from 'lucide-react';
 import type { ManagedCourseDto } from '@traderlab/contracts';
 import styles from './AdminCourseCatalog.module.css';
 
@@ -47,24 +48,15 @@ export function CoursePublicationButton({ course }: { course: ManagedCourseDto }
         disabled={busy}
       >
         {published ? (
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="4" y="4" width="16" height="16" rx="3" />
-            <path d="M9 9v6m6-6v6" />
-          </svg>
+          <Pause aria-hidden="true" size={18} strokeWidth={1.8} />
         ) : (
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="9" />
-            <path d="m9 7 7 5-7 5V7Z" />
-          </svg>
+          <Play aria-hidden="true" size={18} strokeWidth={1.8} />
         )}
       </button>
       {error && <span className={styles.srOnly} role="alert">{error}</span>}
       <dialog ref={dialogRef} className={styles.confirmDialog} aria-labelledby={`unpublish-title-${course.id}`} aria-describedby={`unpublish-copy-${course.id}`}>
         <div className={styles.dialogIcon} aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 3 2.8 19h18.4L12 3Z" />
-            <path d="M12 9v4m0 3h.01" />
-          </svg>
+          <CircleAlert aria-hidden="true" size={22} strokeWidth={1.8} />
         </div>
         <h2 id={`unpublish-title-${course.id}`}>Despublicar curso?</h2>
         <p id={`unpublish-copy-${course.id}`}>

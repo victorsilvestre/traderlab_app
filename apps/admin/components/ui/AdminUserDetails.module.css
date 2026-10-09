@@ -1,17 +1,17 @@
 .details { width: 100%; min-width: 0; }
-.heading { display: flex; align-items: center; gap: 15px; margin: 20px 0 24px; }
-.avatar, .avatarFallback { display: grid; width: 58px; height: 58px; flex: 0 0 auto; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--soft-green); color: var(--green); object-fit: cover; font-size: 22px; font-weight: 750; }
-.heading h1 { margin: 0; font-size: 32px; letter-spacing: -.03em; line-height: 1.2; overflow-wrap: anywhere; }
-.heading p { margin: 6px 0 0; color: var(--muted); }
+.heading { display: flex; align-items: center; gap: 15px; margin: 0 0 var(--space-section); }
+.avatar, .avatarFallback { display: grid; width: 58px; height: 58px; flex: 0 0 auto; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--soft-green); color: var(--green-ink); object-fit: cover; font-size: 22px; font-weight: 750; }
+.heading h1 { margin: 0; font-size: 34px; letter-spacing: -.03em; line-height: 1.15; overflow-wrap: anywhere; }
+.heading p { margin: var(--space-2) 0 0; color: var(--muted); line-height: 1.5; }
 .sections { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
-.card { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); }
+.card { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--shadow-card); }
 .card h2 { margin: 0 0 16px; font-size: 17px; }
 .cardHeading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .cardHeading h2 { margin-bottom: 16px; }
 .enrollmentHeading { display: flex; align-items: center; gap: 9px; }
 .enrollmentHeading h2 { margin-bottom: 16px; }
 .enrollmentHeading > span { margin: 0 0 16px; color: var(--muted); font-size: 12px; }
-.addEnrollment { display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center; margin-top: -8px; border: 1px solid var(--line); border-radius: 6px; color: var(--green); }
+.addEnrollment { display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center; margin-top: -8px; border: 1px solid var(--line); border-radius: 6px; color: var(--green-ink); }
 .addEnrollment svg { width: 17px; height: 17px; }
 .card dl { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px 20px; margin: 0; }
 .card dl > div { display: grid; min-width: 0; gap: 6px; }
@@ -24,8 +24,8 @@
 .enrollmentMain strong { min-width: 0; color: var(--ink); font-size: 13px; overflow-wrap: anywhere; }
 .enrollmentMeta { color: var(--muted); font-size: 11px; }
 .active, .revoked { padding: 4px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; }
-.active { background: var(--soft-green); color: var(--green); }
-.revoked { background: #f2e9e7; color: #88493e; }
+.active { background: var(--soft-green); color: var(--green-ink); }
+.revoked { background: #f7e7e5; color: var(--red); }
 .empty, .lastActivity { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
 .metrics { display: flex; flex-wrap: wrap; gap: 16px 36px; }
 .metrics > div { display: grid; gap: 4px; }

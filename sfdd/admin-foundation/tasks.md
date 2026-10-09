@@ -48,13 +48,13 @@ unidades SFDD posteriores.
 
 ## Validação da fundação
 
-- [ ] Validar acesso e saída do admin com contas existentes de administrador e
+- [x] Validar acesso e saída do admin com contas existentes de administrador e
       mentor e conferir as diferenças de navegação.
-- [ ] Validar que uma conta de aluno recebe acesso negado no login e em
+- [x] Validar que uma conta de aluno recebe acesso negado no login e em
       acesso direto a URL protegida.
-- [ ] Validar que sessão expirada volta ao login com destino interno seguro e
+- [x] Validar que sessão expirada volta ao login com destino interno seguro e
       que indisponibilidade temporária exibe tentativa de recuperação.
-- [ ] Validar isolamento de sessão entre os dois hosts e o comportamento do
+- [x] Validar isolamento de sessão entre os dois hosts e o comportamento do
       callback de autenticação em cada um.
 - [x] Executar typecheck, lint e build das aplicações afetadas e os testes
       pertinentes às regras de acesso e autenticação.

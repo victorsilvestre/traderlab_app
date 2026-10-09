@@ -9,7 +9,7 @@ import styles from './ProfileScreen.module.css';
 const bucket =
   process.env.NEXT_PUBLIC_PROFILE_AVATARS_BUCKET ?? 'traderlab-profile-avatars';
 
-export function ProfileForm({ profile }: { profile: UserProfileDetailsDto }) {
+export function ProfileForm({ profile, completionRequired = false }: { profile: UserProfileDetailsDto; completionRequired?: boolean }) {
   const [name, setName] = useState(profile.name);
   const [phone, setPhone] = useState(formatPhone(profile.phone));
   const [file, setFile] = useState<File | null>(null);
@@ -99,11 +99,11 @@ export function ProfileForm({ profile }: { profile: UserProfileDetailsDto }) {
             authorization: `Bearer ${session.access_token}`,
             'content-type': 'application/json',
           },
-          body: JSON.stringify({
-            name,
-            phone,
-            ...(avatarPath ? { avatarPath } : {}),
-          }),
+          body: JSON.stringify(
+            completionRequired
+              ? { phone }
+              : { name, phone, ...(avatarPath ? { avatarPath } : {}) },
+          ),
         },
       );
       const result = await response.json();
@@ -116,7 +116,8 @@ export function ProfileForm({ profile }: { profile: UserProfileDetailsDto }) {
       setMessage({ text: 'Perfil atualizado com sucesso.', error: false });
       setFile(null);
       setAvatarFailed(false);
-      router.refresh();
+      if (completionRequired) router.replace('/home');
+      else router.refresh();
     } catch (error) {
       setMessage({
         text:
@@ -143,14 +144,14 @@ export function ProfileForm({ profile }: { profile: UserProfileDetailsDto }) {
         <div className={styles.avatarControls}>
           <strong>Foto de perfil</strong>
           <span>JPEG, PNG ou WebP · até 5 MB</span>
-          <button
+          {!completionRequired && <button
             type="button"
             className={styles.secondaryButton}
             onClick={() => inputRef.current?.click()}
           >
             Escolher imagem
-          </button>
-          <input
+          </button>}
+          {!completionRequired && <input
             ref={inputRef}
             className={styles.fileInput}
             type="file"
@@ -159,7 +160,7 @@ export function ProfileForm({ profile }: { profile: UserProfileDetailsDto }) {
               setAvatarFailed(false);
               setFile(event.target.files?.[0] ?? null);
             }}
-          />
+          />}
         </div>
       </section>
       <label className={styles.field}>
@@ -168,8 +169,9 @@ export function ProfileForm({ profile }: { profile: UserProfileDetailsDto }) {
           value={name}
           onChange={(event) => setName(event.target.value)}
           maxLength={120}
-          required
+          required={!completionRequired}
           autoComplete="name"
+          readOnly={completionRequired}
         />
       </label>
       <label className={styles.field}>
@@ -206,7 +208,7 @@ export function ProfileForm({ profile }: { profile: UserProfileDetailsDto }) {
       )}
       <div className={styles.actions}>
         <button className={styles.primaryButton} type="submit" disabled={busy}>
-          {busy ? 'Salvando…' : 'Salvar alterações'}
+          {busy ? 'Salvando…' : completionRequired ? 'Salvar e ir para a home' : 'Salvar alterações'}
         </button>
       </div>
     </form>

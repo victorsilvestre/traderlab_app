@@ -25,6 +25,7 @@ export default async function StudentHomePage() {
 
   if (!authenticated) redirect(signInPath);
   if (!profile) return <StudentSessionUnavailable returnTo="/home" />;
+  if (!profile.phone.trim()) redirect('/profile?complete=1');
 
   if (!accessToken) redirect(signInPath);
 

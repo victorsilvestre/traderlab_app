@@ -4,14 +4,15 @@
   max-width: 100%;
 }
 .editor h1 {
-  margin: 18px 0 8px;
-  font-size: 32px;
+  margin: 0 0 var(--space-2);
+  font-size: 34px;
   letter-spacing: -0.03em;
+  line-height: 1.15;
 }
 .editor > p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.55;
+  line-height: 1.5;
 }
 .status {
   display: inline-flex;
@@ -19,7 +20,7 @@
   padding: 6px 10px;
   border-radius: 999px;
   background: var(--soft-green);
-  color: var(--green);
+  color: var(--green-ink);
   font-size: 12px;
   font-weight: 650;
 }
@@ -27,7 +28,7 @@
   display: block;
   width: fit-content;
   margin-top: 17px;
-  color: var(--green);
+  color: var(--green-ink);
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;

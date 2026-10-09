@@ -50,8 +50,12 @@ function toIdentity(user: User): AuthenticatedIdentity {
     id: user.id,
     email: user.email ?? null,
     emailConfirmed: Boolean(user.email_confirmed_at),
-    name: metadataText(user, 'name'),
+    name: metadataText(user, 'name') ?? metadataText(user, 'full_name'),
     phone: metadataText(user, 'phone'),
+    avatarUrl: metadataText(user, 'avatar_url') ?? metadataText(user, 'picture'),
+    providers: Array.isArray(user.app_metadata?.providers)
+      ? user.app_metadata.providers.filter((provider): provider is string => typeof provider === 'string')
+      : typeof user.app_metadata?.provider === 'string' ? [user.app_metadata.provider] : [],
   };
 }
 

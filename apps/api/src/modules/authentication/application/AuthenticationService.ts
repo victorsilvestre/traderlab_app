@@ -5,6 +5,7 @@ import type {
   AuthenticationProvider,
   AuthenticatedIdentity,
 } from './AuthenticationProvider.js';
+import type { ProfileAvatarImporter } from './ProfileAvatarImporter.js';
 
 const genericSignUpMessage =
   'Se a conta puder ser criada, enviaremos um e-mail com as instruções de confirmação.';
@@ -17,6 +18,7 @@ export class AuthenticationService {
     private readonly profiles: UserProfileRepository,
     private readonly webAppUrl: string,
     private readonly adminAppUrl?: string,
+    private readonly avatars?: ProfileAvatarImporter,
   ) {}
 
   async signUp(input: {
@@ -187,7 +189,35 @@ export class AuthenticationService {
   }
 
   async getCurrentUser(accessToken: string): Promise<UserProfileDto> {
-    return this.resolveProfile(await this.verifyIdentity(accessToken));
+    return this.requireCompleteProfile(await this.resolveProfile(await this.verifyIdentity(accessToken)));
+  }
+
+  async completeExternalSignIn(accessToken: string): Promise<{ profile: UserProfileDto; requiresPhone: boolean }> {
+    const identity = await this.verifyIdentity(accessToken);
+    if (!identity.providers?.includes('google')) {
+      throw new AuthenticationError('Esta operação está disponível somente para uma sessão do Google.', 403);
+    }
+    const existing = await this.profiles.findById(identity.id);
+    const profile = existing ?? await this.profiles.createForStudent({
+      id: identity.id,
+      name: identity.name ?? '',
+      phone: identity.phone ?? '',
+      email: identity.email,
+    });
+    if (!existing && identity.avatarUrl && this.avatars) {
+      try {
+        const avatarPath = await this.avatars.importProviderAvatar(identity.id, identity.avatarUrl);
+        if (avatarPath) {
+          // Profile creation and avatar storage are independent; profile edits remain authoritative.
+          await this.profiles.updateAvatarPath?.(identity.id, avatarPath);
+        }
+      } catch {
+        // Avatar is optional and must never prevent a successful sign-in.
+      }
+    }
+    await this.recordSuccessfulLogin(identity);
+    const saved = await this.profiles.findById(identity.id) ?? profile;
+    return { profile: saved, requiresPhone: !saved.phone.trim() };
   }
 
   async getCurrentWorkspaceUser(accessToken: string): Promise<UserProfileDto> {
@@ -196,7 +226,7 @@ export class AuthenticationService {
     if (!profile || (profile.role !== 'mentor' && profile.role !== 'administrator')) {
       throw new AuthenticationError('Este perfil não tem acesso ao ambiente de gestão.', 403);
     }
-    return profile;
+    return this.requireCompleteProfile(profile);
   }
 
   async getCurrentAdministrator(accessToken: string): Promise<UserProfileDto> {
@@ -208,7 +238,7 @@ export class AuthenticationService {
         403,
       );
     }
-    return profile;
+    return this.requireCompleteProfile(profile);
   }
 
   async getCurrentIdentity(accessToken: string): Promise<AuthenticatedIdentity> {
@@ -248,6 +278,13 @@ export class AuthenticationService {
       phone: identity.phone ?? '',
       email: identity.email,
     });
+  }
+
+  private requireCompleteProfile(profile: UserProfileDto): UserProfileDto {
+    if (!profile.phone.trim()) {
+      throw new AuthenticationError('Complete seu telefone para continuar.', 403);
+    }
+    return profile;
   }
 
   private async recordSuccessfulLogin(identity: AuthenticatedIdentity): Promise<void> {

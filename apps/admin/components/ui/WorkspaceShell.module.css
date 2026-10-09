@@ -2,47 +2,31 @@
   width: 100%;
   min-width: 0;
   display: grid;
-  grid-template-columns: minmax(0, 236px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 252px) minmax(0, 1fr);
   min-height: 100vh;
   min-height: 100dvh;
 }
 .sidebar {
   display: flex;
   flex-direction: column;
-  padding: 26px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  padding: 28px 18px 20px;
   border-right: 1px solid var(--line);
-  background: #f0f2ed;
+  background: var(--surface);
 }
 .brand {
   display: flex;
   align-items: center;
-  gap: 11px;
-  padding: 0 8px 35px;
-  color: var(--ink);
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  padding: 2px 7px 30px;
 }
-.mark {
-  display: grid;
-  width: 35px;
-  height: 35px;
-  flex: 0 0 auto;
-  place-items: center;
-  border-radius: 50% 50% 50% 10%;
-  background: var(--green);
-  color: white;
-  font-size: 17px;
-  font-weight: 750;
-}
-.brand small {
+.brandLogo {
   display: block;
-  margin-top: 2px;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 650;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
+  width: 196px;
+  height: auto;
+  max-width: 100%;
 }
 .sidebarNote {
   margin-top: auto;
@@ -58,21 +42,27 @@
 .header {
   display: flex;
   min-width: 0;
-  min-height: 76px;
+  position: sticky;
+  z-index: 4;
+  top: 0;
+  min-height: 74px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 20px;
-  padding: 15px 32px;
+  padding: 14px clamp(20px, 3vw, 44px);
   border-bottom: 1px solid var(--line);
-  background: var(--surface);
+  background: rgb(255 251 247 / 94%);
+  backdrop-filter: blur(12px);
   color: var(--muted);
   font-size: 13px;
 }
 .account {
   display: flex;
+  width: 100%;
   min-width: 0;
   align-items: center;
   gap: 14px;
+  margin-right: auto;
   color: var(--ink);
 }
 .avatar {
@@ -81,8 +71,8 @@
   height: 34px;
   flex: 0 0 auto;
   place-items: center;
-  border-radius: 50%;
-  background: var(--soft-green);
+  border-radius: 11px;
+  background: var(--ink);
   color: var(--green);
   font-size: 13px;
   font-weight: 750;
@@ -93,6 +83,9 @@
   font-size: 13px;
   font-weight: 650;
 }
+.account > span:nth-child(2) { order: 2; }
+.account .avatar { order: 1; }
+.account > span:has(button) { order: 3; margin-left: auto; }
 .account small {
   color: var(--muted);
   font-weight: 400;
@@ -105,15 +98,15 @@
   gap: 8px;
   padding: 8px 12px;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: var(--radius-control);
   background: var(--surface);
   color: var(--ink);
   font-size: 12px;
   font-weight: 650;
 }
 .account button:hover {
-  border-color: #abc4b3;
-  background: #f8faf7;
+  border-color: var(--green-ink);
+  background: #f7f9ee;
 }
 .account button:disabled {
   cursor: wait;
@@ -132,43 +125,52 @@
 .content {
   width: 100%;
   min-width: 0;
-  max-width: 1160px;
+  max-width: 1500px;
   margin-inline: auto;
-  padding: 48px clamp(28px, 5vw, 72px);
+  padding: 42px clamp(24px, 3.4vw, 56px) 64px;
 }
-@media (max-width: 960px) {
-  .header > span {
-    display: none;
-  }
+.content::before {
+  display: block;
+  width: 38px;
+  height: 4px;
+  margin: 0 0 20px;
+  border-radius: 999px;
+  background: var(--green);
+  content: "";
 }
 @media (max-width: 740px) {
   .shell {
     grid-template-columns: 1fr;
   }
   .sidebar {
-    padding: 16px 18px;
+    position: relative;
+    height: auto;
+    padding: 16px 18px 12px;
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
   .brand {
-    padding: 0 0 14px;
+    padding: 0 0 10px;
   }
+  .brandLogo { width: 180px; }
   .sidebarNote {
     display: none;
   }
   .header {
+    position: relative;
     min-height: 66px;
     padding: 12px 18px;
   }
   .account {
     width: 100%;
     gap: 10px;
+    margin-right: 0;
   }
   .account > span:nth-child(2) {
     flex: 1;
     min-width: 0;
   }
   .content {
-    padding: 32px 20px;
+    padding: 30px 18px 48px;
   }
 }

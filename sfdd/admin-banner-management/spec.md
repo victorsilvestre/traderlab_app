@@ -20,12 +20,12 @@ recebe a mesma lista de banners ativos, na ordem definida.
 
 - Adicionar o menu **Banners** no admin, imediatamente antes de **Notificações**.
   Na ordem atual dos cinco itens, fica como o penúltimo item.
-- Listar banners cadastrados, indicando prévia, nome interno, texto visível,
-  estado, posição e link de destino quando houver.
+- Listar banners cadastrados com miniatura e nome administrativo; manter status,
+  posição e ações nos controles alinhados à direita.
 - Reordenar os banners ativos entre as cinco posições disponíveis. A ordem é
   controlada por botões explícitos de mover para cima/baixo, sem depender de
   arrastar.
-- Cadastrar um banner com nome interno, título, descrição, imagem, texto da
+- Cadastrar um banner com nome administrativo, descrição, imagem, texto da
   vitrine/banner, texto alternativo acessível e link de destino opcional.
 - Ativar e inativar um banner por ação explícita. Inativar não apaga cadastro,
   imagem nem dados editoriais; libera uma das cinco vagas.
@@ -41,34 +41,40 @@ recebe a mesma lista de banners ativos, na ordem definida.
 
 ### Listagem e organização
 
-A listagem única apresenta cada banner em uma linha com prévia, nome interno,
-textos relevantes, posição, coluna de status (Ativo/Inativo) e ações por ícone.
+A listagem única apresenta cada banner em uma linha com miniatura 3:1 e nome
+administrativo. Status, posição e ações ficam em colunas próprias alinhadas à
+direita. Não exibir kicker, texto sobre a imagem, texto de apoio ou link na
+linha; esses dados ficam no formulário de edição.
 Inativos não ocupam posição na sequência visível da home. O ícone de edição
 abre o formulário preenchido para consultar e alterar dados ou imagem. A ação
 de inativar usa ícone de pausa vermelho.
 
-Nos ativos, controles de subir/descer trocam a posição com o banner vizinho e
-persistem a nova ordem. Os controles de extremos ficam desabilitados. A
+Nos ativos, controles de subir/descer trocam a posição com o banner vizinho,
+atualizam a listagem imediatamente e persistem a nova ordem. Em caso de falha,
+a listagem restaura as posições confirmadas. Os controles de extremos ficam desabilitados. A
 listagem identifica as vagas disponíveis, por exemplo “3 de 5 ativos”, e
 explica por que a ação de ativar/criar ativo está bloqueada quando as cinco
-vagas estão ocupadas.
+vagas estão ocupadas. O botão **Novo banner** fica desabilitado e a listagem
+exibe junto a ele: “Já tem cinco banners. Você precisa inativar um para
+cadastrar outro.”
 
 A ação **Novo banner** abre o formulário. Os campos são agrupados em
-**Informações do sistema** (nome interno, link, texto alternativo e imagem) e
-**Informações visualizadas pelo usuário** (kicker, título, texto de apoio e
-texto sobre a imagem). A edição carrega os valores existentes e mantém a imagem
-atual quando nenhuma nova imagem é escolhida. Se houver menos de cinco ativos, o
-novo banner é ativado ao salvar e entra na última posição ativa. Se já houver
+**Informações do sistema** (nome, link, texto alternativo e imagem) e
+**Informações visualizadas pelo usuário** (kicker, texto sobre a imagem e
+texto de apoio). A edição carrega os valores existentes e
+mantém a imagem atual quando nenhuma nova imagem é escolhida. Se houver menos de cinco ativos, o
+novo banner é ativado ao salvar na posição 1, e os demais ativos avançam uma
+posição. Se já houver
 cinco, não é permitido salvar um sexto ativo; a interface informa que é
 necessário inativar outro banner primeiro. Não se ativa outro banner
 implicitamente nem se desativa um existente de forma automática.
 
 ### Cadastro
 
-O formulário separa conteúdo editorial e identificação interna:
+O formulário separa os metadados administrativos do conteúdo visualizado na
+vitrine:
 
-- **Nome interno** obrigatório, para localizar/gerir o registro no admin.
-- **Título** obrigatório, conteúdo editorial associado ao banner.
+- **Nome** obrigatório, para localizar e gerir o registro no admin.
 - **Descrição** opcional, texto auxiliar/explicativo do conteúdo.
 - **Chamada curta da vitrine** opcional, exibida acima do título.
 - **Imagem** obrigatória.
@@ -76,39 +82,35 @@ O formulário separa conteúdo editorial e identificação interna:
 - **Texto alternativo** obrigatório, descrição acessível da imagem.
 - **Link de destino** opcional; aceita apenas URL HTTP ou HTTPS válida.
 
-Salvar um registro novo ativa-o automaticamente se houver menos de cinco ativos.
-O sistema atribui a próxima posição disponível. Se todas as cinco vagas
+Salvar um registro novo ativa-o automaticamente na posição 1 se houver menos de
+cinco ativos, avançando as posições dos banners existentes. Se todas as cinco vagas
 estiverem ocupadas, cadastro ativo é bloqueado com orientação clara para
 inativar um banner existente. Inativar um existente não apaga conteúdo nem
 imagem.
 
-Na home, o texto da vitrine é apresentado como título sobre a imagem quando
-preenchido. A chamada curta pode aparecer acima e a descrição abaixo do título.
+Na home, o texto sobre a imagem é apresentado como título principal quando
+preenchido. A chamada curta aparece acima e o texto de apoio abaixo. Esses são
+os três campos exibidos ao usuário. O nome do banner não é renderizado
+na vitrine.
 Sem texto da vitrine, a arte é mostrada sem texto sobreposto; se houver destino,
 a imagem continua clicável. Sem destino, o banner é informativo e não aparenta
 ser clicável. Link preenchido abre em nova aba com proteção contra acesso à
 janela de origem.
 
-O formulário mostra prévia na mesma área visível proporcional usada na home e
-identifica falhas de seleção, envio ou persistência sem perder os demais campos.
+O formulário mostra prévia em caixa 3:1, com a imagem inteira e sem distorção,
+e identifica falhas de seleção, envio ou persistência sem perder os demais
+campos.
 
 ### Imagem e área visível
 
-- A composição usa a proporção da área de banner já existente na web, não 16:9.
-- A área é responsiva; em desktop sua altura atual é
-  `clamp(275px, 31vw, 390px)` e em viewport estreito é
-  `clamp(280px, 43vw, 340px)`. A largura acompanha a área útil da página.
-- A prévia do admin representa essa moldura visível. O autor deve posicionar o
-  conteúdo importante dentro dela e conferir o preview antes de salvar.
-- O recorte responsivo existente (`background-size: cover`) pode cortar as
-  extremidades da imagem em outras proporções. Não distorcer nem mudar a área
-  visível para acomodar um arquivo 1920×1080.
+- A vitrine, a prévia do admin e as miniaturas usam a mesma moldura 3:1.
+- Imagens em 3:1 preenchem a moldura sem faixas vazias nem corte. Arquivos em
+  outra proporção são centralizados e ajustados para preencher, podendo perder
+  partes das bordas.
 - Aceitar imagens JPEG, PNG e WebP de até 5 MB.
-- Recomendar proporção 3:1 e resolução de referência 1440 × 480 px, conforme
-  as artes SVG originais.
-- Orientar o administrador a preparar a imagem na proporção do quadro mostrado
-  na prévia. A largura e a altura de exibição se adaptam à tela; não há uma
-  largura universal fixa em pixels.
+- Recomendar 1440 × 480 px (3:1), conforme as artes SVG originais. A proporção
+  importa para a exibição uniforme; a resolução pode variar sem mudar o
+  enquadramento.
 
 ## Regras de acesso e integridade
 
@@ -153,13 +155,13 @@ identifica falhas de seleção, envio ou persistência sem perder os demais camp
 ## Critérios de aceite
 
 1. **Banners** aparece no menu entre **Cursos** e **Notificações**, antes desta.
-2. Administrador consulta todos os banners, ativos e inativos, com posição,
-   prévia e atributos editoriais.
+2. Administrador consulta todos os banners, ativos e inativos, com miniatura,
+   nome administrativo, posição e status.
 3. A gestão apresenta uma listagem única com coluna de status e posição dos
    ativos; nunca há mais de cinco itens ativos.
-4. Administrador cadastra nome interno, título, descrição, imagem, texto da
+4. Administrador cadastra nome, descrição, imagem, texto da
    vitrine, texto alternativo e destino opcional.
-5. Banner novo é ativado e colocado na próxima posição se existir vaga; com
+5. Banner novo é ativado na posição 1 e desloca os demais se existir vaga; com
    cinco ativos, o cadastro ativo é impedido e a interface orienta inativar um.
 6. Administrador inativa qualquer banner ativo sem apagar seus dados e ativa
    um inativo somente quando houver uma das cinco vagas livres.
@@ -167,28 +169,29 @@ identifica falhas de seleção, envio ou persistência sem perder os demais camp
    descer; posição é sequencial e não pode haver duplicatas.
 8. Administrador abre um banner para edição, consulta os valores existentes e
    altera campos ou imagem sem recriar o registro.
-8. A home exibe somente banners ativos, ordenados, no máximo cinco.
-9. Todo usuário autenticado que acessa a plataforma recebe a mesma vitrine,
+9. A home exibe somente banners ativos, ordenados, no máximo cinco.
+10. Todo usuário autenticado que acessa a plataforma recebe a mesma vitrine,
    sem filtro por papel, matrícula ou curso.
-10. A imagem preserva proporção e preview usa a mesma área visível responsiva
-    existente na web; não se exige 1920×1080 nem recorte para 16:9.
-11. O texto da vitrine é exibido sobre a imagem quando preenchido; chamada curta
+11. A prévia, a miniatura e a vitrine usam moldura 3:1. Arquivos 3:1 preenchem
+    as três áreas sem faixas ou cortes.
+12. Todas as linhas da listagem têm estrutura uniforme: miniatura, nome, status,
+    posição e ações; não incluem textos editoriais.
+13. O texto da vitrine é exibido sobre a imagem quando preenchido; chamada curta
     e descrição aparecem junto dele quando preenchidas.
-12. Banner com destino abre URL HTTP(S) em nova aba; banner sem destino não
+14. Banner com destino abre URL HTTP(S) em nova aba; banner sem destino não
     aparenta ser clicável.
-13. Sessão ausente recebe 401; perfil sem papel de administrador recebe 403
+15. Sessão ausente recebe 401; perfil sem papel de administrador recebe 403
     nas rotas de gestão, inclusive em chamadas diretas.
-14. A interface distingue carregamento, lista vazia, vagas, limite atingido,
+16. A interface distingue carregamento, lista vazia, vagas, limite atingido,
     erro e falha de salvamento.
-15. O admin mantém `← Voltar`, rolagem vertical natural e não introduz rolagem
+17. O admin mantém `← Voltar`, rolagem vertical natural e não introduz rolagem
     horizontal global.
 
 ## Alinhamentos confirmados
 
 - Imagem em JPEG, PNG ou WebP até 5 MB.
-- A moldura e proporção seguem a área responsiva existente na home; o
-  administrador usa a prévia no mesmo formato para conferir o resultado, sem
-  largura padrão fixa em pixels.
+- A vitrine, prévia e miniaturas usam moldura 3:1. Arquivos 3:1 preenchem as
+  áreas sem faixas ou cortes; outras proporções podem perder partes das bordas.
 - O texto da vitrine sobreposto à imagem é opcional, pois a própria arte pode
   conter texto.
 
@@ -200,4 +203,3 @@ identifica falhas de seleção, envio ou persistência sem perder os demais camp
 - Relatórios de impressões, cliques ou conversão.
 - Publicação para visitantes sem autenticação; a home atual é autenticada.
 - Envio de notificação associado ao banner.
-

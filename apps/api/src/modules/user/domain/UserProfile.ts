@@ -53,6 +53,7 @@ export interface UserProfileRepository {
 
 export interface ProfileAvatarStorage {
   createUpload(path: string): Promise<{ token: string }>;
+  importProviderAvatar(userId: string, url: string): Promise<string | null>;
   createReadUrl(path: string): Promise<string>;
   exists(path: string): Promise<boolean>;
 }

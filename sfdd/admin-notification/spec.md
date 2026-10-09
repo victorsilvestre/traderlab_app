@@ -2,9 +2,8 @@
 
 ## Status
 
-Proposta para revisão antes da implementação. Esta unidade descreve a gestão
-administrativa de notificações internas da plataforma e não autoriza, por si só,
-alterações no sistema.
+Implementada e validada pelo usuário. Esta unidade descreve a gestão
+administrativa de notificações internas da plataforma.
 
 ## Perfil e objetivo
 
@@ -75,7 +74,9 @@ Salvar envia e publica imediatamente a notificação, seguindo o padrão atual d
 produto de tornar o conteúdo disponível ao salvar. Uma confirmação final
 explica o público e o número estimado de pessoas que receberão o aviso. A ação
 principal é “Enviar notificação”; não há rascunho, agendamento, aprovação ou
-envio por e-mail nesta unidade.
+envio por e-mail nesta unidade. E-mails automáticos e comunicações com identidade
+visual da empresa serão tratados em etapa futura após configuração do Supabase;
+as notificações internas cobrem o fluxo previsto nesta etapa.
 
 Na listagem, abrir uma notificação leva à tela de detalhes. Ela apresenta os
 atributos do disparo e uma lista de destinatários com nome, e-mail e data
@@ -136,7 +137,8 @@ sem disparar a notificação.
 
 ## Fora desta unidade
 
-- Envio por e-mail, SMS, WhatsApp ou serviço externo.
+- E-mails de sistema personalizados e disparos de comunicação por e-mail; serão tratados após a configuração do Supabase.
+- SMS, WhatsApp ou outros serviços externos.
 - Notificações agendadas, recorrentes, editáveis após o disparo ou canceláveis.
 - Segmentação além de público geral e alunos com matrícula ativa em um curso.
 - Exportação, relatórios avançados, métricas de abertura e reenvio individual.

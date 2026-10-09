@@ -51,6 +51,11 @@
 .success { color: #276043; }
 .error { color: #a4362e; }
 
+.completionDialog { width: min(100% - 48px, 620px); max-height: calc(100dvh - 48px); overflow-y: auto; margin: auto; padding: clamp(24px, 5vw, 38px); border: 1px solid #dce4dc; border-radius: 14px; background: #fff; box-shadow: 0 24px 80px rgb(0 0 0 / 24%); }
+.completionDialog::backdrop { background: rgb(17 26 20 / 64%); }
+.completionDialog h2 { margin: 0; font-size: clamp(24px, 4vw, 32px); letter-spacing: -.03em; }
+.completionDialog > p:not(.eyebrow) { margin: 10px 0 24px; color: #68736c; font-size: 14px; line-height: 1.55; }
+
 @media (max-width: 560px) {
   .content { width: min(100% - 32px, 760px); padding-top: 25px; }
   .heading { margin-top: 25px; }
@@ -58,4 +63,5 @@
   .avatar { width: 72px; height: 72px; font-size: 20px; }
   .actions { justify-content: stretch; }
   .primaryButton { width: 100%; }
+  .completionDialog { width: calc(100% - 24px); max-height: calc(100dvh - 24px); padding: 22px; }
 }

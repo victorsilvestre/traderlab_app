@@ -33,6 +33,10 @@ export class UserService {
     identity: AuthenticatedIdentity,
     input: { name?: string; phone?: string; avatarPath?: string },
   ): Promise<UserProfileDetailsDto> {
+    const currentProfile = await this.requireProfile(identity.id);
+    if (!currentProfile.phone.trim() && (input.name !== undefined || input.avatarPath !== undefined)) {
+      throw new UserError('Complete somente o telefone para liberar seu perfil.', 403);
+    }
     const update: { name?: string; phone?: string; avatarPath?: string } = {};
     if (input.name !== undefined) {
       const name = input.name.trim();
@@ -71,7 +75,10 @@ export class UserService {
     if (!Number.isSafeInteger(input.sizeBytes) || input.sizeBytes < 1 || input.sizeBytes > maximumBytes) {
       throw new UserError('A imagem deve ter até 5 MB.', 400);
     }
-    await this.requireProfile(identity.id);
+    const profile = await this.requireProfile(identity.id);
+    if (!profile.phone.trim()) {
+      throw new UserError('Complete seu telefone antes de alterar a foto do perfil.', 403);
+    }
     const path = `${identity.id}/avatar-${crypto.randomUUID()}.${extensionByType[input.contentType]}`;
     const { token } = await this.avatars.createUpload(path);
     return { path, token };

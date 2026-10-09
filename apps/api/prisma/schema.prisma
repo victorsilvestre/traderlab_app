@@ -77,7 +77,6 @@ model UserProfile {
 model HomeBanner {
   id             Int               @id @default(autoincrement())
   internalName   String            @map("internal_name") @db.VarChar(180)
-  title          String            @db.VarChar(180)
   description    String            @default("") @db.Text
   eyebrowText    String?           @map("eyebrow_text") @db.VarChar(180)
   overlayText    String?           @map("overlay_text") @db.VarChar(500)

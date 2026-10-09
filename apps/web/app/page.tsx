@@ -55,5 +55,5 @@ export default async function HomePage() {
     );
   }
 
-  redirect('/home');
+  redirect(profile.phone.trim() ? '/home' : '/profile?complete=1');
 }

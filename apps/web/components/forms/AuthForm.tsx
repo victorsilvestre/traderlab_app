@@ -142,8 +142,12 @@ export function AuthForm({
 
       {hasSocialOption && (
         <div className="social-options">
-          <button className="social-button" type="button" disabled>
-            Entrar com Google <span className="coming-soon">Em breve</span>
+          <button
+            className="social-button"
+            type="button"
+            disabled
+          >
+            Continuar com Google <span className="coming-soon">Em breve</span>
           </button>
           <div className="auth-divider" aria-hidden="true"><span>ou</span></div>
         </div>

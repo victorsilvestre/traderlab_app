@@ -2,13 +2,13 @@
   display: inline-flex;
   width: fit-content;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: var(--space-page-heading);
   color: var(--muted);
   font-size: 13px;
   text-decoration: none;
 }
 .link:hover {
-  color: var(--green);
+  color: var(--green-ink);
   text-decoration: underline;
 }
 .link:focus-visible {

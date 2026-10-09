@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Eye } from 'lucide-react';
 import type { AdminUserPageDto } from '@traderlab/contracts';
 import { AdminBackLink } from '../navigation/AdminBackLink';
 import styles from './AdminUserCatalog.module.css';
@@ -128,10 +129,7 @@ export function AdminUserCatalog({
                           href={detailsHref}
                           aria-label={`Visualizar ${user.name || 'usuário'}`}
                         >
-                          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-                            <path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z" />
-                            <circle cx="12" cy="12" r="2.5" />
-                          </svg>
+                          <Eye aria-hidden="true" size={18} strokeWidth={1.8} />
                           <span className={styles.srOnly}>Visualizar</span>
                         </Link>
                       </td>

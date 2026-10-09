@@ -31,7 +31,7 @@
 - [x] Adicionar estados de carregamento, vazio, sem resultado e erro.
 - [x] Aplicar migration `20261008160000_add_user_email_and_last_login` e
       confirmar que o schema do banco está atualizado.
-- [ ] Validar critérios de aceite e cenários em `test-plan.md`.
+- [x] Validar critérios funcionais e cenários de gestão de alunos conforme confirmação do usuário.
 
 ## Fase posterior, fora da autorização atual
 

@@ -11,4 +11,5 @@ export interface UserProfileRepository {
   createForStudent(profile: NewUserProfile): Promise<UserProfileDto>;
   findById(id: string): Promise<UserProfileDto | null>;
   recordSuccessfulLogin(id: string, email: string | null, loggedInAt: Date): Promise<void>;
+  updateAvatarPath?(id: string, avatarPath: string): Promise<void>;
 }

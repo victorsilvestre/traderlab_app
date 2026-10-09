@@ -6,15 +6,15 @@ Implementado conforme esta abordagem. A feature pertence ao MVP. O schema
 Prisma, a tabela `home_banners`, o DTO público, o endpoint autenticado
 `GET /home/banners` e a integração da home já existiam.
 
-Decisões confirmadas: no máximo cinco banners ativos; cadastro cria ativo e
-ocupa a próxima posição quando houver vaga; com cinco ativos não há ativação ou
-cadastro ativo até o administrador inativar um; nome interno é separado do
-título, descrição e texto visível da vitrine; a arte segue a área responsiva já
-implementada na web, sem formato de arquivo 16:9 obrigatório; upload aceita
-JPEG/PNG/WebP até 5 MB; texto sobreposto é opcional. A prévia do formulário usa
-a própria proporção do carrossel e orienta o enquadramento sem impor largura
-fixa em pixels. As artes SVG originais usam quadro 1440 × 480 px (3:1), que o
-formulário passa a informar como resolução de referência.
+Decisões confirmadas: no máximo cinco banners ativos; cadastro cria ativo na
+posição 1 quando houver vaga; com cinco ativos não há ativação ou
+cadastro ativo até o administrador inativar um; há um nome administrativo
+único, separado da descrição e dos textos visíveis da vitrine. Upload aceita
+JPEG/PNG/WebP até 5 MB; texto sobreposto é opcional. Prévia, miniatura e moldura
+da vitrine usam 3:1; `cover` preenche as áreas, e arquivos nessa proporção não
+são cortados nem deixam faixas vazias. `internalName` é o único identificador
+administrativo; os textos da vitrine são `eyebrowText`, `overlayText` e
+`description`.
 
 ## Aplicações e módulos afetados
 
@@ -67,11 +67,15 @@ formulário passa a informar como resolução de referência.
 - Usar o padrão `← Voltar` e retorno contextual validado.
 - Apresentar uma tabela única com coluna de status, indicador `n de 5` e posição dos ativos.
 - Em cinco ativos, bloquear ativação/cadastro ativo com instrução para inativar
-  primeiro; não desativar nenhum banner automaticamente.
+  primeiro; desabilitar **Novo banner** com orientação visível; não desativar
+  nenhum banner automaticamente.
 - Oferecer mover para cima/baixo apenas para ativos; operações persistem ordem
-  em uma transação.
-- Mostrar prévia na área visível responsiva do banner web, além de nome interno,
-  campos editoriais e destino.
+  em uma transação; atualizar posição na UI imediatamente e restaurar em caso
+  de falha.
+- Inserir novo banner ativo na posição 1 e deslocar as posições existentes na
+  mesma transação.
+- Mostrar miniatura 3:1 e nome administrativo na linha; posicionar status,
+  ordem e ações nas colunas da direita, sem conteúdo editorial na listagem.
 - Upload, formulários e ações preservam o padrão global de rolagem e não criam
   overflow horizontal.
 
@@ -125,6 +129,6 @@ ativar/inativar deve deixar posições dos ativos únicas e sequenciais.
   permitindo inativar rapidamente um item e então ativar/cadastrar.
 - URL de leitura assinada tem validade de uma hora e cache no adaptador de
   Storage; a leitura renova URLs próximas da expiração.
-- A imagem mantém área visual responsiva e recorte `cover` atuais; prévia deve
-  evitar divergência entre o admin e a home.
+- A prévia, miniatura e moldura da vitrine usam 3:1 e `cover`; arquivos 3:1
+  preenchem as áreas sem corte nem faixas vazias.
 - Evitar quebrar os banners iniciais referenciados como `/banners/*.svg`.

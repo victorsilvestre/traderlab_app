@@ -15,11 +15,14 @@ export async function completeSignIn(
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(credentials),
   });
-  const result = (await response.json().catch(() => ({}))) as { message?: string };
+  const result = (await response.json().catch(() => ({}))) as {
+    message?: string;
+    user?: { phone?: string };
+  };
   if (!response.ok) {
     throw new Error(result.message ?? 'Não foi possível entrar. Tente novamente.');
   }
 
-  navigation.replace(getSafeReturnPath(returnTo));
+  navigation.replace(result.user?.phone?.trim() ? getSafeReturnPath(returnTo) : '/profile?complete=1');
   navigation.refresh();
 }

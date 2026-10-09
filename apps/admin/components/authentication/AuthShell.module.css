@@ -17,8 +17,7 @@
   height: 54px;
   place-items: center;
   border-radius: 50% 50% 50% 10%;
-  background: var(--green);
-  color: white;
+  background: var(--green); color: var(--ink);
   font-size: 27px;
   font-weight: 750;
 }

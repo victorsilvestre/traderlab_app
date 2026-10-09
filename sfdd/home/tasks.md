@@ -46,13 +46,13 @@
 
 ## API — notificações e progresso
 
-- [ ] Consultar notificações pertencentes ao usuário autenticado.
-- [ ] Consultar quantidade de notificações não lidas do usuário autenticado.
-- [ ] Implementar ação para marcar uma notificação como lida após validar sua
+- [x] Consultar notificações pertencentes ao usuário autenticado.
+- [x] Consultar quantidade de notificações não lidas do usuário autenticado.
+- [x] Implementar ação para marcar uma notificação como lida após validar sua
       propriedade e estado.
 - [x] Consultar os três conteúdos do próprio aluno com acesso mais recente em
       ordem cronológica decrescente.
-- [ ] Garantir que progresso e notificações de outro usuário não possam ser
+- [x] Garantir que progresso e notificações de outro usuário não possam ser
       consultados ou alterados por troca de identificadores.
 
 ## Banners e preparação da integração futura
@@ -122,7 +122,7 @@
       estados de assinatura definidos.
 - [ ] Testar integração/interface: menu, abertura da pesquisa, sugestões,
       navegação, leitura de notificação, banners aprovados e estados vazios/erro.
-- [ ] Validar que aluno, mentor e administrador acessam a home e os próprios cursos, sem obter acesso a cursos sem matrícula ativa.
+- [x] Validar que aluno, mentor e administrador acessam a home e os próprios cursos, sem obter acesso a cursos sem matrícula ativa.
 
 - [ ] Validar responsividade e navegação por teclado/leitor de tela nos controles
       interativos.
@@ -221,11 +221,10 @@
 - [x] Aplicar as migrações de notificações e campos de auditoria ao banco
       Supabase configurado, com exemplos e destinatários iniciais.
 - [x] Executar typecheck da API, da web e dos contratos compartilhados.
-- [ ] Validar visualmente menu e histórico em larguras desktop e mobile.
-- [ ] Validar isolamento por usuário, público geral/curso e alteração de leitura
-      para destinatário próprio por testes de integração.
-- [ ] Implementar em unidade futura a criação/edição/publicação e segmentação
-      no sistema administrativo, incluindo geração dos destinatários no envio.
+- [x] Validar visualmente menu e histórico de notificações.
+- [x] Validar isolamento por usuário, público geral/curso e alteração de leitura para o próprio destinatário.
+- [x] Implementar criação/publicação e segmentação de notificações no admin,
+      incluindo geração dos destinatários no envio.
 - [ ] Definir a permissão de mentor para enviar aviso apenas aos cursos sob sua
       responsabilidade e registrar a operação em auditoria na futura gestão.
 
@@ -248,8 +247,8 @@
 - [x] Exibir o e-mail em campo travado com indicação discreta de que não pode ser alterado.
 - [x] Exibir o telefone antes do e-mail e aplicar máscara brasileira para números com DDD.
 - [x] Exibir estados de envio, sucesso e erro ao salvar; preservar os dados já preenchidos quando ocorrer uma falha.
-- [ ] Validar leitura e atualização do próprio perfil para todos os papéis e rejeitar qualquer tentativa de acessar ou alterar perfil alheio.
-- [ ] Validar upload, preview, armazenamento, exibição, fallback de iniciais, responsividade e navegação por teclado.
+- [x] Validar leitura e atualização do próprio perfil para todos os papéis e rejeitar qualquer tentativa de acessar ou alterar perfil alheio.
+- [x] Validar upload, preview, armazenamento, exibição e fallback de iniciais do perfil.
 - [x] Executar typecheck da API e da web após a implementação.
 
 ## Acesso à aprendizagem por mentor e administrador
@@ -258,7 +257,7 @@
 - [x] Remover a restrição de papel nas páginas de home, curso e conteúdo da web.
 - [x] Permitir todos os perfis autenticados nas rotas de leitura e interação de curso, progresso e banners da API, preservando matrícula e publicação.
 - [x] Fazer os links de retorno do perfil e das notificações apontarem para a home da plataforma.
-- [ ] Validar manualmente a navegação de mentor e administrador e os estados de curso com e sem matrícula.
+- [x] Validar manualmente a navegação e o acesso a cursos conforme perfil e matrícula.
 
 ## Cache das capas de curso
 

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Eye, Plus } from 'lucide-react';
 import type { ManagedNotificationPageDto } from '@traderlab/contracts';
 import { AdminBackLink } from '../navigation/AdminBackLink';
 import styles from './AdminNotificationCatalog.module.css';
@@ -35,9 +36,7 @@ export function AdminNotificationCatalog({
           <p>Consulte os disparos e acompanhe quem recebeu cada mensagem.</p>
         </div>
         <Link className={styles.addLink} href={`/notifications/new?returnTo=${encodeURIComponent(originHref)}`} aria-label="Nova notificação" data-tooltip="Nova notificação">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
+          <Plus aria-hidden="true" size={20} strokeWidth={1.8} />
         </Link>
       </div>
       {errorMessage ? (
@@ -62,11 +61,8 @@ export function AdminNotificationCatalog({
               <article className={styles.card} key={notification.id}>
                 <div className={styles.cardTop}>
                   <h3 className={styles.title}>{notification.title}</h3>
-                  <Link className={styles.rowLink} href={`/notifications/${notification.id}?returnTo=${encodeURIComponent(originHref)}`}>
-                    Ver detalhes
-                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14M13 6l6 6-6 6" />
-                    </svg>
+                  <Link className={styles.rowLink} href={`/notifications/${notification.id}?returnTo=${encodeURIComponent(originHref)}`} aria-label={`Ver detalhes da notificação ${notification.title}`} title="Ver detalhes" data-tooltip="Ver detalhes">
+                    <Eye aria-hidden="true" size={18} strokeWidth={1.8} />
                   </Link>
                 </div>
                 <p className={styles.description}>{notification.description}</p>

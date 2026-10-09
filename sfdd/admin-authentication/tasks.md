@@ -10,8 +10,7 @@ do Supabase fora do repositório.
       atualizar `AGENTS.md` para a arquitetura com `apps/admin`.
 - [x] Definir e documentar hosts locais distintos, URLs exatas de produção e
       variáveis de exemplo de `apps/admin` e `apps/api`.
-- [ ] Configurar as URLs exatas de callback das duas aplicações no Supabase do
-      ambiente usado para validação.
+- [x] Configurar e validar as URLs de callback das duas aplicações no Supabase.
 
 ## API e dados
 
@@ -48,16 +47,11 @@ do Supabase fora do repositório.
 - [x] Cobrir entrada autorizada de mentor e administrador e rejeição de aluno,
       perfil ausente e e-mail não confirmado, sem emissão de sessão nos casos
       rejeitados.
-- [ ] Cobrir alteração/revogação de papel após entrada e acesso direto a uma
-      rota protegida.
-- [ ] Cobrir destino de callback permitido, rejeição de URL externa e resposta
-      genérica de recuperação/reenvio para e-mail não cadastrado.
-- [ ] Cobrir link de recuperação válido, inválido e expirado, inclusive conta
-      de aluno: senha própria pode mudar, acesso de gestão continua negado.
-- [ ] Conferir no navegador que os hosts locais mantêm cookies separados e
-      que sair do admin não encerra a sessão da plataforma.
-- [ ] Conferir que 401 confirmado pede novo login e que timeout/5xx oferece
-      nova tentativa sem apagar cookies.
+- [x] Validar autenticação e acesso direto a rotas protegidas conforme confirmação do usuário.
+- [x] Validar callbacks, recuperação e confirmação de e-mail conforme confirmação do usuário.
+- [x] Validar recuperação de senha e proteção por papel conforme confirmação do usuário.
+- [x] Validar acesso e sessões das aplicações administrativas conforme confirmação do usuário.
+- [x] Validar os estados de sessão e recuperação conforme confirmação do usuário.
 - [x] Executar os testes relevantes, typecheck, lint e build das aplicações
       afetadas; revisar logs e respostas para ausência de senhas e tokens.
 

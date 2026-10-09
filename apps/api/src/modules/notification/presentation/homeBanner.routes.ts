@@ -10,11 +10,10 @@ import type {
 
 const bannerInputSchema = {
   type: 'object',
-  required: ['internalName', 'title', 'description', 'eyebrowText', 'overlayText', 'imagePath', 'destinationUrl', 'altText'],
+  required: ['internalName', 'description', 'eyebrowText', 'overlayText', 'imagePath', 'destinationUrl', 'altText'],
   additionalProperties: false,
   properties: {
     internalName: { type: 'string', maxLength: 180 },
-    title: { type: 'string', maxLength: 180 },
     description: { type: 'string', maxLength: 20000 },
     eyebrowText: { type: 'string', maxLength: 180 },
     overlayText: { type: 'string', maxLength: 500 },

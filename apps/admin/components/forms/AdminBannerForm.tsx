@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Save, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import type { HomeBannerImageUploadDto, ManagedHomeBannerDto } from '@traderlab/contracts';
@@ -64,7 +65,7 @@ export function AdminBannerForm({ returnTo, activeCount, banner }: {
       const response = await fetch(editing ? `/api/admin/banners/${banner!.id}` : '/api/admin/banners', {
         method: editing ? 'PATCH' : 'POST', headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          internalName: String(fields.get('internalName') ?? ''), title: String(fields.get('title') ?? ''),
+          internalName: String(fields.get('internalName') ?? ''),
           description: String(fields.get('description') ?? ''), eyebrowText: String(fields.get('eyebrowText') ?? ''),
           overlayText: String(fields.get('overlayText') ?? ''), imagePath,
           destinationUrl: String(fields.get('destinationUrl') ?? ''), altText: String(fields.get('altText') ?? ''),
@@ -95,23 +96,22 @@ export function AdminBannerForm({ returnTo, activeCount, banner }: {
             </div>
             <input ref={inputRef} className={styles.fileInput} type="file" accept="image/jpeg,image/png,image/webp" required={!editing && !file} onChange={(event) => selectFile(event.currentTarget.files?.[0])} />
             {file && <button className={styles.replaceButton} type="button" onClick={() => inputRef.current?.click()}>Escolher outra imagem</button>}
-            <small>Proporção recomendada: 3:1 · resolução de referência: 1440 × 480 px. O recorte se ajusta à área responsiva da home.</small>
+            <small>Use 3:1 (referência: 1440 × 480 px). Esse formato preenche a prévia, a miniatura e a vitrine sem faixas vazias ou cortes.</small>
           </div>
         </fieldset>
 
         <fieldset className={styles.group}>
           <legend>Informações visualizadas pelo usuário</legend>
           <label>Chamada curta (kicker) <span>Opcional</span><input name="eyebrowText" maxLength={180} defaultValue={banner?.eyebrowText ?? ''} /><small>Texto pequeno acima do título, como “Aprenda com método”.</small></label>
-          <label>Título<input name="title" required maxLength={180} defaultValue={banner?.title ?? ''} /></label>
-          <label>Texto de apoio <span>Opcional</span><textarea name="description" rows={3} maxLength={20000} defaultValue={banner?.description ?? ''} /><small>Complementa o título na vitrine.</small></label>
-          <label>Texto sobre a imagem <span>Opcional</span><input name="overlayText" maxLength={500} defaultValue={banner?.overlayText ?? ''} /><small>Deixe vazio se o texto já fizer parte da arte.</small></label>
+          <label>Texto sobre a imagem <span>Opcional</span><input name="overlayText" maxLength={500} defaultValue={banner?.overlayText ?? ''} /><small>É o título principal que aparece sobre a imagem. Deixe vazio se ele já fizer parte da arte.</small></label>
+          <label>Texto de apoio <span>Opcional</span><textarea name="description" rows={3} maxLength={20000} defaultValue={banner?.description ?? ''} /><small>Complementa o texto sobre a imagem na vitrine.</small></label>
         </fieldset>
 
         {!editing && <div className={styles.note} role={atLimit ? 'alert' : undefined}>{atLimit ? 'Os cinco banners ativos já estão ocupando a vitrine. Inative um banner antes de cadastrar outro.' : `Ao salvar, o banner será ativado. Há ${5 - activeCount} ${5 - activeCount === 1 ? 'vaga disponível' : 'vagas disponíveis'}.`}</div>}
         <div className={styles.actions}>
-          <Link href={returnTo} aria-label={`Cancelar ${editing ? 'edição' : 'cadastro'}`} data-tooltip="Cancelar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></Link>
+          <Link href={returnTo} aria-label={`Cancelar ${editing ? 'edição' : 'cadastro'}`} data-tooltip="Cancelar"><X aria-hidden="true" size={19} strokeWidth={1.8} /></Link>
           <button type="submit" disabled={busy || atLimit || (!editing && !file)} aria-label={busy ? 'Salvando banner' : 'Salvar banner'} data-tooltip={busy ? 'Salvando…' : atLimit ? 'Inative um banner antes de cadastrar' : 'Salvar'}>
-            {busy ? <span className={styles.spinner} aria-hidden="true" /> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h12l4 4v14H3V3h2ZM7 3v6h10V3M7 21v-8h10v8" /></svg>}
+            {busy ? <span className={styles.spinner} aria-hidden="true" /> : <Save aria-hidden="true" size={19} strokeWidth={1.8} />}
           </button>
         </div>
       </form>

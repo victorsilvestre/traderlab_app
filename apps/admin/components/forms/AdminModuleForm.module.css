@@ -86,7 +86,7 @@
   white-space: nowrap;
 }
 .fileInput:focus-visible ~ .coverButton {
-  outline: 3px solid #91b79c;
+  outline: 3px solid var(--green);
   outline-offset: 2px;
 }
 .removeCover {
@@ -135,8 +135,7 @@
   padding: 0 16px;
   border: 1px solid var(--green);
   border-radius: 7px;
-  background: var(--green);
-  color: white;
+  background: var(--green); color: var(--ink);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { LogOut } from 'lucide-react';
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser';
 
 export function SignOutButton() {
@@ -27,10 +28,7 @@ export function SignOutButton() {
   return (
     <span>
       <button type="button" onClick={signOut} disabled={busy}>
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M10 17l5-5-5-5M15 12H3" />
-          <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
-        </svg>
+        <LogOut aria-hidden="true" size={16} strokeWidth={1.8} />
         {busy ? 'Saindo…' : 'Sair'}
       </button>
       {error && <small role="alert">{error}</small>}

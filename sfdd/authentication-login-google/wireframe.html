@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wireframe — Login com Google</title>
+  <style>
+    :root { color-scheme: light; font-family: Arial, sans-serif; color: #222; background: #eee; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 32px; }
+    .frames { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; max-width: 1300px; margin: auto; }
+    main { min-height: 560px; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #aaa; background: #fff; }
+    section { padding: 48px 36px; }
+    .visual { display: grid; place-items: center; background: #d8d8d8; border-left: 1px solid #aaa; color: #555; text-align: center; }
+    .brand { margin: 0 0 42px; font-size: 14px; font-weight: bold; }
+    h1 { margin: 0 0 12px; font-size: 26px; }
+    .intro { margin: 0 0 26px; color: #555; line-height: 1.5; }
+    button, input { width: 100%; min-height: 44px; border: 1px solid #888; background: #fff; color: #222; padding: 11px; font: inherit; }
+    button { cursor: default; font-weight: 600; }
+    .primary { margin-top: 18px; background: #444; border-color: #444; color: #fff; }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: #666; }
+    .divider::before, .divider::after { content: ""; height: 1px; background: #bbb; flex: 1; }
+    label { display: block; margin: 16px 0 7px; font-size: 14px; font-weight: 600; }
+    .links { margin-top: 22px; color: #555; font-size: 14px; line-height: 1.5; }
+    .avatar { width: 64px; height: 64px; border: 1px solid #777; border-radius: 50%; background: #ddd; display: grid; place-items: center; margin-bottom: 14px; }
+    .identity { display: flex; align-items: center; gap: 14px; margin: 18px 0 24px; }
+    .identity .avatar { flex: 0 0 64px; margin: 0; }
+    .identity p { margin: 0; line-height: 1.5; overflow-wrap: anywhere; }
+    .profile-frame { position: relative; }
+    .profile-background { background: #f5f5f5; }
+    .profile-row { margin: 22px 0; padding: 14px; border: 1px solid #bbb; background: #fff; line-height: 1.7; }
+    .dialog-backdrop { position: absolute; inset: 0; display: grid; place-items: center; padding: 22px; background: rgb(0 0 0 / 38%); }
+    .dialog { width: min(100%, 390px); padding: 26px; border: 1px solid #777; background: #fff; box-shadow: 0 12px 36px rgb(0 0 0 / 22%); }
+    .dialog h2 { margin: 0 0 10px; font-size: 22px; }
+    .dialog p { color: #555; line-height: 1.5; }
+    @media (max-width: 900px) { body { padding: 18px; } .frames { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { body { padding: 0; } main { min-height: 100vh; grid-template-columns: 1fr; border: 0; } section { padding: 34px 24px; } .visual { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="frames">
+    <main aria-label="Tela de login">
+      <section aria-labelledby="login-title">
+        <p class="brand">TRADERLAB</p>
+        <h1 id="login-title">Boas-vindas de volta</h1>
+        <p class="intro">Entre na sua conta para continuar seus estudos.</p>
+        <button type="button">Continuar com Google</button>
+        <div class="divider" aria-hidden="true">ou</div>
+        <label for="email">E-mail</label>
+        <input id="email" placeholder="seu@email.com">
+        <label for="password">Senha</label>
+        <input id="password" type="password" placeholder="Sua senha">
+        <button class="primary" type="button">Entrar</button>
+        <p class="links">Não possui conta? Cadastre-se.</p>
+      </section>
+      <section class="visual" aria-label="Área visual ilustrativa">Imagem de apoio da autenticação</section>
+    </main>
+    <main class="profile-frame" aria-label="Página de perfil com modal de conclusão">
+      <section class="profile-background" aria-labelledby="profile-title">
+        <p class="brand">TRADERLAB · PERFIL</p>
+        <h1 id="profile-title">Meu perfil</h1>
+        <div class="profile-row"><strong>Nome</strong><br>Alex Barbosa</div>
+        <div class="profile-row"><strong>E-mail</strong><br>alex@email.com</div>
+        <div class="profile-row"><strong>Telefone</strong><br>A completar</div>
+      </section>
+      <section class="visual" aria-label="Área visual ilustrativa">Imagem de apoio da autenticação</section>
+      <div class="dialog-backdrop">
+        <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="complete-title" aria-describedby="complete-description">
+          <h2 id="complete-title">Complete seus dados</h2>
+          <p id="complete-description">Seu acesso com Google foi confirmado. Informe o telefone para concluir o perfil e continuar para a plataforma.</p>
+          <div class="identity">
+            <div class="avatar" aria-label="Foto do Google ou iniciais">AB</div>
+            <p><strong>Alex Barbosa</strong><br><span>alex@email.com</span></p>
+          </div>
+          <label for="phone">Telefone</label>
+          <input id="phone" placeholder="(00) 00000-0000">
+          <button class="primary" type="button">Salvar e ir para a home</button>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

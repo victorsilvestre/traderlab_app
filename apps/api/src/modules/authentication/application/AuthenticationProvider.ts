@@ -4,6 +4,8 @@ export type AuthenticatedIdentity = {
   emailConfirmed: boolean;
   name: string | null;
   phone: string | null;
+  avatarUrl?: string | null;
+  providers?: string[];
 };
 
 export type AuthSession = {

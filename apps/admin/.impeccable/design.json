@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-09T00:00:00.000Z",
+  "title": "Design System: TraderLab Gestão",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "TraderLab Lime", "tonalRamp": ["#192000", "#354604", "#526B08", "#6F900B", "#8BAE0B", "#A2CB10", "#C8E36A", "#EFF6D9"] },
+      "primary-hover": { "role": "primary", "displayName": "Deep Lime", "tonalRamp": ["#192000", "#354604", "#526B08", "#6F900B", "#8BAE0B", "#A2CB10", "#C8E36A", "#EFF6D9"] },
+      "primary-ink": { "role": "neutral", "displayName": "Lime Ink" },
+      "danger": { "role": "secondary", "displayName": "TraderLab Red", "tonalRamp": ["#240506", "#4A0A0C", "#700F12", "#961417", "#A71619", "#C54B4E", "#E39A9C", "#F8E6E6"] },
+      "ink": { "role": "neutral", "displayName": "Near Black", "tonalRamp": ["#0C0D0E", "#252729", "#3E4042", "#57595A", "#707273", "#898B8C", "#B8B9B9", "#FFFBF7"] },
+      "muted": { "role": "neutral", "displayName": "Muted Gray" },
+      "canvas": { "role": "neutral", "displayName": "Warm Canvas" },
+      "surface": { "role": "neutral", "displayName": "Warm Off-White" },
+      "line": { "role": "neutral", "displayName": "Quiet Divider" },
+      "soft-green": { "role": "neutral", "displayName": "Pale Lime" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Page Heading", "purpose": "Primary page headings in Roboto Serif." },
+      "title": { "displayName": "Section Title", "purpose": "Notice and section headings in Roboto Serif." },
+      "body": { "displayName": "Interface Body", "purpose": "Body copy, controls, tables, and account details in Roboto." },
+      "label": { "displayName": "Compact Label", "purpose": "Small metadata and status labels in Roboto." }
+    },
+    "shadows": [
+      { "name": "card", "value": "0 12px 30px rgb(37 31 22 / 7%)", "purpose": "Lift primary catalog and notice panels." },
+      { "name": "float", "value": "0 20px 52px rgb(37 31 22 / 14%)", "purpose": "Elevate transient floating surfaces." }
+    ],
+    "motion": [
+      { "name": "nav-transition", "value": "160ms ease", "purpose": "Navigation color, background, and transform state changes." }
+    ],
+    "breakpoints": [
+      { "name": "compact-navigation", "value": "740px" },
+      { "name": "compact-header", "value": "960px" }
+    ],
+    "components": [
+      {
+        "name": "Primary Action",
+        "kind": "button",
+        "refersTo": "button-primary",
+        "description": "Compact lime action with dark text and clear keyboard focus.",
+        "html": "<button class=\"ds-button-primary\">Salvar</button>",
+        "css": ".ds-button-primary { min-height: 40px; padding: 9px 12px; border: 1px solid #354604; border-radius: 6px; background: #A2CB10; color: #0C0D0E; font: 650 12px/1.4 Roboto, sans-serif; transition: background-color 160ms ease; } .ds-button-primary:hover { background: #8BAE0B; } .ds-button-primary:focus-visible { outline: 3px solid #A2CB10; outline-offset: 3px; }"
+      },
+      {
+        "name": "Workspace Navigation Item",
+        "kind": "nav",
+        "refersTo": "navigation-active",
+        "description": "Selected item on the persistent left navigation.",
+        "html": "<a class=\"ds-nav-active\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/></svg> Cursos</a>",
+        "css": ".ds-nav-active { display: flex; min-height: 46px; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 11px; background: #EFF6D9; color: #0C0D0E; font: 700 13px/1.4 Roboto, sans-serif; text-decoration: none; transition: color 160ms ease, background-color 160ms ease; } .ds-nav-active:hover { background: #F5F3EF; } .ds-nav-active:focus-visible { outline: 3px solid #A2CB10; outline-offset: 3px; }"
+      },
+      {
+        "name": "Notice Card",
+        "kind": "card",
+        "refersTo": "card",
+        "description": "Warm elevated panel for a workspace notice or catalog surface.",
+        "html": "<section class=\"ds-card\"><h2>Bem-vindo ao TraderLab Gestão</h2><p>Use a navegação para acessar as áreas disponíveis.</p></section>",
+        "css": ".ds-card { padding: 27px 30px; border: 1px solid #E5E1DC; border-radius: 14px; background: #FFFBF7; box-shadow: 0 12px 30px rgb(37 31 22 / 7%); color: #0C0D0E; } .ds-card h2 { margin: 0 0 9px; font: 700 18px/1.3 'Roboto Serif', Georgia, serif; } .ds-card p { max-width: 66ch; margin: 0; color: #6E6D6B; font: 400 13px/1.6 Roboto, sans-serif; }"
+      },
+      {
+        "name": "Status Chip",
+        "kind": "chip",
+        "description": "Pale green status pill with dark green text.",
+        "html": "<span class=\"ds-chip\">Ativo</span>",
+        "css": ".ds-chip { display: inline-flex; align-items: center; padding: 5px 8px; border-radius: 99px; background: #EFF6D9; color: #354604; font: 600 10px/1.4 Roboto, sans-serif; }"
+      },
+      {
+        "name": "Text Field",
+        "kind": "input",
+        "description": "Quiet bordered field with a visible keyboard focus ring.",
+        "html": "<label class=\"ds-field-label\">Buscar<input class=\"ds-field\" placeholder=\"Buscar cursos\" /></label>",
+        "css": ".ds-field-label { display: grid; gap: 6px; color: #6E6D6B; font: 600 11px/1.4 Roboto, sans-serif; } .ds-field { min-height: 40px; padding: 9px 12px; border: 1px solid #E5E1DC; border-radius: 9px; background: #FFFBF7; color: #0C0D0E; font: 400 13px/1.4 Roboto, sans-serif; } .ds-field:focus-visible { outline: 3px solid #A2CB10; outline-offset: 3px; }"
+      }
+    ],
+    "narrative": {
+      "northStar": "Guia prático do TraderLab",
+      "overview": "TraderLab Gestão is a quiet, task-focused management workspace. Its visual language pairs editorial serif headings with compact, highly legible sans-serif controls and data. A persistent left navigation gives mentors and administrators a stable map while each page starts with a small lime marker and its existing title, description, actions, and content.\n\nThe system uses warm neutral surfaces, restrained brand color, rounded panels, and soft shadows to make hierarchy easy to scan. It includes the Bruno Borges signature as a typographic BB mark because no standalone logo asset is present in the repository. This record is derived from shipped CSS and component patterns; no authenticated workspace screenshot was available for computed-style verification.",
+      "keyCharacteristics": ["Persistent, role-filtered left navigation", "Roboto Serif headings with Roboto interface text", "Warm canvas, off-white panels, and restrained lime emphasis", "Rounded surfaces with soft structural shadows"],
+      "rules": [
+        { "name": "The Restrained Lime Rule", "body": "Keep lime as a focused marker or action emphasis; maintain near-black text on lime.", "section": "colors" },
+        { "name": "The Heading Contrast Rule", "body": "Use Roboto Serif for headings only; keep tables, controls, and body copy in Roboto.", "section": "typography" },
+        { "name": "The Panel-Only Shadow Rule", "body": "Use shadows to define major panels, not every row or nested element.", "section": "elevation" }
+      ],
+      "dos": ["Do preserve the left navigation as the persistent workspace map.", "Do use the established brand fonts and palette roles.", "Do maintain readable near-black text on lime actions and markers.", "Do reserve shadows for major panels and floating surfaces.", "Do preserve existing route content and role-based visibility when extending the UI."],
+      "donts": ["Don't use serif type in tables, controls, or body text.", "Don't spread lime across large areas or use white text on lime actions.", "Don't add shadows to every row or nested element.", "Don't infer visual rules from an unavailable authenticated screenshot; verify future updates against the rendered workspace."]
+    }
+  }
+}

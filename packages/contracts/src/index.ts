@@ -121,7 +121,6 @@ export type MessageDto = {
 
 export type HomeBannerDto = {
   id: number;
-  title: string;
   eyebrowText: string | null;
   description: string;
   overlayText: string | null;
@@ -146,7 +145,6 @@ export type ManagedHomeBannersDto = {
 
 export type ManagedHomeBannerInputDto = {
   internalName: string;
-  title: string;
   description: string;
   eyebrowText: string;
   overlayText: string;

@@ -53,6 +53,7 @@ export default async function CourseContentPage({
   const { authenticated, profile, accessToken } = await getCurrentUserProfile();
   if (!authenticated) redirect(signInPath);
   if (!profile) return <StudentSessionUnavailable returnTo={returnTo} />;
+  if (!profile.phone.trim()) redirect('/profile?complete=1');
 
   if (!accessToken) redirect(signInPath);
 

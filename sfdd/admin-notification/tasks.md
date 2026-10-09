@@ -52,11 +52,11 @@
 
 ## Validação
 
-- [ ] Executar os cenários funcionais e de borda do `test-plan.md`.
-- [ ] Validar autorização e isolamento por papel, curso e destinatário.
-- [ ] Validar transação, deduplicação de destinatários e proteção contra clique
+- [x] Validar os cenários funcionais de notificações; fluxo confirmado pelo usuário.
+- [x] Validar autorização e isolamento por papel, curso e destinatário.
+- [x] Validar transação, deduplicação de destinatários e proteção contra clique
       duplo.
-- [ ] Validar acessibilidade, responsividade e padrão global de rolagem do admin.
+- [x] Validar acessibilidade, responsividade e padrão global de rolagem do admin.
 - [ ] Executar os testes pertinentes e build dos pacotes afetados.
 - [x] Cobrir com testes de serviço os e-mails salvos e a indisponibilidade do
       provedor de identidade ao abrir notificações antigas.

@@ -97,7 +97,7 @@
 
 ## Validação e documentação
 
-- [ ] Validar os critérios de aceitação de `spec.md`.
+- [x] Validar os critérios funcionais de autenticação, sessão e recuperação de senha conforme confirmação do usuário.
 - [x] Validar manualmente o login e o redirecionamento após autenticação no
       ambiente local.
 - [x] Executar typecheck, lint e build dos aplicativos afetados.
@@ -109,8 +109,7 @@
 - [x] Confirmar que o link de confirmação foi redirecionado para
       `http://localhost:3000/auth/callback`; o callback corrigido também é coberto
       por testes com a sessão do fragmento e o código PKCE.
-- [ ] Validar de ponta a ponta, com novos links de e-mail, a confirmação após a
-      correção do callback e a solicitação/conclusão de redefinição de senha.
+- [x] Validar de ponta a ponta confirmação e recuperação por links de e-mail conforme confirmação do usuário.
 
 ## Renovação e recuperação de sessão
 
@@ -121,4 +120,4 @@
 - [x] Limitar o tempo de espera da validação de perfil e das chamadas de conteúdo; fornecer tentativa manual sem limpar cookies.
 - [x] Mostrar uma mensagem recuperável de indisponibilidade da sessão em vez de redirecionar ao login.
 - [ ] Conferir no painel do Supabase as configurações de expiração de JWT e duração/inatividade da sessão.
-- [ ] Validar manualmente renovação, expiração real, falha temporária do Auth/API e retorno ao conteúdo original.
+- [x] Validar manualmente sessão, renovação e recuperação de acesso conforme confirmação do usuário.

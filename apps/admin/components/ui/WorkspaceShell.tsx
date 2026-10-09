@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import type { UserProfileDto } from '@traderlab/contracts';
-import Link from 'next/link';
 import { SignOutButton } from '../authentication/SignOutButton';
 import { WorkspaceNavigation } from '../navigation/WorkspaceNavigation';
 import styles from './WorkspaceShell.module.css';
@@ -22,12 +22,14 @@ export function WorkspaceShell({
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
-          <span className={styles.mark} aria-hidden="true">
-            T
-          </span>
-          <span>
-            TraderLab <small>Gestão</small>
-          </span>
+          <Image
+            className={styles.brandLogo}
+            src="/logos/logo-verde-fundo-claro.png"
+            alt="Trader Bruno Borges"
+            width={220}
+            height={50}
+            priority
+          />
         </div>
         <WorkspaceNavigation isAdministrator={profile.role === 'administrator'} />
         <p className={styles.sidebarNote}>
@@ -36,7 +38,6 @@ export function WorkspaceShell({
       </aside>
       <div className={styles.mainArea}>
         <header className={styles.header}>
-          <span>Ambiente de gestão</span>
           <div className={styles.account}>
             <span className={styles.avatar} aria-hidden="true">
               {profile.name.trim().charAt(0).toLocaleUpperCase('pt-BR') || 'T'}

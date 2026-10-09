@@ -31,6 +31,8 @@ O administrador precisa consultar as matrículas existentes e conceder acesso a 
 
 ## Regras de negócio
 
+- Não há fluxo de convite que conceda matrícula sem cadastro: a pessoa precisa criar conta e entrar na plataforma antes de receber matrícula.
+
 - A funcionalidade é exclusiva de administradores.
 - Matrícula manual concede acesso imediatamente e usa origem **Manual**.
 - Usuário existente pode receber matrícula independentemente do papel.
@@ -60,5 +62,6 @@ O administrador precisa consultar as matrículas existentes e conceder acesso a 
 
 ## Fora de escopo
 
+- Convite com liberação de matrícula sem cadastro prévio.
 - Compra, cobrança, pagamentos, lotes de matrículas, cadastro de novos usuários, revogação/reativação, exclusão e auditoria de quem concedeu cada matrícula.
 - Matrícula em curso em rascunho.

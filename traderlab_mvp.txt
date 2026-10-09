@@ -22,7 +22,7 @@ O MVP deve permitir que:
 [ ] - O sistema receba e processe a confirmacao do pagamento.
 [ ] - O administrador consulte pagamentos, recorrências, débitos, cancelamentos, atrasos.
 [ ] - O acesso seja bloqueado ou atualizado conforme o status da assinatura.
-[ ] - O sistema registre logs e aplique regras basicas de seguranca.
+[-] - O sistema registre logs e aplique regras basicas de seguranca. (bloco geral planejado para etapa futura; nao bloqueia a validacao funcional atual)
 
 Funcionalidades do MVP:
 
@@ -30,7 +30,7 @@ Funcionalidades do MVP:
 - Perfis basicos de aluno, mentor e administrador.
 - Cursos, modulos, aulas e materiais.
 - Conteudo em rascunho e publicado.
-- Matriculas por compra, convite ou concessao manual.
+- Matriculas por compra ou concessao manual. Convites sem cadastro previo e revogacao/reativacao nao fazem parte da etapa atual.
 - Controle de acesso aos cursos e aulas.
 - Pagamento unico ou assinatura, conforme a decisao comercial do produto.
 - Integracao com Mercado Pago.
@@ -38,7 +38,7 @@ Funcionalidades do MVP:
 - Controle de status de pagamentos e matriculas.
 - Registro de progresso das aulas.
 - Retomada basica do estudo.
-- E-mails e notificacoes essenciais.
+- Notificacoes internas e e-mails automaticos essenciais cobrem a comunicacao prevista nesta etapa. Personalizacao visual e novos disparos de sistema dependem de configuracao futura do Supabase.
 - Painel administrativo basico.
 - Ambiente de trabalho separado para mentores e administradores.
 - Mentor com permissao para criar, editar, publicar e despublicar conteudos.
@@ -47,8 +47,8 @@ Funcionalidades do MVP:
 - Mentor com consulta ao progresso dos alunos relacionados aos seus conteudos.
 - Administrador com acesso total ao sistema, incluindo usuarios, permissoes,
   matriculas, pagamentos, configuracoes e todas as funcoes do mentor.
-- Logs de operacoes importantes.
-- Regras basicas de autenticacao, autorizacao e seguranca.
+- Logs gerais de operacoes, acesso e utilizacao serao implementados em bloco transversal futuro, conforme a visao de produto.
+- Autenticacao e autorizacao funcional foram implementadas e validadas. O bloco de seguranca geral da aplicacao sera tratado futuramente, conforme a visao de produto.
 
 2. O QUE NAO FAZ PARTE DO MVP
 

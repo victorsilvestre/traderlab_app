@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { ChevronDown, ChevronUp, Pencil, Pause, Play, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type { ManagedHomeBannerDto, ManagedHomeBannersDto } from '@traderlab/contracts';
@@ -8,11 +9,8 @@ import { AdminBackLink } from '../navigation/AdminBackLink';
 import styles from './AdminBannerCatalog.module.css';
 
 function BannerIcon({ kind }: { kind: 'up' | 'down' | 'activate' | 'deactivate' | 'edit' }) {
-  if (kind === 'up') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 14 6-6 6 6" /></svg>;
-  if (kind === 'down') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 10 6 6 6-6" /></svg>;
-  if (kind === 'activate') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" /></svg>;
-  if (kind === 'deactivate') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg>;
-  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5M4 20l4.5-1 10-10a2.12 2.12 0 0 0-3-3l-10 10L4 20Z" /></svg>;
+  const Icon = { up: ChevronUp, down: ChevronDown, activate: Play, deactivate: Pause, edit: Pencil }[kind];
+  return <Icon aria-hidden="true" size={17} strokeWidth={1.8} />;
 }
 
 function BannerRow({ banner, index, count, activeCount, returnTo, onMove, onStatus, busy }: {
@@ -31,14 +29,9 @@ function BannerRow({ banner, index, count, activeCount, returnTo, onMove, onStat
     <div className={styles.row} role="row">
       <div className={styles.previewCell} role="cell"><div className={styles.preview} style={{ backgroundImage: `url("${banner.imageUrl}")` }} role="img" aria-label={banner.altText} /></div>
       <div className={styles.identity} role="cell">
-        <strong title={banner.internalName}>{banner.internalName}</strong>
-        <span title={banner.title}>{banner.title}</span>
-        <div className={styles.details}>
-          {banner.eyebrowText && <span title={banner.eyebrowText}>Kicker: {banner.eyebrowText}</span>}
-          {banner.description && <span title={banner.description}>Apoio: {banner.description}</span>}
-          {banner.overlayText && <span title={banner.overlayText}>Texto na imagem: {banner.overlayText}</span>}
-          {banner.destinationUrl && <a href={banner.destinationUrl} target="_blank" rel="noopener noreferrer">Destino ↗</a>}
-        </div>
+        <Link className={styles.rowDetailsLink} href={editHref} aria-label={`Abrir detalhes do banner ${banner.internalName}`}>
+          <strong title={banner.internalName}>{banner.internalName}</strong>
+        </Link>
       </div>
       <div className={styles.position} role="cell">{active ? index! + 1 : '—'}</div>
       <div className={styles.statusCell} role="cell"><span className={active ? styles.activeBadge : styles.inactiveBadge}>{active ? 'Ativo' : 'Inativo'}</span></div>
@@ -85,17 +78,23 @@ export function AdminBannerCatalog({ data, errorMessage, returnTo }: { data?: Ma
   }
 
   async function move(from: number, to: number) {
+    const previousActive = [...active];
     const reordered = [...active];
     const [moved] = reordered.splice(from, 1);
     if (!moved) return;
     reordered.splice(to, 0, moved);
+    const positioned = reordered.map((item, index) => ({ ...item, displayOrder: index + 1 }));
+    setItems([...positioned, ...inactive]);
     setBusy(true); setError('');
     try {
-      const response = await fetch('/api/admin/banners/order', { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ids: reordered.map((item) => item.id) }) });
+      const response = await fetch('/api/admin/banners/order', { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ids: positioned.map((item) => item.id) }) });
       const result = await response.json().catch(() => ({})) as { message?: string };
       if (!response.ok) throw new Error(result.message ?? 'Não foi possível salvar a ordem.');
-      setItems([...reordered, ...inactive]);
-    } catch (cause) { setError(cause instanceof Error ? cause.message : 'Não foi possível salvar a ordem.'); }
+      router.refresh();
+    } catch (cause) {
+      setItems([...previousActive, ...inactive]);
+      setError(cause instanceof Error ? cause.message : 'Não foi possível salvar a ordem.');
+    }
     finally { setBusy(false); }
   }
 
@@ -104,7 +103,14 @@ export function AdminBannerCatalog({ data, errorMessage, returnTo }: { data?: Ma
       <AdminBackLink href={returnTo} />
       <header className={styles.heading}>
         <div><h1 id="banners-title">Banners</h1><p>Organize as comunicações exibidas na página inicial.</p></div>
-        <Link className={styles.addButton} href={`/banners/new?returnTo=${encodeURIComponent(returnHref)}`} aria-label="Novo banner" title="Novo banner" data-tooltip="Novo banner"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></Link>
+        {data && active.length >= data.activeLimit ? (
+          <div className={styles.addAction}>
+            <span className={styles.limitNotice}>Já tem cinco banners. Você precisa inativar um para cadastrar outro.</span>
+            <button className={styles.addButton} type="button" disabled aria-label="Cadastro bloqueado: já há cinco banners ativos. Inative um para cadastrar outro." title="Já tem cinco banners. Você precisa inativar um." data-tooltip="Já tem cinco banners. Você precisa inativar um."><Plus aria-hidden="true" size={20} strokeWidth={1.8} /></button>
+          </div>
+        ) : (
+          <Link className={styles.addButton} href={`/banners/new?returnTo=${encodeURIComponent(returnHref)}`} aria-label="Novo banner" title="Novo banner" data-tooltip="Novo banner"><Plus aria-hidden="true" size={20} strokeWidth={1.8} /></Link>
+        )}
       </header>
       {error && <p className={styles.feedback} role="alert">{error}</p>}
       {!data && !errorMessage ? <p className={styles.empty}>Carregando banners…</p> : null}

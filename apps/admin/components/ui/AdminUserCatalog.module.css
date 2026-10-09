@@ -2,18 +2,18 @@
 .loading { display: grid; gap: 12px; padding-top: 28px; }
 .loading span { height: 76px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); animation: pulse 1.2s ease-in-out infinite alternate; }
 @keyframes pulse { to { opacity: .48; } }
-.heading { margin: 18px 0 24px; }
+.heading { margin: 0 0 var(--space-section); }
 .heading h1 { margin: 0; font-size: 34px; letter-spacing: -.03em; line-height: 1.15; }
-.heading p { margin: 9px 0 0; color: var(--muted); line-height: 1.5; }
-.searchForm { display: grid; gap: 8px; margin: 24px 0 12px; color: var(--ink); font-size: 12px; font-weight: 700; }
+.heading p { margin: var(--space-2) 0 0; color: var(--muted); line-height: 1.5; }
+.searchForm { display: grid; gap: 8px; margin: 0 0 12px; color: var(--ink); font-size: 12px; font-weight: 700; }
 .searchControls { display: flex; min-width: 0; align-items: center; gap: 10px; }
 .searchControls input { width: 100%; min-width: 0; min-height: 44px; padding: 0 13px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--ink); font: inherit; font-weight: 400; }
-.searchControls button { min-height: 44px; padding: 0 16px; border: 1px solid var(--green); border-radius: 7px; background: var(--green); color: white; font: inherit; cursor: pointer; }
-.searchControls a { color: var(--green); white-space: nowrap; }
-.resultCount { margin: 18px 0 10px; color: var(--muted); font-size: 12px; }
+.searchControls button { min-height: 44px; padding: 0 16px; border: 1px solid var(--green); border-radius: 7px; background: var(--green); color: var(--ink); font: inherit; cursor: pointer; }
+.searchControls a { color: var(--green-ink); white-space: nowrap; }
+.resultCount { margin: 16px 0 10px; color: var(--muted); font-size: 12px; }
 .tableWrap { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
 .table { width: 100%; table-layout: fixed; border-collapse: collapse; }
-.table th, .table td { padding: 13px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.table th, .table td { padding: 13px 12px; border-bottom: 1px solid var(--line); line-height: 1.5; text-align: left; vertical-align: middle; }
 .table th { background: #f6f7f5; color: var(--muted); font-size: 11px; font-weight: 700; white-space: nowrap; }
 .table tbody tr:last-child td { border-bottom: 0; }
 .table th:nth-child(1) { width: 17%; }
@@ -23,28 +23,29 @@
 .table th:nth-child(5) { width: 15%; }
 .table th:nth-child(6) { width: 12%; }
 .table th:nth-child(7) { width: 8%; }
-.userRow { position: relative; color: var(--ink); font-size: 12px; }
+.userRow { position: relative; color: var(--ink); font-size: 12px; cursor: pointer; }
 .userRow:hover { background: #f8faf8; }
 .table td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nameCell { font-weight: 700; }
 .userName { position: static; color: var(--ink); text-decoration: none; }
 .userName::after { position: absolute; z-index: 0; inset: 0; content: ''; }
-.userName:hover { text-decoration: underline; }
+.userName:hover { text-decoration: none; }
+.userName:focus-visible::after { outline: 3px solid var(--green); outline-offset: -3px; }
 .emailCell { color: var(--muted); }
-.role { display: inline-flex; max-width: 100%; align-items: center; padding: 4px 8px; border-radius: 999px; background: var(--soft-green); color: var(--green); font-size: 10px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.detailLink { position: relative; z-index: 1; display: inline-flex; width: 34px; height: 34px; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--green); text-decoration: none; }
+.role { display: inline-flex; max-width: 100%; align-items: center; padding: 4px 8px; border-radius: 999px; background: var(--soft-green); color: var(--green-ink); font-size: 10px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.detailLink { position: relative; z-index: 1; display: inline-flex; width: 34px; height: 34px; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--green-ink); text-decoration: none; }
 .detailLink svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .detailLink:hover { background: var(--soft-green); }
-.feedback, .emptyState { margin-top: 18px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.feedback, .emptyState { margin-top: 18px; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--shadow-card); }
 .feedback { color: var(--error); }
 .emptyState h2 { margin: 0 0 8px; font-size: 18px; }
 .emptyState p { margin: 0; color: var(--muted); }
-.emptyState a, .feedback a { display: inline-block; margin-top: 12px; color: var(--green); font-weight: 700; }
+.emptyState a, .feedback a { display: inline-block; margin-top: 12px; color: var(--green-ink); font-weight: 700; }
 .pagination { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 18px; color: var(--muted); font-size: 12px; }
 .pagination > div { display: flex; gap: 8px; }
 .pageLink, .pageDisabled { display: inline-flex; min-height: 38px; align-items: center; padding: 0 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); text-decoration: none; }
 .pageDisabled { opacity: .45; }
-.searchControls button:focus-visible, .searchControls input:focus-visible, .userName:focus-visible, .detailLink:focus-visible, .pageLink:focus-visible { outline: 3px solid #91b79c; outline-offset: 2px; }
+.searchControls button:focus-visible, .searchControls input:focus-visible, .userName:focus-visible, .detailLink:focus-visible, .pageLink:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 @media (max-width: 900px) {
   .table th, .table td { padding-inline: 8px; }

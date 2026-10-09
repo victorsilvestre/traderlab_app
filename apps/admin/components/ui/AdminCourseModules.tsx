@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { ChevronDown, ChevronUp, FolderOpen, FolderPlus, Pause, Pencil, Play, Plus, Settings, UserRoundPlus, UsersRound } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type {
@@ -133,21 +134,14 @@ export function AdminCourseModules({
         <div className={styles.courseActions}>
           {isAdministrator && <>
             <Link className={styles.settingsButton} href={`/enrollments?courseId=${course.id}&returnTo=${encodeURIComponent(currentCourseHref)}`} aria-label="Ver matrículas do curso" data-tooltip="Ver matrículas">
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="10" cy="7" r="4" /><path d="M20 8v6M17 11h6" />
-              </svg>
+              <UsersRound aria-hidden="true" size={18} strokeWidth={1.8} />
             </Link>
             {course.status === 'published' && <Link className={styles.settingsButton} href={`/enrollments/new?courseId=${course.id}&returnTo=${encodeURIComponent(currentCourseHref)}`} aria-label="Matricular usuário neste curso" data-tooltip="Matricular usuário">
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="10" cy="7" r="4" /><path d="M19 8v6M16 11h6" />
-              </svg>
+              <UserRoundPlus aria-hidden="true" size={18} strokeWidth={1.8} />
             </Link>}
           </>}
           <Link className={styles.settingsButton} href={`/courses/${course.id}/settings?returnTo=${encodeURIComponent(currentCourseHref)}`} aria-label="Configurações do curso" data-tooltip="Configurações do curso">
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
-              <path d="m19.4 15 .1.1a1.8 1.8 0 0 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3.1 1.3v.2a1.8 1.8 0 0 1-3.6 0v-.2a1.8 1.8 0 0 0-3.1-1.3l-.1.1a1.8 1.8 0 0 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-1.3-3.1h-.2a1.8 1.8 0 0 1 0-3.6h.2a1.8 1.8 0 0 0 1.3-3.1l-.1-.1a1.8 1.8 0 0 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3.1-1.3v-.2a1.8 1.8 0 0 1 3.6 0v.2a1.8 1.8 0 0 0 3.1 1.3l.1-.1a1.8 1.8 0 0 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 1.3 3.1h.2a1.8 1.8 0 0 1 0 3.6h-.2a1.8 1.8 0 0 0-1.3 3.1Z" />
-            </svg>
+            <Settings aria-hidden="true" size={18} strokeWidth={1.8} />
           </Link>
         </div>
       </header>
@@ -171,16 +165,7 @@ export function AdminCourseModules({
           aria-label="Adicionar módulo"
           data-tooltip="Adicionar módulo"
         >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          >
-            <path d="M12 5v14M5 12h14" />
-          </svg>
+          <Plus aria-hidden="true" size={20} strokeWidth={1.8} />
         </Link>
       </div>
 
@@ -364,17 +349,7 @@ function ModuleCard({
             data-tooltip={expanded ? 'Recolher módulo' : 'Expandir módulo'}
             onClick={onToggle}
           >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m6 9 6 6 6-6" />
-            </svg>
+            {expanded ? <ChevronUp aria-hidden="true" size={18} strokeWidth={1.8} /> : <ChevronDown aria-hidden="true" size={18} strokeWidth={1.8} />}
           </button>
         </div>
       </div>
@@ -707,40 +682,18 @@ function ActionIcon({
     | 'materialsClosed'
     | 'materialsOpen';
 }) {
-  const paths = {
-    edit: <path d="m14 5 5 5M4 20l4.2-.8L19 8.4 15.6 5 4.8 15.8 4 20Z" />,
-    up: <path d="M12 19V5m-6 6 6-6 6 6" />,
-    down: <path d="M12 5v14m6-6-6 6-6-6" />,
-    pause: <path d="M8 5v14M16 5v14" />,
-    play: <path d="m8 5 12 7-12 7V5Z" />,
-    plus: <path d="M12 5v14m-7-7h14" />,
-    materialsClosed: (
-      <>
-        <path d="M4 6h6l2 2h8v10H4z" />
-        <path d="m9 11 3 3 3-3" />
-      </>
-    ),
-    materialsOpen: (
-      <>
-        <path d="M4 6h6l2 2h8v10H4z" />
-        <path d="m9 14 3-3 3 3" />
-      </>
-    ),
+  const icons = {
+    edit: Pencil,
+    up: ChevronUp,
+    down: ChevronDown,
+    pause: Pause,
+    play: Play,
+    plus: Plus,
+    materialsClosed: FolderPlus,
+    materialsOpen: FolderOpen,
   };
-
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {paths[kind]}
-    </svg>
-  );
+  const Icon = icons[kind];
+  return <Icon aria-hidden="true" size={18} strokeWidth={1.8} />;
 }
 
 function formatFileSize(bytes: number): string {

@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
+import { Roboto, Roboto_Serif } from 'next/font/google';
 import './globals.css';
+
+const roboto = Roboto({ subsets: ['latin'], variable: '--font-roboto' });
+const robotoSerif = Roboto_Serif({ subsets: ['latin'], variable: '--font-roboto-serif' });
 
 export const metadata: Metadata = {
   title: 'TraderLab Gestão',
@@ -11,7 +15,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body className={`${roboto.variable} ${robotoSerif.variable}`}>{children}</body>
     </html>
   );
 }

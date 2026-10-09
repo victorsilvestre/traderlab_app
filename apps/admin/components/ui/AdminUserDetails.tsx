@@ -1,5 +1,6 @@
 import { AdminBackLink } from '../navigation/AdminBackLink';
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
 import styles from './AdminUserDetails.module.css';
 
 function formatDate(value: string | null) {
@@ -97,7 +98,7 @@ export function AdminUserDetails({
               <span>{user.enrollments.length}</span>
             </div>
             <Link className={styles.addEnrollment} href={`/enrollments/new?userId=${encodeURIComponent(user.id)}&returnTo=${encodeURIComponent(enrollmentReturnTo)}`} aria-label={`Matricular ${user.name} em um curso`} title="Matricular em curso">
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
+              <Plus aria-hidden="true" size={20} strokeWidth={1.8} />
             </Link>
           </div>
           {user.enrollments.length ? (

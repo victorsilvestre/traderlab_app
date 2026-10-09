@@ -3,7 +3,6 @@ ALTER TABLE "home_banners"
 
 UPDATE "home_banners"
 SET "internal_name" = 'Aprenda com método',
-    "title" = 'Conhecimento se constrói com consistência.',
     "description" = 'Um passo de cada vez, no seu ritmo.',
     "eyebrow_text" = 'Aprenda com método',
     "overlay_text" = 'Conhecimento se constrói com consistência.',
@@ -13,7 +12,6 @@ WHERE "id" = 1;
 
 UPDATE "home_banners"
 SET "internal_name" = 'Estude com clareza',
-    "title" = 'Entenda o contexto antes de agir.',
     "description" = 'Conteúdo para apoiar decisões mais conscientes.',
     "eyebrow_text" = 'Estude com clareza',
     "overlay_text" = 'Entenda o contexto antes de agir.',
@@ -23,7 +21,6 @@ WHERE "id" = 2;
 
 UPDATE "home_banners"
 SET "internal_name" = 'Seu aprendizado',
-    "title" = 'Seu próximo passo começa aqui.',
     "description" = 'Retome seus estudos sempre que quiser.',
     "eyebrow_text" = 'Seu aprendizado',
     "overlay_text" = 'Seu próximo passo começa aqui.',

@@ -8,12 +8,12 @@
 .summary { padding: 14px 16px; border: 1px solid var(--line); border-radius: 7px; background: #f8f9f6; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 9px; margin-top: 6px; }
 .button { display: inline-flex; box-sizing: border-box; min-height: 42px; align-items: center; justify-content: center; padding: 0 15px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--ink); font: inherit; font-size: 12px; font-weight: 700; line-height: 1; white-space: nowrap; cursor: pointer; text-decoration: none; }
-.primary { border-color: var(--green); background: var(--green); color: white; }
+.primary { border-color: var(--green-ink); background: var(--green); color: var(--ink); }
 .primary:hover { border-color: var(--green-hover); background: var(--green-hover); }
-.button:focus-visible { outline: 3px solid #91b79c; outline-offset: 2px; }
+.button:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
 .button:disabled { cursor: wait; opacity: .6; }
 .error { padding: 12px 14px; border: 1px solid #e6b3ae; border-radius: 7px; background: #fff8f7; color: var(--error); font-size: 12px; }
-.success { padding: 12px 14px; border: 1px solid #a9c9b0; border-radius: 7px; background: #f5faf5; color: var(--green); font-size: 12px; }
+.success { padding: 12px 14px; border: 1px solid #a9c9b0; border-radius: 7px; background: #f5faf5; color: var(--green-ink); font-size: 12px; }
 .dialog { width: min(calc(100% - 32px), 480px); padding: 26px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); box-shadow: 0 24px 80px #14221b33; }
 .dialog::backdrop { background: #14221b75; backdrop-filter: blur(2px); }
 .dialog h2 { margin: 0 0 10px; font-size: 21px; }

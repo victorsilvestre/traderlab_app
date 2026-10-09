@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BookOpen, Filter, Pencil, Plus, Search, X } from 'lucide-react';
 import type {
   ManagedCourseDto,
   ManagedCoursePageDto,
@@ -54,33 +55,14 @@ export function AdminCourseCatalog({
           aria-label="Novo curso"
           data-tooltip="Novo curso"
         >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          >
-            <path d="M12 5v14M5 12h14" />
-          </svg>
+          <Plus aria-hidden="true" size={20} strokeWidth={1.8} />
         </Link>
       </div>
 
       <form className={styles.filters} method="get" action="/courses">
         <label className={styles.search}>
           <span className={styles.srOnly}>Buscar cursos pelo título</span>
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          >
-            <circle cx="10.8" cy="10.8" r="6.8" />
-            <path d="m16 16 4.5 4.5" />
-          </svg>
+          <Search aria-hidden="true" size={18} strokeWidth={1.8} />
           <input
             name="query"
             defaultValue={query}
@@ -101,16 +83,7 @@ export function AdminCourseCatalog({
                 form.requestSubmit();
               }}
             >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              >
-                <path d="m6 6 12 12M18 6 6 18" />
-              </svg>
+              <X aria-hidden="true" size={17} strokeWidth={1.8} />
             </button>
           )}
         </label>
@@ -128,17 +101,7 @@ export function AdminCourseCatalog({
           aria-label="Filtrar"
           data-tooltip="Filtrar"
         >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M4 6h16M7 12h10m-7 6h4" />
-          </svg>
+          <Filter aria-hidden="true" size={18} strokeWidth={1.8} />
         </button>
       </form>
 
@@ -150,17 +113,7 @@ export function AdminCourseCatalog({
       ) : courses.length === 0 ? (
         <div className={styles.emptyState}>
           <span className={styles.emptyIcon} aria-hidden="true">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z" />
-              <path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20M8 7h8M8 10h6" />
-            </svg>
+            <BookOpen aria-hidden="true" size={24} strokeWidth={1.7} />
           </span>
           <h2>
             {query || status
@@ -190,7 +143,7 @@ export function AdminCourseCatalog({
             </thead>
             <tbody>
               {courses.map((course) => (
-                <tr key={course.id}>
+                <tr key={course.id} className={styles.courseRow}>
                   <td className={styles.courseCell} data-label="Curso">
                     <Link href={detailsHref(course.id)}>{course.title}</Link>
                     <small>{course.description}</small>
@@ -217,17 +170,7 @@ export function AdminCourseCatalog({
                         aria-label={`Editar ${course.title}`}
                         data-tooltip="Editar"
                       >
-                        <svg
-                          aria-hidden="true"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="m14 5 5 5M4 20l4.2-.8L19 8.4 15.6 5 4.8 15.8 4 20Z" />
-                        </svg>
+                        <Pencil aria-hidden="true" size={18} strokeWidth={1.8} />
                       </Link>
                       <CoursePublicationButton course={course} />
                     </div>

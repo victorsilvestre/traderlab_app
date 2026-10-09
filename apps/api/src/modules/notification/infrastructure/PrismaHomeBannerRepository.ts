@@ -9,7 +9,6 @@ export class PrismaHomeBannerRepository {
       select: {
         id: true,
         internalName: true,
-        title: true,
         description: true,
         eyebrowText: true,
         overlayText: true,
@@ -32,13 +31,13 @@ export class PrismaHomeBannerRepository {
   }
 
   update(id: number, input: {
-    internalName: string; title: string; description: string; eyebrowText: string | null;
+    internalName: string; description: string; eyebrowText: string | null;
     overlayText: string | null; imagePath: string; destinationUrl: string | null; altText: string; administratorId: string;
   }) {
     return prisma.homeBanner.update({
       where: { id },
       data: {
-        internalName: input.internalName, title: input.title, description: input.description,
+        internalName: input.internalName, description: input.description,
         eyebrowText: input.eyebrowText, overlayText: input.overlayText, imagePath: input.imagePath,
         destinationUrl: input.destinationUrl, altText: input.altText, updatedById: input.administratorId,
       },
@@ -50,7 +49,6 @@ export class PrismaHomeBannerRepository {
 
   async create(input: {
     internalName: string;
-    title: string;
     description: string;
     eyebrowText: string | null;
     overlayText: string | null;
@@ -60,12 +58,21 @@ export class PrismaHomeBannerRepository {
     administratorId: string;
   }) {
     return prisma.$transaction(async (transaction) => {
-      const activeCount = await transaction.homeBanner.count({ where: { status: 'PUBLISHED' } });
-      if (activeCount >= 5) return { limitReached: true as const };
+      const active = await transaction.homeBanner.findMany({
+        where: { status: 'PUBLISHED' },
+        orderBy: [{ displayOrder: 'asc' }, { id: 'asc' }],
+        select: { id: true, displayOrder: true },
+      });
+      if (active.length >= 5) return { limitReached: true as const };
+      for (const [index, banner] of active.entries()) {
+        await transaction.homeBanner.update({
+          where: { id: banner.id },
+          data: { displayOrder: index + 2, updatedById: input.administratorId },
+        });
+      }
       const banner = await transaction.homeBanner.create({
         data: {
           internalName: input.internalName,
-          title: input.title,
           description: input.description,
           eyebrowText: input.eyebrowText,
           overlayText: input.overlayText,
@@ -73,7 +80,7 @@ export class PrismaHomeBannerRepository {
           destinationUrl: input.destinationUrl,
           altText: input.altText,
           status: 'PUBLISHED',
-          displayOrder: activeCount + 1,
+          displayOrder: 1,
           createdById: input.administratorId,
           updatedById: input.administratorId,
         },

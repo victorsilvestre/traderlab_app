@@ -45,7 +45,7 @@ export function BannerCarousel({ banners }: { banners: HomeBannerDto[] }) {
               href={destinationUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Abrir ${activeBanner.title} em uma nova aba`}
+              aria-label={`Abrir banner ${activeBanner.displayOrder} em uma nova aba`}
             />
           )}
           {activeBanner.overlayText && <>

@@ -83,7 +83,7 @@
 }
 .published {
   background: var(--soft-green);
-  color: var(--green);
+  color: var(--green-ink);
 }
 .draft {
   background: #f0f0eb;
@@ -160,14 +160,13 @@
   font-size: 12px;
 }
 .primaryButton {
-  border-color: var(--green);
-  background: var(--green);
-  color: #fff;
+  border-color: var(--green-ink);
+  background: var(--green); color: var(--ink);
 }
 .primaryButton:hover {
   border-color: var(--green-hover);
   background: var(--green-hover);
-  color: #fff;
+  color: var(--ink);
 }
 .settingsButton svg,
 .primaryButton svg {
@@ -290,7 +289,7 @@
   border: 1px solid transparent;
   border-radius: 5px;
   background: transparent;
-  color: var(--green);
+  color: var(--green-ink);
   cursor: pointer;
   font-size: 15px;
   line-height: 1;

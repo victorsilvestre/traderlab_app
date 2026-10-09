@@ -52,4 +52,11 @@ export class PrismaUserProfileRepository implements UserProfileRepository {
       },
     });
   }
+
+  async updateAvatarPath(id: string, avatarPath: string): Promise<void> {
+    await prisma.userProfile.updateMany({
+      where: { id, avatarPath: null },
+      data: { avatarPath },
+    });
+  }
 }

@@ -32,6 +32,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
   if (!authenticated) redirect(signInPath);
   if (!profile) return <StudentSessionUnavailable returnTo={returnTo} />;
+  if (!profile.phone.trim()) redirect('/profile?complete=1');
 
   const accessToken = await getCurrentAccessToken();
   if (!accessToken) redirect(signInPath);

@@ -11,7 +11,9 @@ export async function renderAuthenticationPage(
 ): Promise<ReactNode> {
   const returnTo = getSafeReturnPath(requestedReturnPath);
   const { authenticated, profile } = await getCurrentUserProfile();
-  if (authenticated && profile && mode !== 'reset') redirect(returnTo);
+  if (authenticated && profile && mode !== 'reset') {
+    redirect(profile.phone.trim() ? returnTo : '/profile?complete=1');
+  }
 
   return (
     <AuthShell>
@@ -27,4 +29,3 @@ export async function renderAuthenticationPage(
     </AuthShell>
   );
 }
-

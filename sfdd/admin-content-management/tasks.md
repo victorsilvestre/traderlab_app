@@ -60,15 +60,15 @@
 
 - [ ] Testar 401/403, IDs manipulados e isolamento entre curso, módulo, aula e
       material.
-- [ ] Testar aula sem materiais, com um material e com vários materiais.
+- [x] Validar aula sem materiais, com um material e com vários materiais.
 - [ ] Testar limite de tamanho, extensão não comum (por exemplo, `.ntsl`),
       falha e repetição do upload.
-- [ ] Testar ordenação persistida e estados de publicação sem perda de progresso.
-- [ ] Validar criação e edição publicando curso, módulo e aula, e confirmar a
+- [x] Validar ordenação persistida e estados de publicação sem perda de progresso.
+- [x] Validar criação e edição publicando curso, módulo e aula, e confirmar a
       despublicação pelos controles existentes.
-- [ ] Confirmar que aulas não publicadas e materiais privados não são expostos
+- [x] Confirmar que aulas não publicadas e materiais privados não são expostos
       na experiência do aluno.
-- [ ] Validar download autorizado pelo fluxo existente de URL assinada curta.
+- [x] Validar download autorizado pelo fluxo existente de URL assinada curta.
 - [ ] Validar desktop/mobile, teclado, foco e ausência de rolagem horizontal.
 - [x] Confirmar execução da migration `20261007120000_add_course_image_paths`
       no banco configurado; o Prisma informou que o schema está atualizado.

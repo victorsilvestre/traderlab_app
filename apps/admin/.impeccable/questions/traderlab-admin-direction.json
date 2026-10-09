@@ -1,0 +1,134 @@
+{
+  "title": "Direção visual do TraderLab Gestão",
+  "question": "Qual direção deve guiar a revitalização visual do workspace? As opções preservam navegação e funcionalidades atuais. Escolha uma, peça uma nova rodada ou mantenha o padrão da categoria.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Trilho de referência",
+      "kicker": "THE ROLL",
+      "lineage": "working plate / emission-line rail",
+      "thesis": "Um trilho visual alinha contexto, conteúdo e estados em uma gestão clara.",
+      "palette": ["#FFFBF7", "#0C0D0E", "#A2CB10", "#A71619"],
+      "materials": ["painéis claros", "tinta carvão", "sombras suaves"],
+      "viewport": "A tela de Cursos usa a navegação lateral já conhecida. O conteúdo preserva o título, a descrição, a busca, o filtro de situação e a tabela atuais. Uma linha verde-lima fina alinha o título, os filtros e o início da lista; estados continuam nomeados e usam cor apenas como apoio.",
+      "risk": "Se o trilho se espalhar pelos controles, o workspace pode parecer um instrumento de trading.",
+      "raised": [
+        {
+          "from": "challenger-star-atlas",
+          "raise": "Estados sempre têm rótulo e forma próprios; a cor nunca é a única pista."
+        },
+        {
+          "from": "challenger-japanese-density",
+          "raise": "A tabela mantém colunas alinhadas e densidade útil sem reduzir a leitura a microtipografia."
+        },
+        {
+          "from": "challenger-doujin-catalog",
+          "raise": "O catálogo permanece escaneável como uma lista coerente, sem fragmentar cada registro em um cartão isolado."
+        }
+      ],
+      "html": ".impeccable/mocks/decision/assigned.html",
+      "comp": ".impeccable/mocks/decision/assigned.webp"
+    },
+    {
+      "id": "model-pick",
+      "label": "Guia prático do TraderLab",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "manuais de formação prática e guias de campo",
+      "thesis": "Cada tarefa de gestão ganha um lugar claro, um estado legível e um próximo passo familiar.",
+      "palette": ["#FFFBF7", "#0C0D0E", "#A2CB10", "#A71619"],
+      "materials": ["superfícies claras", "painéis elevados", "marcadores de seção"],
+      "viewport": "A navegação lateral organiza Cursos, Alunos, Matrículas, Banners e Notificações. A página Cursos mantém sua busca, filtro, tabela, publicação e cadastro atuais, com hierarquia de guia prático: título Roboto Serif, texto Roboto e um marcador discreto de seção junto ao cabeçalho.",
+      "risk": "Se a serifada aparecer em controles e tabelas, a interface perde ritmo de ferramenta.",
+      "html": ".impeccable/mocks/decision/model-pick.html",
+      "comp": ".impeccable/mocks/decision/model-pick.webp"
+    },
+    {
+      "id": "challenger-crouwel-grid",
+      "label": "Grade de construção",
+      "verdict": "competitive",
+      "lineage": "espécimes tipográficos de Wim Crouwel",
+      "thesis": "Uma grade rigorosa torna listagens e formulários previsíveis e precisos.",
+      "palette": ["#FFFBF7", "#0C0D0E", "#A2CB10", "#A71619"],
+      "materials": ["grade modular fina", "superfícies claras", "acento geométrico"],
+      "viewport": "O mesmo catálogo de Cursos usa uma grade estrita para alinhar filtros, tabela e ações. A assinatura aparece como um traço diagonal verde-lima perto do título; o restante mantém controles web comuns, títulos Roboto Serif e texto Roboto.",
+      "case": "A estrutura melhora o alinhamento e a leitura dos dados, embora sua linguagem abstrata se conecte menos à formação prática do TraderLab.",
+      "risk": "A grade visível pode competir com os dados se atravessar a área de trabalho inteira.",
+      "html": ".impeccable/mocks/decision/challenger-crouwel-grid.html",
+      "comp": ".impeccable/mocks/decision/challenger-crouwel-grid.webp",
+      "board": "https://impeccable.style/worlds/cards/crouwel-grid-specimen.webp",
+      "hero": "https://impeccable.style/worlds/cards/crouwel-grid-specimen-hero.webp"
+    },
+    {
+      "id": "challenger-gate-board",
+      "label": "Estados em sequência",
+      "verdict": "competitive",
+      "lineage": "quadros de embarque e cartões de viagem",
+      "thesis": "Estados ficam em uma coluna estável e são fáceis de localizar durante a gestão.",
+      "palette": ["#FFFBF7", "#0C0D0E", "#A2CB10", "#A71619"],
+      "materials": ["painéis claros e carvão", "marcadores de estado", "cartões segmentados"],
+      "viewport": "O catálogo de Cursos mantém a navegação à esquerda e apresenta as colunas atuais em uma ordem estável. Rascunho e Publicado recebem marcadores de estado consistentes, e os filtros ficam acima da lista; nenhuma ação ou estado novo é acrescentado.",
+      "case": "A leitura de estados é forte, mas a metáfora de embarque traz um vocabulário alheio ao trabalho de gestão do TraderLab.",
+      "risk": "Se estados comuns parecerem alertas, o vermelho perde seu sentido semântico.",
+      "html": ".impeccable/mocks/decision/challenger-gate-board.html",
+      "comp": ".impeccable/mocks/decision/challenger-gate-board.webp",
+      "board": "https://impeccable.style/worlds/cards/vernacular-ephemera-boarding-pass-and-gate-board.webp",
+      "hero": "https://impeccable.style/worlds/cards/vernacular-ephemera-boarding-pass-and-gate-board-hero.webp"
+    },
+    {
+      "id": "challenger-star-atlas",
+      "label": "Atlas de estados",
+      "verdict": "declined",
+      "lineage": "cartas de atlas celeste",
+      "thesis": "Uma hierarquia por marca e escala distingue estados sem depender apenas do texto.",
+      "palette": ["#FFFBF7", "#0C0D0E", "#A2CB10", "#A71619"],
+      "materials": ["marcas de escala", "pontos de estado", "fundo claro"],
+      "viewport": "O catálogo mantém seus filtros e registros em uma grade de leitura convencional, com cada estado identificado por texto e contorno.",
+      "case": "A linguagem cartográfica não corresponde às tarefas nem ao contexto de gestão do produto.",
+      "kept": "Usar contorno e rótulo junto à cor para reforçar estados e acessibilidade.",
+      "risk": "Coordenadas e constelações fariam o catálogo parecer uma ferramenta de análise de mercado.",
+      "hero": "https://impeccable.style/worlds/cards/notation-diagram-systems-star-atlas-hero.webp"
+    },
+    {
+      "id": "challenger-japanese-density",
+      "label": "Mosaico de alta densidade",
+      "verdict": "declined",
+      "lineage": "sites japoneses contemporâneos de alta densidade",
+      "thesis": "Muitos blocos compactos cabem em uma tela com divisões e rótulos persistentes.",
+      "palette": ["#FFFBF7", "#0C0D0E", "#A2CB10", "#A71619"],
+      "materials": ["módulos compactos", "divisões finas", "tipografia pequena"],
+      "viewport": "O shell mantém a navegação à esquerda e a lista de Cursos em uma grade de blocos compactos.",
+      "case": "A densidade extrema conflita com a legibilidade e com o ritmo minimalista solicitado.",
+      "kept": "Manter alinhamento colunar e informação escaneável sem microtipografia.",
+      "risk": "O mosaico pode aumentar o esforço de leitura e esconder a hierarquia.",
+      "hero": "https://impeccable.style/worlds/cards/japanese-high-density-web-hero.webp"
+    },
+    {
+      "id": "challenger-doujin-catalog",
+      "label": "Catálogo em mosaico",
+      "verdict": "declined",
+      "lineage": "catálogos de convenções impressos em papel",
+      "thesis": "Uma grade de muitas miniaturas permite percorrer um catálogo inteiro de uma vez.",
+      "palette": ["#FFFBF7", "#0C0D0E", "#A2CB10", "#A71619"],
+      "materials": ["grade de miniaturas", "papel de uma cor", "marcadores de índice"],
+      "viewport": "A navegação lateral conduz a uma grade compacta de cursos, com situação e ações preservadas.",
+      "case": "A metáfora de evento e o tratamento de miniaturas não se ajustam às tarefas administrativas do produto.",
+      "kept": "Manter o catálogo como uma lista coerente, escaneável e com estados na mesma linha do registro.",
+      "risk": "Miniaturas e códigos reduziriam cursos a itens pequenos demais para reconhecer e gerir.",
+      "hero": "https://impeccable.style/worlds/cards/pop-culture-shelf-doujin-event-catalog-hero.webp"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code", "toggle": true },
+  "canon": true,
+  "canonCard": {
+    "label": "Padrão de admin da categoria",
+    "thesis": "Uma aplicação clara usa navegação lateral, título de página, filtros e tabela sem uma assinatura visual própria.",
+    "palette": ["#FFFBF7", "#0C0D0E", "#A2CB10", "#A71619"],
+    "materials": ["superfícies planas", "contornos discretos", "grade de tabela"],
+    "viewport": "Cursos aparece como uma página SaaS familiar: navegação à esquerda, ações no cabeçalho, filtros e uma tabela ampla com os estados atuais.",
+    "risk": "Sem um gesto visual próprio, a interface pode parecer intercambiável com qualquer outro painel.",
+    "html": ".impeccable/mocks/decision/canon.html",
+    "comp": ".impeccable/mocks/decision/canon.webp"
+  },
+  "steer": true
+}

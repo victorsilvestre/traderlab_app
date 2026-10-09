@@ -62,7 +62,9 @@ As telas existentes de redefinição de senha e reenvio de confirmação mantêm
 
 ## Exclusões explícitas
 
-- Autenticação com Google ou qualquer outro provedor social.
+- O desenho e a implementação do login Google são tratados em
+  `sfdd/authentication-login-google`; até essa unidade ser aprovada e
+  implementada, a opção permanece indisponível.
 - Alterações à API, regras de autenticação, cadastro, recuperação ou autorização.
 - Criação do conteúdo jurídico de Termos de Uso ou Política de Privacidade.
 - Alterações aos critérios de senha aprovados em `sfdd/authentication/`.

@@ -48,11 +48,13 @@ const adminAppUrl = process.env.ADMIN_APP_URL?.replace(/\/$/, '');
 export function createApp() {
   const app = Fastify({ logger: true });
   const authenticationProvider = new SupabaseAuthProvider();
+  const profileAvatars = new SupabaseProfileAvatarStorage();
   const service = new AuthenticationService(
     authenticationProvider,
     new PrismaUserProfileRepository(),
     webAppUrl,
     adminAppUrl,
+    profileAvatars,
   );
   const progressService = new ContentProgressService(
     new PrismaContentProgressRepository(),
@@ -69,7 +71,7 @@ export function createApp() {
   );
   const userService = new UserService(
     new UserProfileEditRepository(),
-    new SupabaseProfileAvatarStorage(),
+    profileAvatars,
   );
   const courseService = new CourseService(
     new PrismaCourseRepository(),
