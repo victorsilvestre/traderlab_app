@@ -1,0 +1,40 @@
+{
+  "title": "Qual linguagem visual deixa a home mais especial?",
+  "question": "As três opções preservam os mesmos blocos e a ordem atual — banner, Continue de onde você parou e cursos. A navegação lateral flutuante aparece em cada proposta, em variações recolhíveis e com sombra; o restante muda de composição e presença visual.",
+  "options": [
+    {
+      "id": "dock-editorial",
+      "label": "Dock editorial",
+      "kicker": "NOVA RODADA · 01",
+      "thesis": "Um menu compacto flutua à esquerda enquanto a fotografia dá o tom da experiência de estudo.",
+      "palette": ["#F5F3EF", "#FFFBF7", "#0C0D0E", "#A2CB10", "#354604"],
+      "materials": ["dock de ícones recolhível", "banner fotográfico amplo", "cards baixos com sombra macia"],
+      "viewport": "Menu vertical compacto e solto da borda; banner amplo com imagem e texto; retomada em faixa horizontal; cursos em três capas iguais.",
+      "risk": "O dock economiza espaço, mas os rótulos precisam aparecer ao expandir ou receber foco.",
+      "html": ".impeccable/mocks/decision/retomar-estudos.html"
+    },
+    {
+      "id": "janela-lateral",
+      "label": "Janela lateral",
+      "thesis": "Um painel de navegação leve organiza a plataforma sem prender a home a uma barra permanente.",
+      "palette": ["#F5F3EF", "#FFFBF7", "#0C0D0E", "#A2CB10", "#354604"],
+      "materials": ["menu flutuante com rótulos", "banner dividido entre texto e arte", "retomada com ação em coluna"],
+      "viewport": "Menu lateral expandido em painel flutuante; banner em duas metades; retomada larga com miniatura e ação separada; primeira capa de curso recebe mais espaço.",
+      "risk": "O painel expandido ocupa mais largura; em telas menores deve recolher para o dock compacto.",
+      "html": ".impeccable/mocks/decision/biblioteca-ativa.html"
+    },
+    {
+      "id": "galeria-imersiva",
+      "label": "Galeria imersiva",
+      "thesis": "Uma navegação flutuante discreta libera espaço para imagens maiores e uma vitrine de cursos mais expressiva.",
+      "palette": ["#F5F3EF", "#FFFBF7", "#0C0D0E", "#A2CB10", "#354604"],
+      "materials": ["ícones lineares", "banner imersivo de alto contraste", "galeria de capas em tamanhos variados"],
+      "viewport": "Rail recolhível isolado à esquerda; banner imersivo; retomada com progresso em coluna; cursos formam uma galeria com a capa principal mais ampla.",
+      "risk": "A galeria chama mais atenção; títulos e progresso precisam continuar fáceis de comparar.",
+      "html": ".impeccable/mocks/decision/percurso-de-estudo.html"
+    }
+  ],
+  "reroll": {"registers": ["safer", "bolder"]},
+  "buildPath": {"value": "code", "toggle": true},
+  "steer": true
+}

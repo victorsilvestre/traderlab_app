@@ -3,6 +3,7 @@ import type { CourseSummaryDto } from '@traderlab/contracts';
 import { homeClass } from './homeStyles';
 import { EmptyState } from './EmptyState';
 import { CourseImage } from './CourseImage';
+import { ArrowUpRight } from 'lucide-react';
 
 export function CourseList({
   courses,
@@ -13,12 +14,12 @@ export function CourseList({
 }) {
   return (
     <section
+      id="courses-section"
       className={homeClass('learning-section', 'courses-section')}
       aria-labelledby="courses-title"
     >
       <div className={homeClass('section-heading')}>
         <div>
-          <p className="eyebrow">SUA BIBLIOTECA</p>
           <h2 id="courses-title">Meus Cursos</h2>
         </div>
         <span className={homeClass('section-count')}>
@@ -64,12 +65,11 @@ export function CourseList({
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <span className={homeClass('course-open')} aria-hidden="true">
-                    ↗
+                    <ArrowUpRight size={17} strokeWidth={1.8} />
                   </span>
                 </Link>
                 <div className={homeClass('course-details')}>
                   <div className={homeClass('course-meta-row')}>
-                    <span>CURSO</span>
                     <span>
                       {course.completedCount} de {course.contentCount} concluídos
                     </span>
@@ -77,7 +77,14 @@ export function CourseList({
                   <h3>{course.title}</h3>
                   <p>{course.description}</p>
                   <div className={homeClass('course-progress-row')}>
-                    <span className={homeClass('progress-track')}>
+                    <span
+                      className={homeClass('progress-track')}
+                      role="progressbar"
+                      aria-label={`Progresso no curso ${course.title}`}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={course.progressPercent}
+                    >
                       <span style={{ width: `${course.progressPercent}%` }} />
                     </span>
                     <small>{course.progressPercent}%</small>

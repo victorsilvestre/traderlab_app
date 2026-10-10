@@ -59,3 +59,17 @@ Página Inicial
 - O papel de mentor ou administrador acrescenta acesso ao sistema administrativo e não elimina o acesso à plataforma.
 - “Meus Cursos”, busca e navegação de conteúdo continuam limitados aos cursos publicados com matrícula ativa do próprio usuário. O papel administrativo, por si só, não cria uma matrícula nem exibe cursos sem vínculo.
 - Progresso e estado de leitura de notificações pertencem à própria conta, independentemente do papel.
+
+## Direção visual aprovada para a home — 09/10/2026
+
+- A composição mantém somente os blocos existentes, nesta ordem: banner,
+  “Continue Onde Parou” e “Meus Cursos”.
+- A navegação da home usa um dock lateral flutuante, recolhido por padrão, com
+  rótulos disponíveis ao expandir. Em telas estreitas, ele se posiciona como
+  barra flutuante inferior; expandir mostra os rótulos em um painel vertical.
+- A retomada usa capa do curso e progresso já disponíveis na resposta da home,
+  sem inventar conteúdo ou percentuais.
+- Cada card em “Meus Cursos” deve exibir a barra e o percentual de progresso
+  retornado para aquele curso.
+- O restante da experiência mantém os fluxos, consultas, permissões e destinos
+  existentes. O dock navega por âncoras da home e não cria novas funcionalidades.

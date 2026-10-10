@@ -14,12 +14,14 @@ export async function StudentHeader({
   role,
   homeHref,
   notificationInbox,
+  showAccount = true,
 }: {
   name: string;
   avatarUrl?: string | null;
   role?: UserProfileDetailsDto['role'];
   homeHref?: string;
   notificationInbox?: NotificationListDto | null;
+  showAccount?: boolean;
 }) {
   let inbox = notificationInbox;
   if (inbox === undefined) {
@@ -55,19 +57,23 @@ export async function StudentHeader({
           inbox={inbox ?? { items: [], unreadCount: 0, nextOffset: null }}
           unavailable={inbox === null}
         />
-        <AccountMenu
-          name={name}
-          avatarUrl={avatarUrl}
-          roleLabel={
-            role
-              ? {
-                  student: 'Aluno',
-                  mentor: 'Mentor',
-                  administrator: 'Administrador',
-                }[role]
-              : 'Aluno'
-          }
-        />
+        {showAccount ? (
+          <AccountMenu
+            name={name}
+            avatarUrl={avatarUrl}
+            roleLabel={
+              role
+                ? {
+                    student: 'Aluno',
+                    mentor: 'Mentor',
+                    administrator: 'Administrador',
+                  }[role]
+                : 'Aluno'
+            }
+          />
+        ) : (
+          <span className={homeClass('student-profile-label')}>{name}</span>
+        )}
       </div>
     </header>
   );

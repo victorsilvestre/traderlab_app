@@ -45,7 +45,7 @@ regras de autorização são verificadas pela API.
   nesta etapa.
 - A revitalização atual abrange somente o layout do workspace, sem mudanças de
   funcionalidades. O foco está nos menus e recursos já disponíveis de
-  notificações, banners, alunos e cursos.
+  notificações, banners, alunos, matrículas e cursos.
 - A experiência de mentores e administradores deve permanecer em um workspace
   próprio, distinto da área do aluno.
 - A aplicação é web. O suporte móvel é responsivo conforme a estrutura do
@@ -59,9 +59,8 @@ As diretrizes de identidade visual fornecidas para o redesign definem Roboto
 Serif para títulos e Roboto para textos. A paleta de marca inclui verde
 `#A2CB10`, vermelho `#A71619`, preto `#0C0D0E` e off-white `#FFFBF7`; as
 aplicações devem preservar contraste adequado. Os logotipos têm variações para
- fundos claros e escuros. No workspace, a assinatura TraderLab Gestão deve
- também incluir a marca Bruno Borges, usando a variação de logo adequada ao
- fundo.
+fundos claros e escuros. No workspace, a navegação lateral usa a logo Trader
+Bruno Borges adequada ao fundo claro.
 
 ## Evidence on Hand
 

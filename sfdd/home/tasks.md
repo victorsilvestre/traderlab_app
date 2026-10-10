@@ -275,3 +275,15 @@
 - [x] Registrar que o cache do adaptador atende imagens de cursos, módulos e conteúdos.
 - [ ] Validar visualmente detalhe do curso e módulos em desktop e mobile.
 - [ ] Usar o mesmo componente quando houver uma área visual para imagem de conteúdo.
+
+## Relayout aprovado da home — Galeria imersiva
+
+- [x] Preservar banner, retomada e cursos nessa ordem, mantendo dados e fluxos existentes.
+- [x] Adicionar dock lateral flutuante, recolhido por padrão e expansível por controle acessível.
+- [x] Adaptar o dock para navegação inferior em telas estreitas, com painel expansível.
+- [x] Manter busca e notificações no cabeçalho e as ações da conta no avatar do dock.
+- [x] Exibir capa do curso e progresso disponível na área “Continue Onde Parou”.
+- [x] Exibir barra e percentual de progresso em todos os cards de curso.
+- [x] Atualizar wireframe de baixa fidelidade para representar a hierarquia e a navegação aprovadas.
+- [x] Verificar tipagem da web, encoding UTF-8 e whitespace do diff.
+- [ ] Validar a aparência em desktop e mobile no navegador; a inicialização local falhou com `spawn EPERM` no ambiente atual.

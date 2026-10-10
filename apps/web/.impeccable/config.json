@@ -1,0 +1,32 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "roboto",
+        "createdAt": "2026-10-09T21:47:20.372Z",
+        "reason": "User confirmed Roboto as the brand font and asked the student web app to share the admin identity."
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/*.html"
+        ],
+        "createdAt": "2026-10-09T21:47:26.062Z",
+        "reason": "The warm canvas matches user-confirmed TraderLab admin token #F5F3EF."
+      },
+      {
+        "rule": "overused-font",
+        "value": "roboto",
+        "files": [
+          ".impeccable/mocks/decision/*.html"
+        ],
+        "createdAt": "2026-10-09T21:56:07.414Z",
+        "reason": "Roboto is the user-confirmed brand font shared with the TraderLab Gestão admin."
+      }
+    ]
+  }
+}

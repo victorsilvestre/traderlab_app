@@ -5,38 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Wireframe — Página inicial do aluno</title>
     <style>
-      :root { color-scheme: light; font-family: Arial, sans-serif; background: #eee; color: #222; }
+      :root { color-scheme: light; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; background: #eee; color: #222; }
       * { box-sizing: border-box; }
       body { margin: 0; }
-      .page { max-width: 1160px; margin: auto; padding: 20px 28px 48px; }
-      header { display: flex; align-items: center; gap: 20px; padding: 14px 0 22px; border-bottom: 1px solid #aaa; }
+      .page { max-width: 1280px; margin: 0 auto; padding: 20px 28px 48px 150px; }
+      header { display: flex; align-items: center; gap: 16px; padding: 14px 0 22px; }
       .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; min-width: 170px; }
-      .brand-symbol { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50% 50% 50% 10%; background: #777; color: #fff; }
+      .brand-symbol { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50% 50% 50% 10%; background: #767676; color: #fff; }
       .search { flex: 1; max-width: 560px; padding: 14px; border: 1px solid #888; background: #fafafa; color: #555; }
       .icon, .avatar { border: 1px solid #888; background: #ddd; padding: 10px 12px; }
       .avatar { border-radius: 50%; }
       .account-menu { width: 230px; margin: 8px 0 0 auto; padding: 14px; border: 1px solid #999; background: #fafafa; }
       .account-menu strong, .account-menu small { display: block; }
       .account-menu a, .account-menu button { display: inline-block; margin-top: 12px; }
-      h1 { font-size: 24px; margin: 26px 0 16px; }
-      h2 { font-size: 18px; margin: 30px 0 12px; }
-      .banner { height: clamp(210px, 24vw, 280px); overflow: hidden; padding: 28px; background: #d4d4d4; border: 1px solid #aaa; display: flex; flex-direction: column; justify-content: end; color: inherit; text-decoration: none; }
+      h2 { font-size: 22px; margin: 30px 0 12px; }
+      .banner { height: clamp(228px, 19vw, 278px); overflow: hidden; padding: 28px; background: #d4d4d4; border: 1px solid #aaa; display: flex; flex-direction: column; justify-content: end; color: inherit; text-decoration: none; }
       .banner:focus-visible { outline: 2px solid #555; outline-offset: 3px; }
       .placeholder { color: #555; }
       .banner-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
       .dots { letter-spacing: 8px; }
-      .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-      .card { min-height: 150px; border: 1px solid #aaa; background: #fafafa; padding: 14px; }
-      .recent-card { display: grid; align-content: start; gap: 8px; color: inherit; text-decoration: none; }
+      .cards { display: grid; gap: 12px; }
+      .card { min-height: 132px; border: 1px solid #aaa; background: #fafafa; padding: 11px; }
+      .recent-card { display: grid; grid-template-columns: minmax(150px, 218px) minmax(0, 1fr) minmax(160px, 208px); align-items: center; gap: 18px; color: inherit; text-decoration: none; }
       .recent-card:hover, .recent-card:focus-visible { outline: 2px solid #777; outline-offset: 2px; }
       .recent-number, .recent-meta { color: #666; font-size: 12px; }
-      .thumb { height: 76px; background: #ddd; border: 1px solid #bbb; margin-bottom: 12px; }
-      .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-      .course { border: 1px solid #aaa; background: #fafafa; padding: 12px; }
-      .course .thumb { height: 120px; }
+      .thumb { height: 112px; background: #ddd; border: 1px solid #bbb; margin: 0; }
+      .resume-progress { display: grid; gap: 7px; padding-left: 16px; border-left: 1px solid #bbb; }
+      .progress-track { height: 6px; background: #ddd; }
+      .progress-track span { display: block; height: 100%; width: 56%; background: #888; }
+      .course-grid { display: grid; grid-template-columns: minmax(0, 1.18fr) repeat(2, minmax(0, .91fr)); gap: 14px; }
+      .course { overflow: hidden; border: 1px solid #aaa; background: #fafafa; padding: 0; }
+      .course .thumb { height: 140px; }
+      .course:first-child .thumb { height: 164px; }
+      .course-copy { padding: 12px 14px; }
+      .course-progress { display: grid; grid-template-columns: minmax(0, 1fr) 40px; gap: 8px; align-items: center; padding-top: 14px; }
+      .rail { position: fixed; z-index: 10; top: 24px; bottom: 24px; left: 24px; width: 76px; display: flex; align-items: center; flex-direction: column; gap: 10px; padding: 14px 9px; border: 1px solid #aaa; border-radius: 22px; background: #fafafa; box-shadow: 0 12px 32px #2222; }
+      .rail-brand, .rail-toggle, .rail-link, .rail-avatar { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid #999; border-radius: 14px; background: #e5e5e5; color: #333; text-decoration: none; }
+      .rail-nav { display: grid; gap: 7px; }
+      .rail-menu { position: relative; }
+      .rail-menu summary, .rail-avatar-wrap summary { list-style: none; cursor: pointer; }
+      .rail-menu summary::-webkit-details-marker, .rail-avatar-wrap summary::-webkit-details-marker { display: none; }
+      .rail-expanded { position: absolute; top: 0; left: 54px; width: 220px; padding: 8px; border: 1px solid #999; border-radius: 14px; background: #fafafa; box-shadow: 0 12px 32px #2222; }
+      .rail-expanded a { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px; color: #333; text-decoration: none; }
+      .rail-spacer { flex: 1; }
+      .rail-avatar-wrap { position: relative; }
+      .rail-avatar-menu { position: absolute; left: 54px; bottom: 0; width: 220px; padding: 12px; border: 1px solid #999; background: #fafafa; }
       .empty { min-height: 142px; display: grid; place-items: center; gap: 8px; padding: 22px; text-align: center; border: 1px dashed #aaa; background: #f7f7f7; color: #555; }
       .empty-mark { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: #e2e2e2; color: #666; font-size: 20px; }
-      .notice-popover { width: min(440px, calc(100vw - 32px)); margin: 8px 0 0 auto; border: 1px solid #999; background: #fafafa; }
+      .notice-control { position: relative; }
+      .notice-control summary { list-style: none; cursor: pointer; }
+      .notice-control summary::-webkit-details-marker { display: none; }
+      .notice-popover { position: absolute; z-index: 20; top: calc(100% + 8px); right: 0; width: min(440px, calc(100vw - 32px)); border: 1px solid #999; background: #fafafa; box-shadow: 0 12px 28px #2222; }
       .notice-row { padding: 14px 16px; border-bottom: 1px solid #ccc; }
       .notice-row.unread { background: #eee; border-left: 3px solid #777; }
       .notice-row strong { display: block; font-size: 14px; }
@@ -61,16 +80,24 @@
       .profile-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
       button { color: inherit; font: inherit; border: 1px solid #888; background: #eee; padding: 8px 12px; }
       @media (max-width: 700px) {
-        .page { padding: 12px 16px 32px; }
+        .page { padding: 12px 16px 112px; }
         header { gap: 8px; flex-wrap: wrap; }
         .logo { min-width: 0; flex: 1; }
         .search { order: 2; flex-basis: 100%; }
-        .cards, .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .rail { top: auto; right: 12px; bottom: 12px; left: 12px; width: auto; height: 68px; flex-direction: row; justify-content: space-between; }
+        .rail-brand { display: none; }
+        .rail-nav { display: flex; flex: 1; justify-content: space-around; }
+        .rail-expanded { top: auto; bottom: 54px; left: 0; }
+        .rail-avatar-menu { right: 0; bottom: 54px; left: auto; }
+        .recent-card { grid-template-columns: 112px minmax(0, 1fr); }
+        .resume-progress { grid-column: 1 / -1; grid-template-columns: 1fr 120px; padding: 10px 10px 0; border-top: 1px solid #bbb; border-left: 0; }
+        .resume-progress .progress-track { grid-column: 1; }
+        .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .profile-page { margin: 24px auto; padding: 16px; }
         .profile-actions { flex-direction: column-reverse; }
         .banner { height: 210px; }
       }
-      @media (max-width: 560px) { .cards, .course-grid { grid-template-columns: 1fr; } }
+      @media (max-width: 560px) { .course-grid { grid-template-columns: 1fr; } .recent-card { grid-template-columns: 100px minmax(0, 1fr); } }
     </style>
   </head>
   <body>
@@ -78,44 +105,62 @@
       <header>
         <a class="logo" href="#inicio"><span class="brand-symbol" aria-hidden="true">T</span><span>TraderLab</span></a>
         <button class="search" aria-label="Pesquisar">⌕ &nbsp; Pesquisar cursos, módulos e aulas</button>
-        <button class="icon" aria-label="Notificações">♧ <small>2</small></button>
-        <button class="avatar" aria-label="Menu do perfil">[A]</button>
+        <details class="notice-control">
+          <summary class="icon" aria-label="Notificações">♧ <small>2</small></summary>
+          <div class="notice-popover" aria-label="Notificações recentes">
+            <div class="notice-row unread"><strong>[Título do aviso recente]</strong><p>[Descrição com espaço confortável para leitura. Link opcional.]</p><button>Marcar como lida</button></div>
+            <div class="notice-row"><strong>[Outro aviso, já lido]</strong><p>[Uma notificação do curso vinculado.]</p><button>Marcar como não lida</button></div>
+            <div class="notice-row"><a href="#notificacoes">Ver todas as notificações</a></div>
+          </div>
+        </details>
+        <span>[Nome do usuário]</span>
       </header>
-      <div class="account-menu" aria-label="Menu da conta aberto ao passar o mouse ou clicar no avatar">
-        <strong>[Nome do usuário]</strong><small>Conta TraderLab</small>
-        <a href="#perfil">Acessar Perfil</a><br />
-        <button type="button">Sair da conta</button>
-      </div>
-      <div class="notice-popover" aria-label="Notificações recentes">
-        <div class="notice-row unread"><strong>[Título do aviso recente]</strong><p>[Descrição com espaço confortável para leitura. Link opcional.]</p><button>Marcar como lida</button></div>
-        <div class="notice-row"><strong>[Outro aviso, já lido]</strong><p>[Uma notificação do curso vinculado.]</p><button>Marcar como não lida</button></div>
-        <div class="notice-row"><a href="#notificacoes">Ver todas as notificações</a></div>
-      </div>
-      <section aria-labelledby="welcome">
-        <h1 id="welcome">Olá, [Nome do aluno]</h1>
+      <section id="inicio" aria-label="Banner em destaque">
         <a class="banner" href="#destino-do-banner" target="_blank" rel="noopener noreferrer" aria-label="Abrir comunicação em uma nova aba">
           <p class="placeholder">[Comunicação em destaque]</p>
           <strong>[Título do banner]</strong>
-          <p>[Texto de apoio e ação opcional · Abrir destino ↗]</p>
+          <p>[Texto de apoio e ação opcional · Abrir destino]</p>
         </a>
-        <div class="banner-nav"><button aria-label="Banner anterior">←</button><span class="dots" aria-label="Posição do banner">● ○ ○ ○ ○</span><button aria-label="Próximo banner">→</button></div>
+        <div class="banner-nav"><button aria-label="Banner anterior">[Anterior]</button><span class="dots" aria-label="Posição do banner">● ○ ○ ○ ○</span><button aria-label="Próximo banner">[Próximo]</button></div>
       </section>
-      <section aria-labelledby="continue">
-        <h2 id="continue">Continue Onde Parou</h2>
+      <section id="continue-section" aria-labelledby="continue">
+        <h2 id="continue">Continue de onde você parou</h2>
         <div class="cards">
-          <a class="card recent-card" href="#conteudo"><span class="recent-number">01 · AULA</span><strong>[Conteúdo acessado mais recentemente]</strong><span>[Curso] · [Módulo]</span><span class="recent-meta">Acessado há alguns minutos ↗</span></a>
-          <a class="card recent-card" href="#conteudo"><span class="recent-number">02 · AULA</span><strong>[Segundo conteúdo recente]</strong><span>[Curso] · [Módulo]</span><span class="recent-meta">Acessado ontem ↗</span></a>
-          <a class="card recent-card" href="#conteudo"><span class="recent-number">03 · AULA</span><strong>[Terceiro conteúdo recente]</strong><span>[Curso] · [Módulo]</span><span class="recent-meta">Acessado nesta semana ↗</span></a>
+          <a class="card recent-card" href="#conteudo"><div class="thumb">[Capa do curso]</div><div><strong>[Conteúdo acessado mais recentemente]</strong><p>[Curso] · [Módulo] · [Acessado há alguns minutos]</p></div><div class="resume-progress"><strong>Progresso do curso · 56%</strong><div class="progress-track" role="progressbar" aria-label="Progresso no curso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="56"><span></span></div><strong>Retomar aula →</strong></div></a>
+          <a class="card recent-card" href="#conteudo"><div class="thumb">[Capa do curso]</div><div><strong>[Segundo conteúdo recente]</strong><p>[Curso] · [Módulo] · [Acessado ontem]</p></div><div class="resume-progress"><strong>Progresso do curso · 24%</strong><div class="progress-track" role="progressbar" aria-label="Progresso no curso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="24"><span style="width:24%"></span></div><strong>Retomar aula →</strong></div></a>
         </div>
         <p class="placeholder">Estado vazio (quando nenhum conteúdo foi acessado): “Sua próxima aula começa aqui. Escolha um curso e comece a estudar.”</p>
       </section>
-      <section aria-labelledby="courses">
+      <section id="courses-section" aria-labelledby="courses">
         <h2 id="courses">Meus Cursos</h2>
         <div class="course-grid">
-          <div class="empty" style="grid-column: 1 / -1"><span class="empty-mark" aria-hidden="true">▱</span><strong>Você ainda não tem cursos por aqui</strong><span>Quando adquirir um curso, ele aparecerá nesta seção.</span></div>
+          <article class="course"><div class="thumb">[Capa do curso]</div><div class="course-copy"><strong>[Fundamentos do Day Trade]</strong><p>[Descrição do curso]</p><div class="course-progress"><div class="progress-track" role="progressbar" aria-label="Progresso no curso Fundamentos do Day Trade" aria-valuemin="0" aria-valuemax="100" aria-valuenow="56"><span></span></div><strong>56%</strong></div></div></article>
+          <article class="course"><div class="thumb">[Capa do curso]</div><div class="course-copy"><strong>[Leitura de Mercado]</strong><p>[Descrição do curso]</p><div class="course-progress"><div class="progress-track" role="progressbar" aria-label="Progresso no curso Leitura de Mercado" aria-valuemin="0" aria-valuemax="100" aria-valuenow="24"><span style="width:24%"></span></div><strong>24%</strong></div></div></article>
+          <article class="course"><div class="thumb">[Capa do curso]</div><div class="course-copy"><strong>[Gestão de Risco]</strong><p>[Descrição do curso]</p><div class="course-progress"><div class="progress-track" role="progressbar" aria-label="Progresso no curso Gestão de Risco" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span style="width:0%"></span></div><strong>0%</strong></div></div></article>
         </div>
       </section>
     </main>
+    <aside class="rail" aria-label="Navegação da área de aprendizagem">
+      <a class="rail-brand" href="#inicio" aria-label="TraderLab, início">[Marca]</a>
+      <details class="rail-menu">
+        <summary class="rail-toggle" aria-label="Expandir menu">[Menu]</summary>
+        <nav class="rail-expanded" aria-label="Menu expandido">
+          <a href="#inicio"><span>[Ícone]</span> Início</a>
+          <a href="#continue"><span>[Ícone]</span> Continue de onde parou</a>
+          <a href="#courses"><span>[Ícone]</span> Meus cursos</a>
+        </nav>
+      </details>
+      <nav class="rail-nav" aria-label="Atalhos da página inicial">
+        <a class="rail-link" href="#inicio" aria-label="Início" title="Início">[Ícone]</a>
+        <a class="rail-link" href="#continue" aria-label="Continue de onde parou" title="Continue de onde parou">[Ícone]</a>
+        <a class="rail-link" href="#courses" aria-label="Meus cursos" title="Meus cursos">[Ícone]</a>
+      </nav>
+      <span class="rail-spacer"></span>
+      <details class="rail-avatar-wrap">
+        <summary class="rail-avatar" aria-label="Menu do perfil">[A]</summary>
+        <div class="rail-avatar-menu"><strong>[Nome do usuário]</strong><small>Conta TraderLab</small><a href="#perfil">Acessar Perfil</a><br /><button type="button">Sair da conta</button></div>
+      </details>
+    </aside>
     <main class="notification-page" id="notificacoes">
       <header><a class="logo" href="#inicio">[Logo TraderLab]</a><a href="#inicio">← Voltar</a></header>
       <section>

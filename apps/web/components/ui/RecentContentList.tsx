@@ -1,7 +1,9 @@
 import Link from 'next/link';
-import type { RecentContentDto } from '@traderlab/contracts';
+import type { CourseSummaryDto, RecentContentDto } from '@traderlab/contracts';
 import { homeClass } from './homeStyles';
 import { EmptyState } from './EmptyState';
+import { CourseImage } from './CourseImage';
+import { Play } from 'lucide-react';
 
 function formatAccessTime(value: string): string {
   const date = new Date(value);
@@ -33,15 +35,20 @@ function countLabel(count: number): string {
 export function RecentContentList({
   contents,
   unavailable = false,
+  courses,
 }: {
   contents: RecentContentDto[];
   unavailable?: boolean;
+  courses: CourseSummaryDto[];
 }) {
   return (
-    <section className={homeClass('learning-section')} aria-labelledby="continue-title">
+    <section
+      id="continue-section"
+      className={homeClass('learning-section')}
+      aria-labelledby="continue-title"
+    >
       <div className={homeClass('section-heading')}>
         <div>
-          <p className="eyebrow">RETOME SEU CAMINHO</p>
           <h2 id="continue-title">Continue Onde Parou</h2>
         </div>
         <span className={homeClass('section-count')}>
@@ -56,31 +63,74 @@ export function RecentContentList({
         </div>
       ) : contents.length ? (
         <div className={homeClass('recent-list')}>
-          {contents.map((item, index) => (
-            <Link
-              key={`${item.courseId}-${item.contentId}`}
-              className={homeClass('recent-item')}
-              href={`/courses/${encodeURIComponent(item.courseId)}/contents/${encodeURIComponent(item.contentId)}`}
-              aria-label={`Continuar ${item.title}, em ${item.courseTitle}`}
-            >
-              <span className={homeClass('recent-index')}>
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <span className={homeClass('recent-play')} aria-hidden="true">
-                ▶
-              </span>
-              <span className={homeClass('recent-main')}>
-                <span className={homeClass('recent-course')}>{item.courseTitle}</span>
-                <strong>{item.title}</strong>
-                <span className={homeClass('recent-meta')}>
-                  {item.moduleTitle} · {formatAccessTime(item.lastAccessedAt)}
+          {contents.map((item) => {
+            const course = courses.find((candidate) => candidate.id === item.courseId);
+            const coverImageUrl = course?.coverImageUrl;
+            const managedStorageImage = coverImageUrl?.includes(
+              '/storage/v1/object/sign/traderlab-course-images/',
+            );
+
+            return (
+              <Link
+                key={`${item.courseId}-${item.contentId}`}
+                className={homeClass('recent-item')}
+                href={`/courses/${encodeURIComponent(item.courseId)}/contents/${encodeURIComponent(item.contentId)}`}
+                aria-label={`Continuar ${item.title}, em ${item.courseTitle}`}
+              >
+                <span
+                  className={homeClass('recent-art')}
+                  style={
+                    !managedStorageImage && coverImageUrl
+                      ? { backgroundImage: `url(${coverImageUrl})` }
+                      : undefined
+                  }
+                  aria-hidden="true"
+                >
+                  {managedStorageImage && coverImageUrl ? (
+                    <CourseImage
+                      className={homeClass('recent-art-image')}
+                      src={coverImageUrl}
+                      alt=""
+                      sizes="(max-width: 560px) 120px, 220px"
+                    />
+                  ) : null}
+                  <span className={homeClass('recent-play')}>
+                    <Play aria-hidden="true" size={17} fill="currentColor" />
+                  </span>
                 </span>
-              </span>
-              <span className={homeClass('recent-arrow')} aria-hidden="true">
-                ↗
-              </span>
-            </Link>
-          ))}
+                <span className={homeClass('recent-main')}>
+                  <span className={homeClass('recent-course')}>{item.courseTitle}</span>
+                  <strong>{item.title}</strong>
+                  <span className={homeClass('recent-meta')}>
+                    {item.moduleTitle} · {formatAccessTime(item.lastAccessedAt)}
+                  </span>
+                </span>
+                <span className={homeClass('recent-progress')}>
+                  {course ? (
+                    <>
+                      <span>PROGRESSO DO CURSO</span>
+                      <strong>{course.progressPercent}% concluído</strong>
+                      <span
+                        className={homeClass('progress-track')}
+                        role="progressbar"
+                        aria-label={`Progresso no curso ${course.title}`}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-valuenow={course.progressPercent}
+                      >
+                        <span style={{ width: `${course.progressPercent}%` }} />
+                      </span>
+                    </>
+                  ) : (
+                    <strong>{item.completed ? 'Conteúdo concluído' : 'Em andamento'}</strong>
+                  )}
+                  <span className={homeClass('recent-resume')}>
+                    Retomar aula <span aria-hidden="true">→</span>
+                  </span>
+                </span>
+              </Link>
+            );
+          })}
         </div>
       ) : (
         <EmptyState

@@ -10,6 +10,7 @@ import { BannerCarousel } from './BannerCarousel';
 import { CourseList } from './CourseList';
 import { RecentContentList } from './RecentContentList';
 import { StudentHeader } from './StudentHeader';
+import { StudentDock } from './StudentDock';
 
 export function StudentHome({
   profile,
@@ -28,28 +29,26 @@ export function StudentHome({
   banners: HomeBannerDto[];
   notificationInbox: NotificationListDto | null;
 }) {
-  const firstName = profile.name?.trim().split(/\s+/)[0] || 'aluno';
-
   return (
     <main className={homeClass('student-home')}>
+      <StudentDock
+        name={profile.name}
+        avatarUrl={profile.avatarUrl}
+        role={profile.role}
+      />
       <StudentHeader
         name={profile.name}
         avatarUrl={profile.avatarUrl}
         role={profile.role}
         notificationInbox={notificationInbox}
+        showAccount={false}
       />
       <div className={homeClass('student-content')}>
-        <div className={homeClass('student-greeting')}>
-          <div>
-            <p className="eyebrow">SUA ÁREA DE APRENDIZAGEM</p>
-            <h1>Olá, {firstName}.</h1>
-          </div>
-          <p>Um bom estudo começa pelo próximo passo.</p>
-        </div>
         <BannerCarousel banners={banners} />
         <RecentContentList
           contents={recentContents}
           unavailable={recentContentsUnavailable}
+          courses={courses}
         />
         <CourseList courses={courses} unavailable={coursesUnavailable} />
         <footer className={homeClass('student-footer')}>

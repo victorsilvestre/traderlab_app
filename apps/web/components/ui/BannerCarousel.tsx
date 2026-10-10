@@ -30,7 +30,11 @@ export function BannerCarousel({ banners }: { banners: HomeBannerDto[] }) {
   }
 
   return (
-    <section className={homeClass('featured-banner')} aria-label="Destaques TraderLab">
+    <section
+      id="home-banner"
+      className={homeClass('featured-banner')}
+      aria-label="Destaques TraderLab"
+    >
       {activeBanner ? (
         <>
           <div
@@ -51,8 +55,8 @@ export function BannerCarousel({ banners }: { banners: HomeBannerDto[] }) {
           {activeBanner.overlayText && <>
             <div className={homeClass('featured-shade')} aria-hidden="true" />
             <div className={homeClass('featured-copy')} key={activeIndex}>
-              {activeBanner.eyebrowText && <p className={homeClass('featured-eyebrow')}><span /> {activeBanner.eyebrowText}</p>}
               <h2>{activeBanner.overlayText}</h2>
+              {activeBanner.eyebrowText && <p className={homeClass('featured-banner-intro')}>{activeBanner.eyebrowText}</p>}
               {activeBanner.description && <p>{activeBanner.description}</p>}
             </div>
           </>}

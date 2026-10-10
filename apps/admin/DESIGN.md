@@ -45,7 +45,7 @@ spacing:
   md: "12px"
   lg: "18px"
   xl: "24px"
-  section: "42px"
+  section: "24px"
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
@@ -71,9 +71,9 @@ components:
 
 **Creative North Star: "Guia prático do TraderLab"**
 
-TraderLab Gestão is a quiet, task-focused management workspace. Its visual language pairs editorial serif headings with compact, highly legible sans-serif controls and data. A persistent left navigation gives mentors and administrators a stable map while each page starts with a small lime marker and its existing title, description, actions, and content.
+TraderLab Gestão is a quiet, task-focused management workspace. Its visual language pairs editorial serif headings with compact, highly legible sans-serif controls and data. A persistent left navigation gives mentors and administrators a stable map while each page starts with a short lime marker and its existing title, description, actions, and content.
 
-The system uses warm neutral surfaces, restrained brand color, rounded panels, and soft shadows to make hierarchy easy to scan. It includes the Bruno Borges signature as a typographic BB mark because no standalone logo asset is present in the repository. This record is derived from shipped CSS and component patterns; no authenticated workspace screenshot was available for computed-style verification.
+The system uses warm neutral surfaces, restrained brand color, rounded panels, and soft shadows to make hierarchy easy to scan. The sidebar uses the supplied green Trader Bruno Borges logo for a light background. Catalog rows and notification cards open their detail view when clicked across the row; dedicated edit and secondary action controls remain independently available. This record is derived from shipped CSS and component patterns.
 
 **Key Characteristics:**
 - Persistent, role-filtered left navigation
@@ -122,7 +122,7 @@ The palette balances the official lime and red with warm paper neutrals; lime ma
 
 ## Layout
 
-Desktop uses a full-height two-column shell: a persistent 252px sidebar and a fluid content area capped at 1500px. The header stays at the top of the main area, and content uses responsive horizontal padding (`clamp(24px, 3.4vw, 56px)`) with 42px top spacing. Catalogs preserve aligned tables on wider screens and stack content on narrow screens. At 740px and below, the sidebar becomes a top section with horizontally scrollable navigation; the content padding reduces to 18px. The recurring rhythm uses compact 4–12px control gaps, 18–24px panel spacing, and generous section separation.
+Desktop uses a full-height two-column shell: a persistent 252px sidebar and a fluid content area capped at 1500px. The header stays at the top of the main area, and content uses responsive horizontal padding (`clamp(24px, 3.4vw, 56px)`) with 42px top spacing. Catalogs preserve aligned tables on wider screens and adapt their content on narrow screens. At 740px and below, the sidebar becomes a top section with horizontally scrollable navigation; the content padding reduces to 18px and top spacing to 30px. The recurring token rhythm uses 4, 8, 12, 18, 24, and 32px spacing; page-section spacing is 24px.
 
 ## Elevation & Depth
 
@@ -155,7 +155,7 @@ Cards use gently rounded 14px corners, controls 9px, navigation 11px, and compac
 - **Corner Style:** 14px for primary cards.
 - **Background:** Warm off-white over a warm canvas.
 - **Shadow Strategy:** Soft card shadow with divider borders where layout needs structure.
-- **Internal Padding:** Common notice panel is 27px 30px, reducing on mobile.
+- **Internal Padding:** Panels use context-specific padding; notification cards use 15px 18px on desktop and 14px 15px on mobile, while detail cards commonly use 20px.
 
 ### Inputs / Fields
 - **Style:** Follow the off-white surface, quiet border, and compact rounded-control language.
@@ -177,6 +177,7 @@ A short, 38px-wide lime bar precedes workspace content, linking pages with a con
 - **Do** maintain readable near-black text on lime actions and markers.
 - **Do** reserve shadows for major panels and floating surfaces.
 - **Do** preserve existing route content and role-based visibility when extending the UI.
+- **Do** make catalog rows and notification cards open their detail route while keeping edit and row-level actions operable.
 
 ### Don't:
 - **Don't** use serif type in tables, controls, or body text.

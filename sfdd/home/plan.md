@@ -364,3 +364,22 @@ e `access`, inclusive concessões, convites e estados de assinatura.
 ## Ampliação aprovada do padrão de imagens — 07/10/2026
 
 A validação da capa na home aprovou o mesmo padrão de leitura e otimização para imagens de cursos, módulos e conteúdos no bucket privado `traderlab-course-images`. O cache de URLs assinadas do adaptador já se aplica aos três tipos. A interface usa `CourseImage` nas capas da home, do detalhe do curso e dos módulos. A imagem de conteúdo ainda não tem local de exibição implementado; quando a tela a apresentar, deverá reutilizar esse componente. Esta decisão substitui a anotação anterior que limitava o padrão às capas de curso. Avatares seguem fora deste escopo.
+
+## Relayout aprovado da home — 09/10/2026
+
+- Direção escolhida no Impeccable: **Galeria imersiva**, code-led. O contrato
+  completo está em `apps/web/.impeccable/build/direction-contract.md`; o sketch
+  escolhido é a referência de composição para a revisão final.
+- `StudentDock` acrescenta navegação por âncoras, com estado compacto inicial,
+  botão acessível para expandir e adaptação para barra inferior em telas
+  estreitas. A conta continua usando `AccountMenu`; busca e notificações usam os
+  componentes existentes.
+- `StudentHome` permanece responsável por compor banner, retomada e cursos
+  nesta ordem. Não há mudança nas consultas nem nos contratos da API.
+- `RecentContentList` associa cada item recente ao curso já carregado na home
+  para mostrar a capa e o percentual existente. `CourseList` mantém o progresso
+  em cada card com semântica de `progressbar`.
+- Capas privadas continuam usando `CourseImage`; capas públicas preservam a
+  referência existente. O recorte `cover` é uma decisão visual da galeria.
+- Lucide React já era dependência do workspace pelo admin e passa a ser
+  declarada também em `apps/web` para os ícones do dock e das ações da galeria.
