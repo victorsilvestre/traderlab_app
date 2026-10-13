@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import type { UserProfileDetailsDto } from '@traderlab/contracts';
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser';
+import { prepareAvatarUpload } from '../../lib/images/prepareAvatarUpload';
 import styles from './ProfileScreen.module.css';
 
 const bucket =
@@ -58,6 +59,7 @@ export function ProfileForm({ profile, completionRequired = false }: { profile: 
 
       let avatarPath: string | undefined;
       if (file) {
+        const imageFile = await prepareAvatarUpload(file);
         const uploadResponse = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/users/me/profile/avatar-upload`,
           {
@@ -67,8 +69,8 @@ export function ProfileForm({ profile, completionRequired = false }: { profile: 
               'content-type': 'application/json',
             },
             body: JSON.stringify({
-              contentType: file.type,
-              sizeBytes: file.size,
+              contentType: imageFile.type,
+              sizeBytes: imageFile.size,
             }),
           },
         );
@@ -81,8 +83,9 @@ export function ProfileForm({ profile, completionRequired = false }: { profile: 
 
         const { error: storageError } = await supabase.storage
           .from(bucket)
-          .uploadToSignedUrl(upload.path, upload.token, file, {
-            contentType: file.type,
+          .uploadToSignedUrl(upload.path, upload.token, imageFile, {
+            contentType: imageFile.type,
+            cacheControl: '31536000',
             upsert: false,
           });
         if (storageError) {
@@ -136,7 +139,7 @@ export function ProfileForm({ profile, completionRequired = false }: { profile: 
       <section className={styles.avatarSection} aria-label="Foto do perfil">
         <div className={styles.avatar}>
           {avatarSrc ? (
-            <img src={avatarSrc} alt="" onError={() => setAvatarFailed(true)} />
+            <img src={avatarSrc} alt="" decoding="async" onError={() => setAvatarFailed(true)} />
           ) : (
             <span>{initials}</span>
           )}
@@ -187,7 +190,7 @@ export function ProfileForm({ profile, completionRequired = false }: { profile: 
           placeholder="(00) 00000-0000"
         />
       </label>
-      <label className={styles.field}>
+      <label className={`${styles.field} ${styles.emailField}`}>
         <span>E-mail</span>
         <input
           value={profile.email ?? 'Não informado'}

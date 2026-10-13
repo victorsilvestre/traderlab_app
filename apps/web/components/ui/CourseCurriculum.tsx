@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { CourseImage } from './CourseImage';
+import { Check, Play } from 'lucide-react';
 import type { CourseDetailDto } from '@traderlab/contracts';
 import styles from './CourseScreen.module.css';
 
@@ -29,7 +30,6 @@ export function CourseCurriculum({
     <details className={styles.curriculum} open>
       <summary className={styles.curriculumToggle}>
         Conteúdo do curso
-        <span aria-hidden="true">⌄</span>
       </summary>
       <div className={styles.curriculumHeading}>
         <h2>Conteúdo do curso</h2>
@@ -59,6 +59,7 @@ export function CourseCurriculum({
               <ul className={styles.curriculumLessons}>
                 {lessons.map((lesson) => {
                   const isCurrent = lesson.id === currentContentId;
+                  const imageUrl = lesson.imageUrl;
                   return (
                     <li key={lesson.id}>
                       <Link
@@ -70,16 +71,15 @@ export function CourseCurriculum({
                           className={styles.curriculumLessonCover}
                           aria-hidden="true"
                         >
-                          {lesson.imageUrl ? (
-                            <Image
-                              src={lesson.imageUrl}
+                          {imageUrl ? (
+                            <CourseImage
+                              src={imageUrl}
                               alt=""
-                              fill
+                              className={styles.curriculumLessonCoverImage ?? ''}
                               sizes="52px"
-                              quality={90}
                             />
                           ) : (
-                            <span>▶</span>
+                            <Play aria-hidden="true" size={13} fill="currentColor" />
                           )}
                         </span>
                         <span className={styles.curriculumLessonName}>
@@ -96,7 +96,11 @@ export function CourseCurriculum({
                                 : 'Aula não concluída'
                           }
                         >
-                          {lesson.completed ? '✓' : isCurrent ? '▶' : ''}
+                          {lesson.completed ? (
+                            <Check aria-hidden="true" size={12} />
+                          ) : isCurrent ? (
+                            <Play aria-hidden="true" size={10} fill="currentColor" />
+                          ) : null}
                         </span>
                       </Link>
                     </li>

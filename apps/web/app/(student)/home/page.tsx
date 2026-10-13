@@ -9,6 +9,7 @@ import { getStudentCourses } from '../../../lib/courses/courseApi';
 import { getStudentRecentContents } from '../../../lib/progress/progressApi';
 import { getHomeBanners } from '../../../lib/home/homeBannerApi';
 import { getNotifications } from '../../../lib/notifications/notificationApi';
+import { StudentWorkspaceShell } from '../../../components/ui/StudentWorkspaceShell';
 
 function isUnauthorized(error: unknown): boolean {
   return (
@@ -55,18 +56,21 @@ export default async function StudentHomePage() {
     recentResult.status === 'fulfilled' ? recentResult.value : [];
 
   return (
-    <StudentHome
+    <StudentWorkspaceShell
       profile={profile}
-      courses={courses}
-      coursesUnavailable={coursesResult.status === 'rejected'}
-      recentContents={recentContents}
-      recentContentsUnavailable={recentResult.status === 'rejected'}
-      banners={bannersResult.status === 'fulfilled' ? bannersResult.value : []}
-      notificationInbox={
+      unreadCount={
         notificationsResult.status === 'fulfilled'
-          ? notificationsResult.value
-          : null
+          ? notificationsResult.value.unreadCount
+          : 0
       }
-    />
+    >
+      <StudentHome
+        courses={courses}
+        coursesUnavailable={coursesResult.status === 'rejected'}
+        recentContents={recentContents}
+        recentContentsUnavailable={recentResult.status === 'rejected'}
+        banners={bannersResult.status === 'fulfilled' ? bannersResult.value : []}
+      />
+    </StudentWorkspaceShell>
   );
 }

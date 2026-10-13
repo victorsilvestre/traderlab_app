@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser';
 import { completeAuthCallback } from '../../lib/authentication/completeAuthCallback';
+import { AuthShell } from './AuthShell';
+import styles from './AuthCallback.module.css';
 
 export function AuthCallback() {
   const [error, setError] = useState('');
@@ -57,17 +59,14 @@ export function AuthCallback() {
   }, []);
 
   return (
-    <main className="callback-page">
-      <div className="callback-card">
-        <span className="brand-symbol" aria-hidden="true">
-          T
-        </span>
+    <AuthShell>
+      <section className={styles.card} aria-live="polite">
         {error ? (
           <>
             <h1>Não foi possível concluir o acesso</h1>
-            <p role="alert">{error}</p>
+            <p className={styles.error} role="alert">{error}</p>
             <Link
-              className="primary-button link-button"
+              className={styles.button}
               href="/sign-in"
             >
               Voltar para o login
@@ -77,10 +76,10 @@ export function AuthCallback() {
           <>
             <h1>Validando seu acesso</h1>
             <p>Aguarde enquanto confirmamos o link enviado para seu e-mail.</p>
-            <span className="loading-mark" aria-label="Carregando" />
+            <span className={styles.spinner} role="img" aria-label="Carregando" />
           </>
         )}
-      </div>
-    </main>
+      </section>
+    </AuthShell>
   );
 }

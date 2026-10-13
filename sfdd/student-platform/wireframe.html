@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wireframe — Plataforma autenticada</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #eee; color: #222; font: 14px/1.55 Arial, sans-serif; }
+      .screen { position: relative; max-width: 1280px; min-height: 620px; margin: 24px auto; padding: 42px 36px 52px 150px; border: 1px solid #aaa; background: #fafafa; }
+      .screen h1 { margin: 0; font-size: clamp(26px, 4vw, 38px); }
+      .screen h2 { margin: 28px 0 12px; font-size: 19px; }
+      .screen p { color: #555; }
+      .rail { position: fixed; z-index: 2; top: 40px; bottom: 40px; left: max(18px, calc((100vw - 1280px) / 2 + 18px)); width: 76px; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; border: 1px solid #999; border-radius: 20px; background: #f7f7f7; box-shadow: 0 8px 24px #2222; }
+      .logo, .toggle, .nav a, .avatar { display: grid; width: 46px; min-height: 44px; place-items: center; border: 1px solid #999; border-radius: 12px; background: #e5e5e5; color: #333; text-decoration: none; }
+      .logo { height: 44px; font-size: 20px; font-weight: bold; }
+      .nav { display: grid; gap: 6px; }
+      .spacer { flex: 1; }
+      .avatar { border-radius: 50%; }
+      .hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 24px; align-items: center; }
+      .image { min-height: 0; aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px solid #aaa; background: #ddd; color: #555; }
+      .progress { height: 7px; margin: 12px 0; background: #ddd; }
+      .progress span { display: block; width: 42%; height: 100%; background: #888; }
+      .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .card { overflow: hidden; border: 1px solid #aaa; background: #fff; }
+      .card .image { min-height: 0; }
+      .copy { padding: 15px; }
+      .row { display: grid; grid-template-columns: 110px 1fr auto; gap: 14px; align-items: center; padding: 12px; border-bottom: 1px solid #ccc; background: #fff; }
+      .row .image { min-height: 66px; }
+      .input { width: 100%; min-height: 52px; margin: 20px 0; padding: 12px; border: 1px solid #888; background: #fff; }
+      .notice { margin-top: 12px; padding: 18px; border: 1px solid #aaa; background: #fff; }
+      .columns { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 24px; }
+      .panel { padding: 16px; border: 1px solid #aaa; background: #fff; }
+      .field { display: grid; gap: 7px; margin: 14px 0; }
+      .field span { color: #555; }
+      .field input { min-height: 42px; padding: 8px; border: 1px solid #999; background: #fff; }
+      .study-heading { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; max-width: none; margin: 20px 0; }
+      .study-heading > * { grid-column: 1; }
+      .study-heading h1 { max-width: none; }
+      .study-columns { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: start; }
+      .study-player { min-height: auto; aspect-ratio: 16 / 9; }
+      .study-copy { max-width: 70ch; margin-top: 28px; padding: 0 8px; border: 0; background: transparent; }
+      .study-material { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 14px; }
+      .study-curriculum { position: sticky; top: 24px; }
+      .study-curriculum p { padding: 10px 0; border-bottom: 1px solid #ddd; }
+      .profile-identity { display: flex; align-items: center; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid #ddd; }
+      .profile-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+      .profile-fields .wide { grid-column: 1 / -1; }
+      .note-meta { display: flex; justify-content: space-between; gap: 18px; }
+      @media (max-width: 760px) {
+        .screen { min-height: 700px; margin: 12px; padding: 28px 18px 110px; }
+        .rail { top: auto; right: 12px; bottom: 12px; left: 12px; width: auto; height: 68px; flex-direction: row; justify-content: space-around; }
+        .logo { display: none; }
+        .nav { display: flex; flex: 1; justify-content: space-around; }
+        .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .hero, .columns, .study-columns { grid-template-columns: 1fr; }
+        .study-curriculum { position: static; }
+        .study-heading { grid-template-columns: 1fr; gap: 0; }
+        .profile-fields { grid-template-columns: 1fr; }
+        .profile-fields .wide { grid-column: auto; }
+      }
+      @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } .row { grid-template-columns: 72px 1fr; } .row button { grid-column: 2; justify-self: start; } }
+    </style>
+  </head>
+  <body>
+    <aside class="rail" aria-label="Menu da plataforma">
+      <a class="logo" href="#home" aria-label="Logo BB">BB</a><button class="toggle" aria-label="Expandir menu">☰</button>
+      <nav class="nav"><a href="#home" aria-label="Início">⌂</a><a href="#courses" aria-label="Cursos">▤</a><a href="#search" aria-label="Pesquisar">⌕</a><a href="#notifications" aria-label="Notificações · 2 não lidas">♧ 2</a></nav>
+      <span class="spacer"></span><a class="avatar" href="#profile" aria-label="Perfil">[A]</a>
+    </aside>
+    <main>
+      <section class="screen" id="courses">
+        <h1>Meus cursos</h1><p>Todos os cursos disponíveis para sua conta.</p>
+        <div class="grid"><article class="card"><div class="image">[Capa]</div><div class="copy"><h2>[Nome do curso]</h2><p>[Descrição do curso]</p></div></article><article class="card"><div class="image">[Capa]</div><div class="copy"><h2>[Nome do curso]</h2><p>[Descrição do curso]</p></div></article><article class="card"><div class="image">[Capa]</div><div class="copy"><h2>[Nome do curso]</h2><p>[Descrição do curso]</p></div></article></div>
+        <p>[Estado vazio: ainda não há cursos liberados para esta conta]</p><p>[Erro: não conseguimos carregar seus cursos; atualizar página]</p>
+      </section>
+      <section class="screen">
+        <p><a href="#courses">← Meus cursos</a></p><div class="hero"><div class="image">[Capa do curso · proporção 16:9]</div><div><h1>[Nome do curso]</h1><p>[Descrição e objetivo do curso]</p><p>[42% concluído · 12 conteúdos]</p><div class="progress"><span></span></div><button>Retomar estudos</button></div></div>
+        <h2>Módulos do curso</h2><div class="grid"><article class="card"><div class="image">[Imagem do módulo]</div><div class="copy"><h2>[Módulo]</h2><p>[Descrição] · [progresso]</p><p>[Lista de aulas e materiais]</p></div></article><article class="card"><div class="image">[Imagem do módulo]</div><div class="copy"><h2>[Módulo]</h2><p>[Descrição] · [progresso]</p></div></article></div>
+      </section>
+      <section class="screen">
+        <p><a href="#courses">[Curso]</a> / [Módulo]</p><header class="study-heading"><p>[Aula · contexto do curso]</p><h1>[Título da aula]</h1><p>[Descrição da aula]</p></header><div class="study-columns"><article><div class="image study-player">[Player de vídeo em destaque]</div><section class="study-copy"><h2>Sobre esta aula</h2><p>[Texto complementar em coluna de leitura confortável]</p><h2>Materiais de apoio</h2><div class="row study-material"><span>[PDF]</span><span>[Nome · descrição · tamanho]</span><button>Baixar</button></div><p>[Progresso salvo] <button>Marcar como concluída</button></p></section></article><aside class="panel study-curriculum"><h2>Conteúdo do curso · [x aulas concluídas]</h2><p>[Módulo ativo · progresso]</p><p>[✓ Aula concluída]</p><p>[Aula atual]</p><p>[Aula seguinte]</p></aside></div>
+      </section>
+      <section class="screen" id="search">
+        <h1>Encontre o que você quer estudar</h1><p>Busque nos cursos disponíveis para sua conta.</p><input class="input" placeholder="Digite um curso, módulo ou conteúdo" /><div class="row"><strong>[Curso]</strong><span>[Título do resultado]</span><a href="#course">Abrir →</a></div><div class="row"><strong>[Aula]</strong><span>[Título do resultado] · [Curso e módulo]</span><a href="#lesson">Abrir →</a></div><p>[Orientação inicial · sem resultados · erro]</p>
+      </section>
+      <section class="screen" id="notifications">
+        <h1>Notificações</h1><p>Acompanhe avisos gerais e dos seus cursos.</p><nav><a href="#all">Todas</a>　<a href="#unread">Não lidas (2)</a> <button>Marcar todas como lidas</button></nav><article class="notice"><div class="note-meta"><p>[● Aviso geral]</p><p>[Data e hora]</p></div><h2>[Título da notificação]</h2><p>[Descrição e link opcional]</p><button>Marcar como lida</button></article><article class="notice"><div class="note-meta"><p>[Curso]</p><p>[Data e hora]</p></div><h2>[Título da notificação]</h2><p>[Descrição]</p></article><p>[Estado vazio ou erro]</p>
+      </section>
+      <section class="screen" id="profile">
+        <h1>Meu perfil</h1><p>Visualize e atualize seus dados pessoais.</p><div class="panel"><div class="profile-identity"><span>[Avatar]</span><p>[Nome e papel]<br /><button>Escolher imagem</button></p></div><div class="profile-fields"><label class="field"><span>Nome completo</span><input value="[Nome cadastrado]" /></label><label class="field"><span>Telefone</span><input value="[(00) 00000-0000]" /></label><label class="field wide"><span>E-mail · somente leitura</span><input value="[email]" disabled /></label></div><button>Salvar alterações</button></div><p>Também há estado para completar telefone antes de seguir e opção separada para sair.</p>
+      </section>
+    </main>
+  </body>
+</html>

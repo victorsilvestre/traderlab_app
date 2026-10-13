@@ -1,20 +1,18 @@
 import Link from 'next/link';
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { CourseImage } from './CourseImage';
 import type {
   CourseDetailDto,
-  UserProfileDetailsDto,
 } from '@traderlab/contracts';
 import { CourseBreadcrumbs } from '../navigation/CourseBreadcrumbs';
 import { CourseModuleExplorer } from './CourseModuleExplorer';
 import { RetryPageButton } from './RetryPageButton';
-import { StudentHeader } from './StudentHeader';
+import { isManagedCourseImageUrl } from '../../lib/images/isManagedCourseImageUrl';
 import styles from './CourseScreen.module.css';
 
 export function CourseDetail({
-  profile,
   course,
 }: {
-  profile: UserProfileDetailsDto;
   course: CourseDetailDto;
 }) {
   const resumeContent = course.lastAccessedContent;
@@ -24,14 +22,14 @@ export function CourseDetail({
   const firstContentHref = firstContent
     ? `/courses/${encodeURIComponent(course.id)}/contents/${encodeURIComponent(firstContent.id)}`
     : null;
+  const managedCourseCover = isManagedCourseImageUrl(course.coverImageUrl);
 
   return (
     <main className={styles.page}>
-      <StudentHeader name={profile.name} avatarUrl={profile.avatarUrl} role={profile.role} />
       <div className={styles.container}>
         <CourseBreadcrumbs courseId={course.id} courseTitle={course.title} />
-        <Link className={styles.lessonBackLink} href="/home#courses-title">
-          ← Voltar
+        <Link className={styles.lessonBackLink} href="/courses">
+          <ArrowLeft aria-hidden="true" size={15} /> Voltar aos cursos
         </Link>
         <section className={styles.courseHero} aria-labelledby="course-title">
           {firstContentHref ? (
@@ -39,11 +37,11 @@ export function CourseDetail({
               className={styles.courseCover}
               href={firstContentHref}
               aria-label={`Abrir o primeiro conteúdo do curso ${course.title}`}
-              style={course.coverImageUrl && !course.coverImageUrl.includes('/storage/v1/object/sign/traderlab-course-images/')
+              style={course.coverImageUrl && !managedCourseCover
                 ? { backgroundImage: `url(${course.coverImageUrl})` }
                 : undefined}
             >
-              {course.coverImageUrl && course.coverImageUrl.includes('/storage/v1/object/sign/traderlab-course-images/') && (
+              {managedCourseCover && course.coverImageUrl && (
                 <CourseImage
                   className={styles.courseCoverImage ?? ''}
                   src={course.coverImageUrl!}
@@ -60,11 +58,11 @@ export function CourseDetail({
               aria-label={
                 course.coverImageUrl ? `Capa do curso ${course.title}` : undefined
               }
-              style={course.coverImageUrl && !course.coverImageUrl.includes('/storage/v1/object/sign/traderlab-course-images/')
+              style={course.coverImageUrl && !managedCourseCover
                 ? { backgroundImage: `url(${course.coverImageUrl})` }
                 : undefined}
             >
-              {course.coverImageUrl && course.coverImageUrl.includes('/storage/v1/object/sign/traderlab-course-images/') && (
+              {managedCourseCover && course.coverImageUrl && (
                 <CourseImage
                   className={styles.courseCoverImage ?? ''}
                   src={course.coverImageUrl!}
@@ -129,7 +127,7 @@ export function CourseDetail({
                 className={styles.resumeLink}
                 href={`/courses/${encodeURIComponent(course.id)}/contents/${encodeURIComponent(resumeContent.id)}`}
               >
-                Retomar estudos <span aria-hidden="true">↗</span>
+                Retomar estudos <ArrowUpRight aria-hidden="true" size={17} />
               </Link>
             </>
           ) : (
@@ -153,13 +151,12 @@ export function CourseDetail({
   );
 }
 
-export function CourseLoadError({ profile }: { profile: UserProfileDetailsDto }) {
+export function CourseLoadError() {
   return (
     <main className={styles.page}>
-      <StudentHeader name={profile.name} avatarUrl={profile.avatarUrl} role={profile.role} />
       <div className={styles.container}>
-        <Link href="/home" className={styles.backLink}>
-          ← Voltar ao início
+        <Link href="/courses" className={styles.backLink}>
+          <ArrowLeft aria-hidden="true" size={15} /> Voltar aos cursos
         </Link>
         <section className={styles.errorState} role="alert">
           <h1>Não conseguimos carregar este curso.</h1>
@@ -168,10 +165,37 @@ export function CourseLoadError({ profile }: { profile: UserProfileDetailsDto })
             protegido.
           </p>
           <RetryPageButton />
-          <Link className={styles.resumeLink} href="/home">
-            Voltar ao início
+          <Link className={styles.resumeLink} href="/courses">
+            Voltar aos cursos
           </Link>
         </section>
+      </div>
+    </main>
+  );
+}
+
+export function CourseDetailLoading() {
+  return (
+    <main className={styles.page} aria-label="Carregando curso">
+      <div className={styles.container}>
+        <div className={styles.loadingState} role="status">
+          <span className={`${styles.loadingBlock} ${styles.loadingBreadcrumb}`} />
+          <div className={styles.loadingHero}>
+            <span className={`${styles.loadingBlock} ${styles.loadingCover}`} />
+            <div>
+              <span className={`${styles.loadingBlock} ${styles.loadingTitle}`} />
+              <span className={`${styles.loadingBlock} ${styles.loadingLine}`} />
+              <span className={`${styles.loadingBlock} ${styles.loadingLine} ${styles.loadingLineShort}`} />
+            </div>
+          </div>
+          <span className={`${styles.loadingBlock} ${styles.loadingResume}`} />
+          <span className={`${styles.loadingBlock} ${styles.loadingHeading}`} />
+          <div className={styles.loadingModules}>
+            <span className={`${styles.loadingBlock} ${styles.loadingModule}`} />
+            <span className={`${styles.loadingBlock} ${styles.loadingModule}`} />
+          </div>
+          <span className={styles.srOnly}>Carregando curso</span>
+        </div>
       </div>
     </main>
   );
@@ -181,13 +205,11 @@ export function CourseUnavailableState() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <Link className={styles.unavailableBrand} href="/home">
-          <span aria-hidden="true">T</span> TraderLab
-        </Link>
+        <Link className={styles.backLink} href="/courses"><ArrowLeft aria-hidden="true" size={15} /> Voltar à biblioteca</Link>
         <section className={styles.errorState} role="status">
           <h1>Este curso ou conteúdo não está disponível para sua conta.</h1>
           <p>Volte à sua biblioteca para ver os cursos liberados para você.</p>
-          <Link className={styles.resumeLink} href="/home">
+          <Link className={styles.resumeLink} href="/courses">
             Ir para meus cursos
           </Link>
         </section>

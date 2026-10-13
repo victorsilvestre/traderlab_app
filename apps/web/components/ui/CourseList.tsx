@@ -4,6 +4,7 @@ import { homeClass } from './homeStyles';
 import { EmptyState } from './EmptyState';
 import { CourseImage } from './CourseImage';
 import { ArrowUpRight } from 'lucide-react';
+import { isManagedCourseImageUrl } from '../../lib/images/isManagedCourseImageUrl';
 
 export function CourseList({
   courses,
@@ -34,9 +35,7 @@ export function CourseList({
       ) : courses.length ? (
         <div className={homeClass('course-grid')}>
           {courses.map((course, index) => {
-            const managedStorageImage = course.coverImageUrl?.includes(
-              '/storage/v1/object/sign/traderlab-course-images/',
-            );
+            const managedStorageImage = isManagedCourseImageUrl(course.coverImageUrl);
             return (
               <article className={homeClass('course-tile')} key={course.id}>
                 <Link

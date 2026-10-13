@@ -12,8 +12,14 @@ code-led selecionada em 09/10/2026.
   difusa. O estado inicial é recolhido, com o monograma e os ícones. Um controle
   explícito expande o dock e revela os rótulos; o estado também funciona por
   teclado e informa `aria-expanded`.
-- Manter busca, notificações e identificação da conta acessíveis no cabeçalho;
-  o avatar e as ações da conta também ficam no fim do dock.
+- Mostrar somente o ícone BB no dock compacto e a marca Trader Bruno Borges
+  completa quando expandido.
+- O dock persistente navega para Início, Cursos (`/courses`), Pesquisa
+  (`/search`) e Notificações (`/notifications`), identifica a área ativa e
+  mostra badge quando há notificações não lidas. Avatar e ações da conta ficam
+  no fim do dock. Em mobile ele vira barra inferior com painel expansível.
+- Nas páginas internas, o dock aprovado substitui o cabeçalho de ações antigo;
+  busca, conta e notificações permanecem encontráveis por seus itens próprios.
 - Após o cabeçalho, mostrar as mesmas três áreas e nesta ordem: banner;
   “Continue Onde Parou”; “Meus Cursos”. Não inserir conteúdo entre elas.
 - Dar mais presença às capas dos cursos em uma galeria com pesos visuais
@@ -30,8 +36,8 @@ mostra um painel vertical com os rótulos.
 
 - Preservar consultas autenticadas, acesso, ordenação, banners, busca,
   notificações, retomada, cursos e destinos existentes.
-- Links do dock levam às seções da própria home; nenhuma rota ou capacidade nova
-  é introduzida.
+- O dock é navegação persistente entre as áreas autenticadas e não cria
+  capacidades de negócio.
 - A retomada usa a capa do curso e o percentual já carregados pela home; sem
   capa, mantém um quadro neutro. Não inventar imagem nem dado de progresso.
 - Não transformar a galeria em vitrine de compra: a compra permanece futura.
@@ -41,3 +47,14 @@ mostra um painel vertical com os rótulos.
 Capas em proporção diferente podem sofrer recorte na galeria; a composição
 responsiva precisa manter títulos e barras de progresso legíveis em desktop e
 mobile.
+
+## Expansão aprovada às telas privadas — 13/10/2026
+
+- Home, biblioteca, detalhe de curso, aula/material, pesquisa, notificações e
+  perfil herdam a linguagem visual, os tokens, o dock e o comportamento
+  responsivo desta direção.
+- Login, cadastro, confirmação de e-mail e recuperação de senha permanecem com
+  a identidade visual pública atual e estão fora desta etapa.
+- A biblioteca aceita crescimento contínuo sem limite visual. Detalhe e aula
+  mantêm sua densidade e preservam busca, vídeo, módulos, materiais, navegação e
+  progresso existentes.

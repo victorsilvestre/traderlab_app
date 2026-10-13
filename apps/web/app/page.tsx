@@ -1,36 +1,41 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { LogoutButton } from '../components/authentication/LogoutButton';
 import { getCurrentUserProfile } from '../lib/authentication/getCurrentUserProfile';
+import styles from './PublicLanding.module.css';
 
 export default async function HomePage() {
   const { authenticated, profile } = await getCurrentUserProfile();
 
   if (!authenticated) {
     return (
-      <main className="home-page home-page-public">
-        <header className="home-header">
-          <Link className="brand-mark" href="/">
-            <span className="brand-symbol" aria-hidden="true">T</span>
-            <span>TraderLab</span>
+      <main className={styles.page}>
+        <header className={styles.header}>
+          <Link className={styles.brand} href="/" aria-label="Trader Bruno Borges, página inicial">
+            <Image className={styles.brandImage} src="/logos/logo-verde-fundo-claro.png" alt="Trader Bruno Borges" width={1137} height={306} priority />
           </Link>
-          <nav aria-label="Acesso à plataforma">
-            <Link className="text-link" href="/sign-in">Entrar</Link>
-            <Link className="primary-button header-button" href="/sign-up">
+          <nav className={styles.nav} aria-label="Acesso à plataforma">
+            <Link className={styles.signIn} href="/sign-in">Entrar</Link>
+            <Link className={styles.button} href="/sign-up">
               Criar conta
             </Link>
           </nav>
         </header>
-        <section className="home-intro">
-          <p className="eyebrow">Aprenda com método</p>
-          <h1>Construa conhecimento para operar com mais clareza.</h1>
-          <p>
-            Entre na plataforma para acompanhar seus estudos e avançar no seu
-            ritmo.
-          </p>
-          <Link className="primary-button intro-button" href="/sign-up">
-            Começar agora
-          </Link>
+        <section className={styles.hero}>
+          <div className={styles.copy}>
+            <h1>Construa conhecimento para operar com mais clareza.</h1>
+            <p>Entre na plataforma para acompanhar seus estudos e avançar no seu ritmo.</p>
+            <div className={styles.actions}>
+              <Link className={styles.button} href="/sign-up">Começar agora</Link>
+              <Link className={styles.signIn} href="/sign-in">Já tenho uma conta</Link>
+            </div>
+          </div>
+          <div className={styles.imagePanel}>
+            <Image className={styles.image} src="/authentication-study.png" alt="Mesa de estudos diante da cidade ao entardecer" fill priority sizes="(max-width: 680px) 100vw, 52vw" />
+            <div className={styles.imageShade} />
+            <p className={styles.imageCaption}>Conhecimento que vira prática.</p>
+          </div>
         </section>
       </main>
     );
@@ -46,8 +51,7 @@ export default async function HomePage() {
           </Link>
           <LogoutButton />
         </header>
-        <section className="welcome-panel">
-          <p className="eyebrow">SUA ÁREA DE APRENDIZAGEM</p>
+        <section className={styles.profileError}>
           <h1>Não conseguimos carregar seu perfil.</h1>
           <p>Atualize a página em instantes. Sua sessão continua protegida.</p>
         </section>

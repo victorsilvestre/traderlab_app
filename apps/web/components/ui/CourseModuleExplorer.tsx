@@ -14,6 +14,7 @@ import type {
   CourseSearchResultDto,
 } from '@traderlab/contracts';
 import { searchCourse } from '../../lib/courses/actions';
+import { isManagedCourseImageUrl } from '../../lib/images/isManagedCourseImageUrl';
 import styles from './CourseScreen.module.css';
 
 function SearchIcon() {
@@ -200,8 +201,9 @@ export function CourseModuleExplorer({
         <div
           className={view === 'grid' ? styles.moduleGrid : styles.moduleList}
         >
-          {modules.map((module, index) => (
-            <article
+          {modules.map((module, index) => {
+            const managedModuleImage = isManagedCourseImageUrl(module.imageUrl);
+            return <article
               className={styles.module}
               id={`module-${module.id}`}
               key={module.id}
@@ -212,11 +214,11 @@ export function CourseModuleExplorer({
                     className={styles.moduleImage}
                     href={`/courses/${encodeURIComponent(courseId)}/contents/${encodeURIComponent(module.contents[0].id)}`}
                     aria-label={`Abrir o primeiro conteúdo do módulo ${module.title}`}
-                    style={module.imageUrl && !module.imageUrl.includes('/storage/v1/object/sign/traderlab-course-images/')
+                    style={module.imageUrl && !managedModuleImage
                       ? { backgroundImage: `url(${module.imageUrl})` }
                       : undefined}
                   >
-                    {module.imageUrl && module.imageUrl.includes('/storage/v1/object/sign/traderlab-course-images/') && (
+                    {managedModuleImage && module.imageUrl && (
                       <CourseImage
                         className={styles.moduleImageAsset ?? ''}
                         src={module.imageUrl!}
@@ -235,11 +237,11 @@ export function CourseModuleExplorer({
                     className={styles.moduleImage}
                     role={module.imageUrl ? 'img' : undefined}
                     aria-label={module.imageUrl ? `Imagem do módulo ${module.title}` : undefined}
-                    style={module.imageUrl && !module.imageUrl.includes('/storage/v1/object/sign/traderlab-course-images/')
+                    style={module.imageUrl && !managedModuleImage
                       ? { backgroundImage: `url(${module.imageUrl})` }
                       : undefined}
                   >
-                    {module.imageUrl && module.imageUrl.includes('/storage/v1/object/sign/traderlab-course-images/') && (
+                    {managedModuleImage && module.imageUrl && (
                       <CourseImage
                         className={styles.moduleImageAsset ?? ''}
                         src={module.imageUrl!}
@@ -302,8 +304,8 @@ export function CourseModuleExplorer({
                     Este módulo ainda não tem conteúdos publicados.
                   </p>
                 ))}
-            </article>
-          ))}
+            </article>;
+          })}
         </div>
       ) : (
         <div className={styles.emptyModules}>

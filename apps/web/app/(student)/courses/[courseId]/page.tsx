@@ -8,6 +8,7 @@ import { getCurrentAccessToken } from '../../../../lib/authentication/getCurrent
 import { getCurrentUserProfile } from '../../../../lib/authentication/getCurrentUserProfile';
 import { getSignInPath } from '../../../../lib/authentication/returnPath';
 import { getStudentCourse } from '../../../../lib/courses/courseApi';
+import { StudentWorkspaceShell } from '../../../../components/ui/StudentWorkspaceShell';
 
 type CoursePageProps = {
   params: Promise<{ courseId: string }>;
@@ -50,8 +51,16 @@ export default async function CoursePage({ params }: CoursePageProps) {
     ) {
       redirect(signInPath);
     }
-    return <CourseLoadError profile={profile} />;
+    return (
+      <StudentWorkspaceShell profile={profile}>
+        <CourseLoadError />
+      </StudentWorkspaceShell>
+    );
   }
 
-  return <CourseDetail profile={profile} course={course} />;
+  return (
+    <StudentWorkspaceShell profile={profile}>
+      <CourseDetail course={course} />
+    </StudentWorkspaceShell>
+  );
 }

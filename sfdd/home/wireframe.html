@@ -9,17 +9,10 @@
       * { box-sizing: border-box; }
       body { margin: 0; }
       .page { max-width: 1280px; margin: 0 auto; padding: 20px 28px 48px 150px; }
-      header { display: flex; align-items: center; gap: 16px; padding: 14px 0 22px; }
-      .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; min-width: 170px; }
-      .brand-symbol { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50% 50% 50% 10%; background: #767676; color: #fff; }
-      .search { flex: 1; max-width: 560px; padding: 14px; border: 1px solid #888; background: #fafafa; color: #555; }
-      .icon, .avatar { border: 1px solid #888; background: #ddd; padding: 10px 12px; }
-      .avatar { border-radius: 50%; }
-      .account-menu { width: 230px; margin: 8px 0 0 auto; padding: 14px; border: 1px solid #999; background: #fafafa; }
-      .account-menu strong, .account-menu small { display: block; }
-      .account-menu a, .account-menu button { display: inline-block; margin-top: 12px; }
+      header { display: flex; align-items: center; gap: 16px; min-height: 78px; margin-bottom: 34px; padding: 14px 0 22px; }
+      .search { width: 100%; padding: 14px; border: 1px solid #888; background: #fafafa; color: #555; }
       h2 { font-size: 22px; margin: 30px 0 12px; }
-      .banner { height: clamp(228px, 19vw, 278px); overflow: hidden; padding: 28px; background: #d4d4d4; border: 1px solid #aaa; display: flex; flex-direction: column; justify-content: end; color: inherit; text-decoration: none; }
+      .banner { position: relative; aspect-ratio: 3 / 1; overflow: hidden; padding: 28px; background: #d4d4d4; border: 1px solid #aaa; display: flex; flex-direction: column; justify-content: end; color: inherit; text-decoration: none; }
       .banner:focus-visible { outline: 2px solid #555; outline-offset: 3px; }
       .placeholder { color: #555; }
       .banner-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
@@ -40,7 +33,7 @@
       .course-copy { padding: 12px 14px; }
       .course-progress { display: grid; grid-template-columns: minmax(0, 1fr) 40px; gap: 8px; align-items: center; padding-top: 14px; }
       .rail { position: fixed; z-index: 10; top: 24px; bottom: 24px; left: 24px; width: 76px; display: flex; align-items: center; flex-direction: column; gap: 10px; padding: 14px 9px; border: 1px solid #aaa; border-radius: 22px; background: #fafafa; box-shadow: 0 12px 32px #2222; }
-      .rail-brand, .rail-toggle, .rail-link, .rail-avatar { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid #999; border-radius: 14px; background: #e5e5e5; color: #333; text-decoration: none; }
+      .rail-toggle, .rail-link, .rail-avatar { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid #999; border-radius: 14px; background: #e5e5e5; color: #333; text-decoration: none; }
       .rail-nav { display: grid; gap: 7px; }
       .rail-menu { position: relative; }
       .rail-menu summary, .rail-avatar-wrap summary { list-style: none; cursor: pointer; }
@@ -81,11 +74,8 @@
       button { color: inherit; font: inherit; border: 1px solid #888; background: #eee; padding: 8px 12px; }
       @media (max-width: 700px) {
         .page { padding: 12px 16px 112px; }
-        header { gap: 8px; flex-wrap: wrap; }
-        .logo { min-width: 0; flex: 1; }
-        .search { order: 2; flex-basis: 100%; }
+        header { gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
         .rail { top: auto; right: 12px; bottom: 12px; left: 12px; width: auto; height: 68px; flex-direction: row; justify-content: space-between; }
-        .rail-brand { display: none; }
         .rail-nav { display: flex; flex: 1; justify-content: space-around; }
         .rail-expanded { top: auto; bottom: 54px; left: 0; }
         .rail-avatar-menu { right: 0; bottom: 54px; left: auto; }
@@ -95,26 +85,14 @@
         .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .profile-page { margin: 24px auto; padding: 16px; }
         .profile-actions { flex-direction: column-reverse; }
-        .banner { height: 210px; }
+        .banner { padding: 16px; }
       }
-      @media (max-width: 560px) { .course-grid { grid-template-columns: 1fr; } .recent-card { grid-template-columns: 100px minmax(0, 1fr); } }
+      @media (max-width: 560px) { header { margin-bottom: 18px; } .banner { padding: 10px; } .course-grid { grid-template-columns: 1fr; } .recent-card { grid-template-columns: 100px minmax(0, 1fr); } }
     </style>
   </head>
   <body>
     <main class="page">
-      <header>
-        <a class="logo" href="#inicio"><span class="brand-symbol" aria-hidden="true">T</span><span>TraderLab</span></a>
-        <button class="search" aria-label="Pesquisar">⌕ &nbsp; Pesquisar cursos, módulos e aulas</button>
-        <details class="notice-control">
-          <summary class="icon" aria-label="Notificações">♧ <small>2</small></summary>
-          <div class="notice-popover" aria-label="Notificações recentes">
-            <div class="notice-row unread"><strong>[Título do aviso recente]</strong><p>[Descrição com espaço confortável para leitura. Link opcional.]</p><button>Marcar como lida</button></div>
-            <div class="notice-row"><strong>[Outro aviso, já lido]</strong><p>[Uma notificação do curso vinculado.]</p><button>Marcar como não lida</button></div>
-            <div class="notice-row"><a href="#notificacoes">Ver todas as notificações</a></div>
-          </div>
-        </details>
-        <span>[Nome do usuário]</span>
-      </header>
+      <header aria-label="Cabeçalho da página"></header>
       <section id="inicio" aria-label="Banner em destaque">
         <a class="banner" href="#destino-do-banner" target="_blank" rel="noopener noreferrer" aria-label="Abrir comunicação em uma nova aba">
           <p class="placeholder">[Comunicação em destaque]</p>
@@ -141,19 +119,20 @@
       </section>
     </main>
     <aside class="rail" aria-label="Navegação da área de aprendizagem">
-      <a class="rail-brand" href="#inicio" aria-label="TraderLab, início">[Marca]</a>
       <details class="rail-menu">
         <summary class="rail-toggle" aria-label="Expandir menu">[Menu]</summary>
         <nav class="rail-expanded" aria-label="Menu expandido">
           <a href="#inicio"><span>[Ícone]</span> Início</a>
-          <a href="#continue"><span>[Ícone]</span> Continue de onde parou</a>
-          <a href="#courses"><span>[Ícone]</span> Meus cursos</a>
+          <a href="/courses"><span>[Ícone]</span> Cursos</a>
+          <a href="/search"><span>[Ícone]</span> Pesquisar</a>
+          <a href="/notifications"><span>[Ícone]</span> Notificações <small>[2 não lidas]</small></a>
         </nav>
       </details>
       <nav class="rail-nav" aria-label="Atalhos da página inicial">
         <a class="rail-link" href="#inicio" aria-label="Início" title="Início">[Ícone]</a>
-        <a class="rail-link" href="#continue" aria-label="Continue de onde parou" title="Continue de onde parou">[Ícone]</a>
-        <a class="rail-link" href="#courses" aria-label="Meus cursos" title="Meus cursos">[Ícone]</a>
+        <a class="rail-link" href="/courses" aria-label="Cursos" title="Cursos">[Ícone]</a>
+        <a class="rail-link" href="/search" aria-label="Pesquisar" title="Pesquisar">[Ícone]</a>
+        <a class="rail-link" href="/notifications" aria-label="Notificações · 2 não lidas" title="Notificações · 2 não lidas">[Ícone · 2]</a>
       </nav>
       <span class="rail-spacer"></span>
       <details class="rail-avatar-wrap">
@@ -161,8 +140,24 @@
         <div class="rail-avatar-menu"><strong>[Nome do usuário]</strong><small>Conta TraderLab</small><a href="#perfil">Acessar Perfil</a><br /><button type="button">Sair da conta</button></div>
       </details>
     </aside>
+    <main class="profile-page" id="todos-os-cursos">
+      <header class="profile-heading"><a href="/home">← Voltar à home</a><p>[SUA APRENDIZAGEM]</p><h1>Meus cursos</h1><p>Todos os cursos disponíveis para sua conta, em um só lugar.</p></header>
+      <p>[3 cursos]</p>
+      <div class="course-grid">
+        <article class="course"><a href="/courses/1"><div class="thumb">[Capa · proporção 16:9]</div><span>[Abrir curso ↗]</span></a><div class="course-copy"><h2>[Nome do curso]</h2><p>[Descrição do curso em até três linhas, com leitura confortável.]</p></div></article>
+        <article class="course"><a href="/courses/2"><div class="thumb">[Capa do curso]</div></a><div class="course-copy"><h2>[Nome do curso]</h2><p>[Descrição do curso]</p></div></article>
+        <article class="course"><a href="/courses/3"><div class="thumb">[Capa do curso]</div></a><div class="course-copy"><h2>[Nome do curso]</h2><p>[Descrição do curso]</p></div></article>
+      </div>
+      <section class="empty"><strong>[Erro de carregamento]</strong><p>Não conseguimos carregar seus cursos agora. Atualize esta página para tentar novamente.</p></section>
+      <section class="empty"><strong>[Lista vazia]</strong><p>Você ainda não tem cursos por aqui. Quando um curso for liberado para sua conta, ele aparecerá nesta página.</p></section>
+    </main>
+    <main class="profile-page" id="pesquisa">
+      <header class="profile-heading"><a href="/home">← Voltar à home</a><p>[PESQUISA DE CONTEÚDO]</p><h1>Pesquisar</h1><p>Encontre cursos, módulos, aulas e materiais disponíveis para sua conta.</p></header>
+      <form class="profile-form"><label>Curso, módulo ou conteúdo<input type="search" placeholder="Digite título ou descrição" maxlength="120" /></label></form>
+      <section aria-live="polite"><p>[Digite para ver os resultados]</p><article class="notice-card"><small>[Curso]</small><h2>[Título do resultado]</h2><p>[Curso] · [Módulo]</p></article><p>[Estado vazio, sem resultados ou erro]</p></section>
+    </main>
     <main class="notification-page" id="notificacoes">
-      <header><a class="logo" href="#inicio">[Logo TraderLab]</a><a href="#inicio">← Voltar</a></header>
+      <header><a href="#inicio">← Voltar à home</a></header>
       <section>
         <div class="notification-heading"><div><p>[SUA CONTA]</p><h1>Notificações</h1><p>Acompanhe os avisos gerais e dos cursos vinculados à sua conta.</p></div><button>Marcar todas como lidas</button></div>
         <nav class="filters" aria-label="Filtrar notificações"><a href="#todas">Todas</a><a href="#nao-lidas">Não lidas (2)</a></nav>

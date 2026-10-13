@@ -3,7 +3,8 @@ import type { CourseSummaryDto, RecentContentDto } from '@traderlab/contracts';
 import { homeClass } from './homeStyles';
 import { EmptyState } from './EmptyState';
 import { CourseImage } from './CourseImage';
-import { Play } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
+import { isManagedCourseImageUrl } from '../../lib/images/isManagedCourseImageUrl';
 
 function formatAccessTime(value: string): string {
   const date = new Date(value);
@@ -66,9 +67,7 @@ export function RecentContentList({
           {contents.map((item) => {
             const course = courses.find((candidate) => candidate.id === item.courseId);
             const coverImageUrl = course?.coverImageUrl;
-            const managedStorageImage = coverImageUrl?.includes(
-              '/storage/v1/object/sign/traderlab-course-images/',
-            );
+            const managedStorageImage = isManagedCourseImageUrl(coverImageUrl);
 
             return (
               <Link
@@ -125,7 +124,7 @@ export function RecentContentList({
                     <strong>{item.completed ? 'Conteúdo concluído' : 'Em andamento'}</strong>
                   )}
                   <span className={homeClass('recent-resume')}>
-                    Retomar aula <span aria-hidden="true">→</span>
+                    Retomar aula <ArrowRight aria-hidden="true" size={15} />
                   </span>
                 </span>
               </Link>

@@ -11,6 +11,7 @@ import {
   getStudentCourse,
   openStudentCourseContent,
 } from '../../../../../../lib/courses/courseApi';
+import { StudentWorkspaceShell } from '../../../../../../components/ui/StudentWorkspaceShell';
 
 type CourseContentPageProps = {
   params: Promise<{ courseId: string; contentId: string }>;
@@ -69,6 +70,16 @@ export default async function CourseContentPage({
     if (isUnauthorized(error)) redirect(signInPath);
   }
 
-  if (!content || !course) return <CourseContentLoadError profile={profile} />;
-  return <CourseContentView profile={profile} content={content} course={course} />;
+  if (!content || !course) {
+    return (
+      <StudentWorkspaceShell profile={profile}>
+        <CourseContentLoadError />
+      </StudentWorkspaceShell>
+    );
+  }
+  return (
+    <StudentWorkspaceShell profile={profile}>
+      <CourseContentView content={content} course={course} />
+    </StudentWorkspaceShell>
+  );
 }

@@ -7,6 +7,7 @@ import type { MessageDto } from '../../lib/api';
 import { apiRequest } from '../../lib/api';
 import { completeSignIn } from '../../lib/authentication/completeSignIn';
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser';
+import styles from './AuthForm.module.css';
 
 export type AuthFormMode =
   | 'sign-up'
@@ -134,26 +135,25 @@ export function AuthForm({
   const hasPassword = mode === 'sign-in' || mode === 'sign-up' || isReset;
 
   return (
-    <div className="auth-form-wrap">
-      <p className="eyebrow">Sua área de aprendizagem</p>
+    <div className={styles.formWrap}>
       <h1>{copy.title}</h1>
-      <p className="form-intro">{copy.description}</p>
-      {notice && <p className="form-message form-message-error" role="alert">{notice}</p>}
+      <p className={styles.intro}>{copy.description}</p>
+      {notice && <p className={`${styles.message} ${styles.messageError}`} role="alert">{notice}</p>}
 
       {hasSocialOption && (
-        <div className="social-options">
+        <div className={styles.socialOptions}>
           <button
-            className="social-button"
+            className={styles.socialButton}
             type="button"
             disabled
           >
-            Continuar com Google <span className="coming-soon">Em breve</span>
+            Continuar com Google <span className={styles.comingSoon}>Em breve</span>
           </button>
-          <div className="auth-divider" aria-hidden="true"><span>ou</span></div>
+          <div className={styles.divider} aria-hidden="true"><span>ou</span></div>
         </div>
       )}
 
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         {mode === 'sign-up' && (
           <>
             <label htmlFor="name">Nome completo</label>
@@ -177,11 +177,11 @@ export function AuthForm({
 
         {hasPassword && (
           <>
-            <div className="label-row">
+            <div className={styles.labelRow}>
               <label htmlFor="password">{isReset ? 'Nova senha' : 'Senha'}</label>
               {mode === 'sign-in' && <Link href="/password-recovery">Esqueceu a senha?</Link>}
             </div>
-            <div className="password-input-wrap">
+            <div className={styles.passwordInput}>
               <input
                 id="password"
                 name="password"
@@ -192,7 +192,7 @@ export function AuthForm({
                 required
               />
               <button
-                className="password-visibility"
+                className={styles.passwordVisibility}
                 type="button"
                 onClick={() => setShowPassword((visible) => !visible)}
                 aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
@@ -201,7 +201,7 @@ export function AuthForm({
                 {showPassword ? 'Ocultar' : 'Mostrar'}
               </button>
             </div>
-            {mode === 'sign-up' && <p className="field-hint">Use pelo menos 6 caracteres.</p>}
+            {mode === 'sign-up' && <p className={styles.fieldHint}>Use pelo menos 6 caracteres.</p>}
           </>
         )}
 
@@ -220,22 +220,22 @@ export function AuthForm({
           </>
         )}
 
-        {error && <p className="form-message form-message-error" role="alert">{error}</p>}
-        {message && <p className="form-message form-message-success" role="status">{message}</p>}
+        {error && <p className={`${styles.message} ${styles.messageError}`} role="alert">{error}</p>}
+        {message && <p className={`${styles.message} ${styles.messageSuccess}`} role="status">{message}</p>}
 
-        <button className="primary-button" type="submit" disabled={busy}>
+        <button className={styles.primaryButton} type="submit" disabled={busy}>
           {busy ? 'Aguarde…' : submitLabel(mode)}
         </button>
       </form>
 
-      <nav className="auth-links" aria-label="Outras opções de acesso">
+      <nav className={styles.links} aria-label="Outras opções de acesso">
         {mode === 'sign-in' && <p>Não possui conta? <Link href="/sign-up">Cadastre-se.</Link></p>}
         {mode === 'sign-up' && <p>Possui conta? <Link href="/sign-in">Faça login.</Link></p>}
         {(mode === 'recovery' || mode === 'resend-confirmation' || isReset) && <p>Possui conta? <Link href="/sign-in">Faça login.</Link></p>}
       </nav>
 
       {mode === 'sign-in' && (
-        <p className="legal-note">
+        <p className={styles.legalNote}>
           Ao continuar, você concorda com os Termos de Uso e a Política de Privacidade do TraderLab.
         </p>
       )}

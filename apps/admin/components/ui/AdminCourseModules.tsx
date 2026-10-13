@@ -34,9 +34,9 @@ export function AdminCourseModules({
     (total, item) => total + item.contentCount,
     0,
   );
-  const managedStorageImage = course.coverImageUrl?.includes(
+  const managedStorageImage = Boolean(course.coverImageUrl?.includes(
     '/storage/v1/object/sign/traderlab-course-images/',
-  );
+  ) || course.coverImageUrl?.includes('/storage/v1/render/image/public/traderlab-course-images/'));
   const currentCourseHref = `/courses/${course.id}?returnTo=${encodeURIComponent(returnTo)}`;
 
   async function move(moduleId: number, offset: -1 | 1) {
@@ -98,7 +98,7 @@ export function AdminCourseModules({
               alt=""
               fill
               sizes="128px"
-              quality={90}
+              unoptimized
             />
           ) : course.coverImageUrl ? (
             // Legacy course cover URLs remain supported without exposing storage paths.
@@ -293,7 +293,7 @@ function ModuleCard({
                 alt=""
                 fill
                 sizes="56px"
-                quality={90}
+                unoptimized
               />
             ) : (
               <span>▧</span>
@@ -367,7 +367,7 @@ function ModuleCard({
                           alt=""
                           fill
                           sizes="64px"
-                          quality={90}
+                          unoptimized
                         />
                       ) : (
                         <span>▶</span>

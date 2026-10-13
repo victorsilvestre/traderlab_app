@@ -2,10 +2,40 @@
 
 import { homeClass } from './homeStyles';
 import type { HomeBannerDto } from '@traderlab/contracts';
+import Image from 'next/image';
 
 import { useState } from 'react';
 import { CarouselControls } from '../navigation/CarouselControls';
 import { EmptyState } from './EmptyState';
+
+function BannerArtwork({
+  src,
+  alt,
+  priority,
+}: {
+  src: string;
+  alt: string;
+  priority: boolean;
+}) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return <div className={homeClass('featured-art')} role="img" aria-label={alt} />;
+  }
+
+  return (
+    <Image
+      className={homeClass('featured-art')}
+      src={src}
+      alt={alt}
+      fill
+      sizes="(min-width: 1280px) 1280px, 100vw"
+      unoptimized
+      priority={priority}
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 export function BannerCarousel({ banners }: { banners: HomeBannerDto[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -37,11 +67,11 @@ export function BannerCarousel({ banners }: { banners: HomeBannerDto[] }) {
     >
       {activeBanner ? (
         <>
-          <div
-            className={homeClass('featured-art')}
-            style={{ backgroundImage: `url(${activeBanner.imageUrl})` }}
-            role="img"
-            aria-label={activeBanner.altText}
+          <BannerArtwork
+            key={activeBanner.imageUrl}
+            src={activeBanner.imageUrl}
+            alt={activeBanner.altText}
+            priority={activeIndex === 0}
           />
           {destinationUrl && (
             <a

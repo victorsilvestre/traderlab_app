@@ -1,6 +1,7 @@
 'use client';
 
 import { homeClass } from '../ui/homeStyles';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function CarouselControls({
   activeIndex,
@@ -30,10 +31,10 @@ export function CarouselControls({
       </div>
       <div className={homeClass('banner-arrows')}>
         <button type="button" aria-label="Banner anterior" onClick={onPrevious}>
-          ←
+          <ChevronLeft aria-hidden="true" size={18} />
         </button>
         <button type="button" aria-label="Próximo banner" onClick={onNext}>
-          →
+          <ChevronRight aria-hidden="true" size={18} />
         </button>
       </div>
     </div>

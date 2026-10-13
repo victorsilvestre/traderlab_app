@@ -3,6 +3,7 @@ import { NotificationCenter } from '../../components/ui/NotificationCenter';
 import { getCurrentUserProfile } from '../../lib/authentication/getCurrentUserProfile';
 import { getSignInPath } from '../../lib/authentication/returnPath';
 import { getNotifications } from '../../lib/notifications/notificationApi';
+import { StudentWorkspaceShell } from '../../components/ui/StudentWorkspaceShell';
 
 type NotificationsPageProps = {
   searchParams: Promise<{ filter?: string; offset?: string }>;
@@ -40,25 +41,33 @@ export default async function NotificationsPage({
       offset,
       limit: 20,
     });
-    return (
+    const center = (
       <NotificationCenter
         inbox={inbox}
         filter={filter}
         offset={offset}
         unavailable={false}
-        profile={profile}
       />
     );
+    return profile ? (
+      <StudentWorkspaceShell profile={profile} unreadCount={inbox.unreadCount}>
+        {center}
+      </StudentWorkspaceShell>
+    ) : center;
   } catch (error) {
     if (isUnauthorized(error)) redirect(signInPath);
-    return (
+    const center = (
       <NotificationCenter
         inbox={null}
         filter={filter}
         offset={offset}
         unavailable
-        profile={profile}
       />
     );
+    return profile ? (
+      <StudentWorkspaceShell profile={profile} unreadCount={0}>
+        {center}
+      </StudentWorkspaceShell>
+    ) : center;
   }
 }

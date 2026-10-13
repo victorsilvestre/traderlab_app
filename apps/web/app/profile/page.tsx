@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { ProfileScreen } from '../../components/ui/ProfileScreen';
 import { getCurrentUserProfile } from '../../lib/authentication/getCurrentUserProfile';
 import { getSignInPath } from '../../lib/authentication/returnPath';
+import { StudentWorkspaceShell } from '../../components/ui/StudentWorkspaceShell';
 
 export default async function ProfilePage() {
   const { authenticated, profile } = await getCurrentUserProfile();
@@ -16,5 +17,9 @@ export default async function ProfilePage() {
       </main>
     );
   }
-  return <ProfileScreen profile={profile} />;
+  return (
+    <StudentWorkspaceShell profile={profile}>
+      <ProfileScreen profile={profile} />
+    </StudentWorkspaceShell>
+  );
 }

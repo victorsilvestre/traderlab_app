@@ -51,9 +51,29 @@ retomada de estudo e cursos com acesso vigente.
 
 ### Banners — interface atual e integração de cadastro pendente
 
-- O quadro do carrossel define altura responsiva independentemente das dimensões
-  do arquivo. A imagem preenche a área com `background-size: cover`, preservando
-  a proporção e recortando excedentes sem redimensionar o restante da página.
+#### Ajuste de enquadramento e entrega de imagens
+
+- O quadro da vitrine terá largura fluida limitada a 1440 pixels e proporção
+  fixa 3:1. A arte será renderizada com `object-fit: contain`, sem recorte; em
+  caso de diferença de proporção, ficará centralizada sobre um fundo escuro.
+- Usar `next/image` para que banners do bucket passem pelo otimizador da web;
+  os arquivos estáticos SVG continuam servidos sem conversão pelo Next.
+- Capas gerenciadas mantêm a otimização responsiva existente, reduzem a
+  qualidade de saída de 90 para 75 e tentam a URL assinada original se o
+  endpoint de otimização falhar. Se a URL original também falhar, manter o
+  placeholder neutro do cartão.
+- O otimizador mantém em cache o resultado derivado por ao menos uma hora, em
+  alinhamento com a validade das URLs assinadas do Supabase.
+- Antes do envio pelo admin, redimensionar banners sem recorte para caber em
+  1440 × 480 e capas de curso, módulo e conteúdo para caber em 1920 × 1080;
+  codificar em WebP quando o navegador suportar. Se a conversão falhar, manter
+  o arquivo original, sem bloquear o cadastro.
+
+- A home reserva respiro acima do carrossel para separar a primeira arte do topo.
+- O quadro do carrossel mantém a proporção da arte aprovada de 1440 × 480 (3:1)
+  com largura fluida e altura derivada dela. A imagem fica inteira e centralizada
+  no quadro (`object-fit: contain`), sem corte; se a proporção do arquivo diferir,
+  as bordas livres ficam no tom escuro do banner.
 - O componente reconhece apenas URLs absolutas HTTP(S) como destinos e, quando
   presente, oferece um link que abre nova aba com `noopener noreferrer`. Um
   banner sem destino permanece informativo e não recebe affordance de link.
@@ -278,7 +298,7 @@ e `access`, inclusive concessões, convites e estados de assinatura.
 - Nome e telefone são persistidos em user_profiles; e-mail é identidade do Supabase Auth e permanece travado, exibido de forma discreta como dado não editável. O fluxo não altera o e-mail associado a cursos e pagamentos.
 - A imagem do avatar é carregada pelo usuário, recebe prévia local antes do salvamento e passa a ser usada no menu de conta e nos cabeçalhos que exibem sua identidade. Sem imagem, manter as iniciais do nome.
 - O cabeçalho completo da aplicação, com pesquisa, notificações e conta, é compartilhado entre home, perfil e histórico de notificações. Clicar no avatar navega para /profile; hover ou foco de teclado abre as opções da conta.
-- Implementação: guardar somente avatar_path em user_profiles; armazenar os arquivos no bucket privado traderlab-profile-avatars, com caminho derivado do ID autenticado e URL assinada de leitura por uma hora. O bucket e a API aceitam JPEG, PNG e WebP, com limite de 5 MB.
+- Implementação: guardar somente avatar_path em user_profiles; armazenar os arquivos no bucket traderlab-profile-avatars, com caminho derivado do ID autenticado. A decisão inicial de manter o bucket privado foi substituída em 13/10/2026 pela entrega pública de variantes transformadas; quem possuir a URL pode abrir o avatar. O bucket e a API aceitam JPEG, PNG e WebP, com limite de 5 MB.
 
 ### Web
 
@@ -287,7 +307,7 @@ e `access`, inclusive concessões, convites e estados de assinatura.
 - Atualizar o botão/avatar da conta para exibir a imagem salva, usando iniciais quando ausente.
 - Implementar formulário em componente de components/ui/ ou components/forms/, escolhendo o menor limite que preserve responsabilidades. Usar componente cliente apenas para upload/preview, interação do menu e estado de envio.
 - Exibir estados de carregamento, salvamento, sucesso e falha sem substituir a página inteira por um estado de sessão durante navegação normal.
-- Atualizar o tipo de perfil retornado à UI com e-mail somente leitura e avatarUrl assinado, sem expor avatarPath, credenciais do Supabase ou dados de outros usuários.
+- Atualizar o tipo de perfil retornado à UI com e-mail somente leitura e avatarUrl pública transformada, sem expor avatarPath, credenciais do Supabase ou dados de outros usuários.
 
 ### API e persistência
 
@@ -296,7 +316,7 @@ e `access`, inclusive concessões, convites e estados de assinatura.
 - Adicionar avatar_path à tabela user_profiles por migração.
 - Criar casos de uso para consultar perfil e atualizar nome/telefone. O e-mail permanece somente leitura nesta funcionalidade.
 - Expor GET e PATCH em /users/me/profile; derivar sempre a identidade do token. PATCH aceita apenas campos definidos de nome, telefone e referência de avatar, nunca ID ou papel de usuário.
-- Criar porta de armazenamento de avatar e adaptador do Supabase Storage no módulo user; preparar o bucket privado e validar tipo, tamanho, caminho e propriedade no servidor. O navegador recebe apenas token assinado de upload; a chave administrativa permanece na API.
+- Criar porta de armazenamento de avatar e adaptador do Supabase Storage no módulo user; validar tipo, tamanho, caminho e propriedade no servidor. O bucket de leitura é público, mas o navegador ainda recebe somente token assinado de upload; a chave administrativa permanece na API.
 - Expor POST /users/me/profile/avatar-upload para emitir URL assinada de upload. O navegador envia o arquivo ao Storage, depois atualiza o perfil com a referência autorizada sob o caminho do próprio usuário. A API verifica a existência do objeto e salva somente o caminho no perfil.
 - As rotas devem validar sessão, conteúdo e propriedade; usuários só leem e alteram o próprio perfil. Nenhuma chave secreta ou acesso ao banco chega ao navegador.
 
@@ -341,7 +361,7 @@ e `access`, inclusive concessões, convites e estados de assinatura.
   de aparecer no histórico. A rota de destino continua revalidando autorização
   e publicação no módulo `course`.
 
-## Cache das capas de curso
+## Decisão anterior — cache de URLs assinadas de capas (substituída em 13/10/2026)
 
 - O bucket `traderlab-course-images` permanece privado; as capas continuam sendo
   entregues por URLs assinadas para não transformar imagens de cursos em URLs
@@ -383,3 +403,65 @@ A validação da capa na home aprovou o mesmo padrão de leitura e otimização 
   referência existente. O recorte `cover` é uma decisão visual da galeria.
 - Lucide React já era dependência do workspace pelo admin e passa a ser
   declarada também em `apps/web` para os ícones do dock e das ações da galeria.
+
+## Ajustes aprovados da busca e navegação — 13/10/2026
+
+- Web: remover as marcas TraderLab da home na área autenticada de aprendizagem.
+- Web: manter cabeçalho sem marca e sem popovers de busca/notificação;
+  menu da conta permanece nas páginas internas que já o compõem.
+- Web: adicionar itens “Pesquisar” e “Notificações” ao `StudentDock`, com ícones,
+  rótulos acessíveis e navegação para `/search` e `/notifications`.
+- Web: passar o `unreadCount` já carregado para o dock e mostrar badge apenas
+  quando positivo, sem nova chamada ou contrato.
+- Web: criar `/search` como página autenticada e componente independente sob
+  `components/ui/`; reutilizar `searchAccessibleCourseContents` e os destinos,
+  limites, debounce, permissões e mensagens atuais de `HomeSearch`.
+- Web: mover o campo de busca para a página, sem modal, com foco pelo atalho `/`.
+  Sem mudança em API, contratos, banco ou autorização.
+- SFDD: ajustar wireframe para refletir menu sem marca e ações como itens do dock;
+  documentar a página `/search` em um wireframe responsivo de baixa fidelidade.
+
+## Ajustes aprovados do dock e do perfil — 13/10/2026
+
+- Web: usar `/logos/logo_icon-black_new.png` no estado compacto do dock e
+  `/logos/logo-preta-fundo-claro.png` no estado expandido. Não redesenhar a marca.
+- Web: remover somente o item de navegação “Continue de onde parou”; manter a
+  seção de retomada da home e seus dados intactos.
+- Web: ampliar a região de hover do menu `AccountMenu` para cobrir a transição
+  avatar/painel, inclusive na barra inferior mobile.
+- Web: incluir `LogoutButton` existente na tela de perfil, sem duplicar lógica
+  de autenticação.
+
+## Página de cursos da plataforma — 13/10/2026
+
+- Web: adicionar rota autenticada `/courses`, mantendo o detalhe em
+  `/courses/:courseId`.
+- Web: carregar a lista existente por `getStudentCourses(accessToken)` no
+  servidor, preservando o filtro de acesso já aplicado pela API.
+- Web: criar componente de listagem sob `components/ui/` com quantidade,
+  cartões em grade responsiva, capa via `CourseImage`, título e descrição.
+- Web: ligar cada cartão ao detalhe existente. Não adicionar pesquisa, filtros,
+  compras ou controles de matrícula nesta tarefa.
+- Web: apresentar estados separados para sessão indisponível, falha da consulta,
+  lista vazia e lista disponível. A falha 401 redireciona ao login; demais falhas
+  podem ser repetidas ao atualizar a página.
+- SFDD: acrescentar requisito, wireframe e tarefas específicos da página.
+
+## Entrega estável e otimizada de imagens — 13/10/2026
+
+A seção `sfdd/image-delivery/` registra a decisão completa e substitui as
+decisões anteriores deste plano que mantinham imagens em buckets privados ou
+dependiam do proxy `next/image` para otimizar os arquivos gerenciados.
+
+- `traderlab-course-images` e `traderlab-profile-avatars` são públicos; quem
+  possui o link pode abrir banners, capas e avatares diretamente. O bucket
+  `traderlab-course-materials` continua privado.
+- A API monta URLs estáveis com transformação do Supabase: banners até 1440 px,
+  demais capas até 1600 px e avatares 256 × 256 px. O CDN escolhe WebP para
+  navegadores compatíveis. O navegador recebe o endereço transformado direto,
+  sem proxy Next adicional.
+- Os caminhos UUID existentes não são alterados; seus objetos passam a receber
+  a variante transformada sem cópia ou migração de banco.
+- Uploads novos de avatar e imagens administrativas são reduzidos no cliente,
+  mantêm cache longo e usam caminhos únicos para invalidar versões antigas.
+- A API não cria mais URLs temporárias de leitura nem mantém cache de tokens.

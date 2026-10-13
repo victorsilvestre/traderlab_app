@@ -53,6 +53,7 @@ export class SupabaseProfileAvatarStorage implements ProfileAvatarStorage, Profi
       const path = `${userId}/avatar-google-${crypto.randomUUID()}.${extension}`;
       const { error } = await client.storage.from(bucketName).upload(path, bytes.buffer, {
         contentType,
+        cacheControl: '31536000',
         upsert: false,
       });
       return error ? null : path;
@@ -68,9 +69,10 @@ export class SupabaseProfileAvatarStorage implements ProfileAvatarStorage, Profi
   }
 
   async createReadUrl(path: string): Promise<string> {
-    const { data, error } = await client.storage.from(bucketName).createSignedUrl(path, 60 * 60);
-    if (error || !data) throw new Error('Could not create a profile image URL.');
-    return data.signedUrl;
+    const { data } = client.storage.from(bucketName).getPublicUrl(path, {
+      transform: { width: 256, height: 256, quality: 70, resize: 'cover' },
+    });
+    return data.publicUrl;
   }
 
   async exists(path: string): Promise<boolean> {

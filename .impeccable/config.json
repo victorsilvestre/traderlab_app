@@ -8,6 +8,21 @@
         "value": "arial",
         "createdAt": "2026-10-09T22:35:22.501Z",
         "reason": "SFDD wireframe usa Arial como placeholder neutro de baixa fidelidade conforme AGENTS.md; nao e fonte da interface publicada"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "apps/web/components/ui/StudentHome.module.css"
+        ],
+        "createdAt": "2026-10-13T17:22:07.551Z",
+        "reason": "User confirmed on 2026-10-13 that the unread notification indicator looks good and should remain as shown in the attached image."
+      },
+      {
+        "rule": "overused-font",
+        "value": "roboto",
+        "createdAt": "2026-10-13T18:08:11.220Z",
+        "reason": "TraderLab's approved direction contract explicitly specifies Roboto for body text across authenticated screens; ProfileScreen inherits that system font for operational copy."
       }
     ]
   }

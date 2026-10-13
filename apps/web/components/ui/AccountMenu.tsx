@@ -3,6 +3,7 @@
 import { homeClass } from './homeStyles';
 
 import Link from 'next/link';
+import { ExternalLink } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { LogoutButton } from '../authentication/LogoutButton';
 
@@ -53,7 +54,11 @@ export function AccountMenu({
       ref={menuRef}
       className={homeClass('header-popover-wrap', 'account-popover-wrap')}
       onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseLeave={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setOpen(false);
+        }
+      }}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
           setOpen(false);
@@ -72,6 +77,8 @@ export function AccountMenu({
             className={homeClass('account-avatar-image')}
             src={avatarUrl}
             alt=""
+            decoding="async"
+            loading="eager"
             onError={() => setImageFailed(true)}
           />
         ) : (
@@ -87,6 +94,8 @@ export function AccountMenu({
                   className={homeClass('account-avatar-image')}
                   src={avatarUrl}
                   alt=""
+                  decoding="async"
+                  loading="eager"
                   onError={() => setImageFailed(true)}
                 />
               ) : (
@@ -103,7 +112,7 @@ export function AccountMenu({
             className={homeClass('account-link')}
             onClick={() => setOpen(false)}
           >
-            Acessar Perfil <span aria-hidden="true">↗</span>
+            Acessar Perfil <ExternalLink aria-hidden="true" size={15} />
           </Link>
           <div className={homeClass('account-logout')}>
             <LogoutButton />

@@ -16,7 +16,7 @@ if (error && !/not found|does not exist/i.test(error.message)) {
   throw new Error('Could not inspect the profile avatars storage bucket.');
 }
 
-const config = { public: false, fileSizeLimit: 5 * 1024 * 1024, allowedMimeTypes };
+const config = { public: true, fileSizeLimit: 5 * 1024 * 1024, allowedMimeTypes };
 if (error) {
   const result = await supabase.storage.createBucket(bucketName, config);
   if (result.error) throw new Error('Could not create the private profile avatars bucket.');
@@ -30,11 +30,11 @@ const verifiedTypes = [...(verified.data?.allowed_mime_types ?? [])].sort();
 if (
   verified.error ||
   !verified.data ||
-  verified.data.public ||
+  !verified.data.public ||
   verified.data.file_size_limit !== config.fileSizeLimit ||
   JSON.stringify(verifiedTypes) !== JSON.stringify([...allowedMimeTypes].sort())
 ) {
   throw new Error('Profile avatars bucket verification failed.');
 }
 
-console.log(JSON.stringify({ bucket: bucketName, public: false, fileSizeLimit: config.fileSizeLimit, allowedMimeTypes }));
+console.log(JSON.stringify({ bucket: bucketName, public: true, fileSizeLimit: config.fileSizeLimit, allowedMimeTypes }));

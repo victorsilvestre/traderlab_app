@@ -1,0 +1,9 @@
+.card { width: min(100%, 430px); }
+.card h1 { margin: 0; color: #11120f; font-family: 'Roboto Serif', Georgia, serif; font-size: clamp(32px, 4vw, 43px); font-weight: 650; letter-spacing: -.035em; line-height: 1.1; text-wrap: balance; }
+.card p { margin: 13px 0 0; color: #55574f; font-size: 14px; line-height: 1.65; }
+.error { margin: 18px 0 0 !important; padding: 12px 13px; color: #7d2420 !important; background: #fbefeb; border: 1px solid #e8c8c0; border-radius: 8px; }
+.button { display: inline-flex; width: 100%; min-height: 49px; align-items: center; justify-content: center; margin-top: 20px; color: #11120f; background: #a2cb10; border: 1px solid #a2cb10; border-radius: 9px; font-size: 13px; font-weight: 750; text-decoration: none; }
+.button:hover { color: #11120f; background: #b0d51e; }
+.spinner { display: inline-block; width: 25px; height: 25px; margin-top: 20px; border: 2px solid #d9dfc4; border-top-color: #829d20; border-radius: 50%; animation: spin 850ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }

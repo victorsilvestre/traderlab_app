@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 export function CourseImage({
   src,
@@ -11,6 +14,14 @@ export function CourseImage({
   className: string;
   sizes: string;
 }) {
+  const [failedSource, setFailedSource] = useState('');
+
+  useEffect(() => {
+    setFailedSource('');
+  }, [src]);
+
+  if (failedSource === src) return null;
+
   return (
     <Image
       src={src}
@@ -18,7 +29,8 @@ export function CourseImage({
       className={className}
       fill
       sizes={sizes}
-      quality={90}
+      unoptimized
+      onError={() => setFailedSource(src)}
     />
   );
 }

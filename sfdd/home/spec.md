@@ -73,3 +73,85 @@ Página Inicial
   retornado para aquele curso.
 - O restante da experiência mantém os fluxos, consultas, permissões e destinos
   existentes. O dock navega por âncoras da home e não cria novas funcionalidades.
+
+## Ajustes aprovados durante a validação da home — 13/10/2026
+
+- Remover as marcas TraderLab que sobraram na navegação da experiência de
+  aprendizagem, incluindo o logo do dock e a marca textual no cabeçalho/rodapé.
+- Manter o cabeçalho sem logo; busca e notificações ficam como ícones no menu
+  flutuante, acompanhados por rótulos ao expandir.
+- O item de busca do menu não mostra badge. O item de notificações mostra badge
+  quando a caixa autenticada tiver notificações não lidas.
+- Selecionar busca navega para `/search`; selecionar notificações navega para
+  `/notifications`. Remover o popover da busca e o popover de notificações do
+  cabeçalho da experiência da home.
+- `/search` preserva a busca autenticada atual: cursos, módulos, aulas e
+  materiais publicados dentro dos cursos disponíveis para a própria conta;
+  consulta parcial por título/descrição; no máximo cinco resultados; estados
+  de vazio, sem resultados e falha; seleção navega ao destino existente.
+- A página de busca permite digitar e consultar resultados sem modal. A busca
+  continua limitada a 120 caracteres e mantém o debounce atual. O atalho `/`
+  foca o campo quando o usuário não está digitando em outro controle; Escape
+  não fecha uma página/modal, então não tem ação associada.
+- As notificações permanecem na página existente com filtros e ações atuais;
+  o badge usa a contagem não lida já fornecida pela API.
+
+## Ajustes aprovados do dock e do perfil — 13/10/2026
+
+- O dock mostra somente o ícone BB quando recolhido e a logo completa Trader
+  Bruno Borges quando expandido.
+- O dock não oferece atalho “Continue de onde parou”; a seção de retomada da
+  home permanece disponível e com seu conteúdo atual.
+- O menu do avatar permanece aberto enquanto o cursor transita do avatar para
+  o painel e enquanto estiver sobre ele, permitindo acessar perfil ou sair.
+- A página de perfil também oferece ação para encerrar a sessão, reutilizando
+  o fluxo de logout existente.
+
+## Página autenticada de cursos — 13/10/2026
+
+- A opção “Cursos” do dock abre `/courses`, uma página interna com todos os
+  cursos publicados e liberados para a conta autenticada.
+- Cada curso é apresentado em um cartão organizado em grade responsiva, com capa
+  ou imagem neutra quando não houver capa, nome e descrição.
+- Selecionar o cartão ou sua ação principal abre o detalhe existente em
+  `/courses/:courseId`; não há ações de compra nem descoberta de cursos não
+  vinculados à conta.
+- A página informa a quantidade real de cursos quando a lista carrega.
+- Se a consulta falhar, mostrar estado de erro separado do estado vazio e
+  orientar atualizar a página. Se retornar zero cursos, explicar que os cursos
+  liberados aparecerão ali quando disponíveis. A lista carregada não recebe um
+  limite visual ou paginação artificial nesta etapa.
+- As regras de publicação, matrícula, perfil e autorização da API permanecem
+  responsáveis por determinar quais cursos aparecem. A mesma página atende os
+  perfis autenticados já autorizados a consumir a plataforma.
+
+## Ajustes visuais da home — 13/10/2026
+
+- Dar espaço vertical entre o cabeçalho/navegação e o início do banner para a
+  composição não parecer colada ao topo.
+- Exibir a arte na proporção original 1440:480 (3:1), com altura resultante da
+  largura disponível. Em telas estreitas, preservar a proporção e reduzir a
+  largura, sem cortar a cabeça ou os pés da pessoa da imagem.
+- Os textos e controles do carrossel permanecem sobrepostos à arte, legíveis e
+  dentro do quadro; os banners seguem fluindo até os limites do conteúdo.
+
+## Vitrine e entrega de imagens — validação posterior
+
+- Limitar a vitrine a no máximo 1440 pixels e manter a proporção 3:1 em todos
+  os tamanhos responsivos.
+- Exibir a imagem completa dentro do quadro, centralizada quando a proporção do
+  arquivo não coincidir com a do banner. Não cortar a arte nem completar o
+  quadro com uma faixa colorida; qualquer área de respiro usa um tom escuro da
+  própria identidade visual.
+- Banners, capas e avatares gerenciados são servidos por URLs públicas estáveis
+  com transformação do Supabase. As imagens podem ser acessadas diretamente por
+  quem possuir o link, sem autenticação; materiais de curso continuam privados.
+- A variante transformada é dimensionada conforme o uso e otimizada pelo CDN,
+  sem passar por um segundo proxy de imagem no Next.js. Se a transformação falhar,
+  a interface mantém o placeholder neutro sem ícone quebrado.
+- Uploads novos de avatar e imagens administrativas são redimensionados e
+  comprimidos quando possível, com nomes únicos e cache de longa duração.
+- No cadastro pelo admin, banners são redimensionados proporcionalmente para
+  caber em 1440 × 480 e capas de curso, módulo e conteúdo em 1920 × 1080. A
+  conversão para WebP reduz o peso quando suportada; falha na conversão mantém
+  o arquivo original e não impede o envio.

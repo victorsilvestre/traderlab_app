@@ -1,7 +1,7 @@
 import Link from 'next/link';
+import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react';
 import type {
   NotificationListDto,
-  UserProfileDetailsDto,
 } from '@traderlab/contracts';
 import {
   markAllNotificationsReadAction,
@@ -9,49 +9,28 @@ import {
 } from '../../lib/notifications/notificationActions';
 import { getSafeNotificationLink } from '../../lib/notifications/notificationLink';
 import { homeClass } from './homeStyles';
-import { StudentHeader } from './StudentHeader';
 
 export function NotificationCenter({
   inbox,
   filter,
   offset,
   unavailable,
-  profile,
 }: {
   inbox: NotificationListDto | null;
   filter: 'all' | 'unread';
   offset: number;
   unavailable: boolean;
-  profile: UserProfileDetailsDto | null;
 }) {
   const items = inbox?.items ?? [];
 
   return (
     <main className={homeClass('student-home')}>
-      {profile ? (
-        <StudentHeader
-          name={profile.name}
-          avatarUrl={profile.avatarUrl}
-          role={profile.role}
-          homeHref="/home"
-        />
-      ) : (
-        <header className={homeClass('student-header')}>
-          <Link className={homeClass('brand-mark')} href="/">
-            <span className={homeClass('brand-symbol')} aria-hidden="true">
-              T
-            </span>
-            <span>TraderLab</span>
-          </Link>
-        </header>
-      )}
       <section
         className={homeClass('notification-center')}
         aria-labelledby="notification-title"
       >
         <div className={homeClass('notification-center-heading')}>
           <div>
-            <p className="eyebrow">SUA CONTA</p>
             <h1 id="notification-title">Notificações</h1>
             <p>
               Acompanhe os avisos gerais e dos cursos vinculados à sua conta.
@@ -162,10 +141,10 @@ export function NotificationCenter({
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            Abrir link ↗
+                            Abrir link <ExternalLink aria-hidden="true" size={14} />
                           </a>
                         ) : (
-                          <Link href={safeLink.href}>Abrir link →</Link>
+                          <Link href={safeLink.href}>Abrir link <ArrowRight aria-hidden="true" size={14} /></Link>
                         ))}
                     </div>
                   </div>
@@ -206,7 +185,7 @@ export function NotificationCenter({
                 <Link
                   href={`/notifications?filter=${filter}&offset=${Math.max(0, offset - 20)}`}
                 >
-                  ← Mais recentes
+                  <ArrowLeft aria-hidden="true" size={15} /> Mais recentes
                 </Link>
               )}
               {inbox?.nextOffset !== null &&
@@ -214,7 +193,7 @@ export function NotificationCenter({
                   <Link
                     href={`/notifications?filter=${filter}&offset=${inbox.nextOffset}`}
                   >
-                    Ver notificações anteriores →
+                    Ver notificações anteriores <ArrowRight aria-hidden="true" size={15} />
                   </Link>
                 )}
             </div>

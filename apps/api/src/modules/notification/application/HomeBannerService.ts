@@ -37,7 +37,7 @@ export class HomeBannerService {
       eyebrowText: banner.eyebrowText,
       description: banner.description,
       overlayText: banner.overlayText,
-      imageUrl: await this.imageUrl(banner.imagePath),
+      imageUrl: await this.imageUrl(banner.imagePath, false),
       destinationUrl: banner.destinationUrl,
       altText: banner.altText,
       displayOrder: banner.displayOrder,
@@ -160,8 +160,11 @@ export class HomeBannerService {
     return { message: 'Ordem dos banners atualizada.' };
   }
 
-  private async imageUrl(path: string) {
-    return path.startsWith('/') ? new URL(path, this.publicAssetsBaseUrl).toString() : this.images.createReadUrl(path);
+  private async imageUrl(path: string, absoluteStaticAsset = true) {
+    if (path.startsWith('/')) {
+      return absoluteStaticAsset ? new URL(path, this.publicAssetsBaseUrl).toString() : path;
+    }
+    return this.images.createReadUrl(path);
   }
 
   private async runWithConflictMessage<T>(operation: () => Promise<T>): Promise<T> {

@@ -1,36 +1,23 @@
 import Link from 'next/link';
-import type {
-  CourseContentDto,
-  CourseDetailDto,
-  UserProfileDetailsDto,
-} from '@traderlab/contracts';
+import { Download, ExternalLink } from 'lucide-react';
+import type { CourseContentDto, CourseDetailDto } from '@traderlab/contracts';
 import { CourseBreadcrumbs } from '../navigation/CourseBreadcrumbs';
-import { StudentHeader } from './StudentHeader';
 import { CourseCompletionButton } from './CourseCompletionButton';
 import { CourseCurriculum } from './CourseCurriculum';
 import { RichTextRenderer } from './RichTextRenderer';
 import { RetryPageButton } from './RetryPageButton';
 import styles from './CourseScreen.module.css';
 
-export function CourseContentLoadError({
-  profile,
-}: {
-  profile: UserProfileDetailsDto;
-}) {
+export function CourseContentLoadError() {
   return (
     <main className={styles.page}>
-      <StudentHeader
-        name={profile.name}
-        avatarUrl={profile.avatarUrl}
-        role={profile.role}
-      />
       <div className={styles.container}>
         <section className={styles.errorState} role="alert">
           <h1>Não conseguimos carregar esta aula.</h1>
           <p>Atualize a página para tentar novamente.</p>
           <RetryPageButton />
-          <Link className={styles.resumeLink} href="/home">
-            Voltar ao início
+          <Link className={styles.resumeLink} href="/courses">
+            Voltar aos cursos
           </Link>
         </section>
       </div>
@@ -105,11 +92,9 @@ function formatBytes(bytes: number): string {
 }
 
 export function CourseContentView({
-  profile,
   content,
   course,
 }: {
-  profile: UserProfileDetailsDto;
   content: CourseContentDto;
   course: CourseDetailDto;
 }) {
@@ -120,11 +105,6 @@ export function CourseContentView({
 
   return (
     <main className={styles.page}>
-      <StudentHeader
-        name={profile.name}
-        avatarUrl={profile.avatarUrl}
-        role={profile.role}
-      />
       <div className={styles.container}>
         <CourseBreadcrumbs
           courseId={content.courseId}
@@ -132,12 +112,12 @@ export function CourseContentView({
           currentTitle={content.title}
         />
         <header className={styles.lessonHeading}>
-          <Link
-            className={styles.lessonBackLink}
-            href={`/courses/${encodeURIComponent(content.courseId)}`}
-          >
-            ← Voltar
-          </Link>
+          <div className={styles.lessonHeadingMeta}>
+            <span className={styles.lessonKind}>
+              {content.kind === 'lesson' ? 'Aula' : 'Material'}
+            </span>
+            <span>{content.moduleTitle}</span>
+          </div>
           <h1>{content.title}</h1>
           {content.description && <p>{content.description}</p>}
         </header>
@@ -145,7 +125,7 @@ export function CourseContentView({
         <div className={styles.lessonLayout}>
           <article className={styles.lessonMain}>
             {content.kind === 'lesson' && (
-              <section aria-label="Vídeo da aula">
+              <section className={styles.lessonPlayer} aria-label="Vídeo da aula">
                 {videoId ? (
                   <div className={styles.lessonVideo}>
                     <iframe
@@ -187,7 +167,8 @@ export function CourseContentView({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Abrir material em outra página ↗
+                  Abrir material em outra página
+                  <ExternalLink aria-hidden="true" size={15} />
                 </a>
               )}
             </section>
@@ -226,6 +207,7 @@ export function CourseContentView({
                         href={`/courses/${encodeURIComponent(content.courseId)}/contents/${encodeURIComponent(content.id)}/materials/${encodeURIComponent(material.id)}/download`}
                       >
                         Baixar
+                        <Download className={styles.downloadArrow} aria-hidden="true" size={15} />
                         <span className={styles.srOnly}> {material.name}</span>
                       </a>
                     </li>
@@ -239,7 +221,10 @@ export function CourseContentView({
             </section>
 
             <div className={styles.completionRow}>
-              <span>Seu progresso é salvo na sua conta.</span>
+              <div className={styles.completionCopy}>
+                <strong>Seu progresso</strong>
+                <span>Fica salvo automaticamente na sua conta.</span>
+              </div>
               <CourseCompletionButton
                 courseId={content.courseId}
                 contentId={content.id}

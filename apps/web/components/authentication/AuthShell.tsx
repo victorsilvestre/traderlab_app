@@ -1,32 +1,31 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import styles from './AuthShell.module.css';
 
 export function AuthShell({ children }: { children: ReactNode }) {
   return (
-    <main className="auth-layout">
-      <section className="auth-content" aria-label="Acesso à plataforma">
-        <Link className="brand-mark auth-brand" href="/" aria-label="TraderLab, página inicial">
-          <span className="brand-symbol" aria-hidden="true">T</span>
-          <span>TraderLab</span>
+    <main className={styles.layout}>
+      <section className={styles.content} aria-label="Acesso à plataforma">
+        <Link className={styles.brand} href="/" aria-label="Trader Bruno Borges, página inicial">
+          <Image className={styles.brandImage} src="/logos/logo-verde-fundo-claro.png" alt="Trader Bruno Borges" width={1137} height={306} priority />
         </Link>
-        <div className="auth-form-host">{children}</div>
+        <div className={styles.formHost}>{children}</div>
       </section>
 
-      <aside className="auth-visual" aria-label="Conheça o TraderLab">
+      <aside className={styles.visual} aria-label="Conheça o TraderLab">
         <Image
-          className="auth-visual-image"
+          className={styles.visualImage}
           src="/authentication-study.png"
           alt=""
           fill
           priority
-          sizes="(max-width: 850px) 0vw, 75vw"
+          sizes="(max-width: 760px) 0vw, 55vw"
         />
-        <div className="auth-visual-shade" />
-        <div className="auth-visual-copy">
-          <p className="eyebrow">Aprenda com método</p>
+        <div className={styles.visualShade} />
+        <div className={styles.visualCopy}>
           <h2>Seu próximo passo começa com uma boa base.</h2>
-          <p>Conhecimento que vira prática.</p>
+          <p className={styles.visualFootnote}>Conhecimento que vira prática.</p>
         </div>
       </aside>
     </main>

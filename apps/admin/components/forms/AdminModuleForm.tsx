@@ -10,6 +10,7 @@ import type {
   ManagedCourseModuleDto,
 } from '@traderlab/contracts';
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser';
+import { prepareImageUpload } from '../../lib/images/prepareImageUpload';
 import styles from './AdminModuleForm.module.css';
 
 const bucket =
@@ -71,14 +72,15 @@ export function AdminModuleForm({
 
   async function uploadCover(moduleId: number): Promise<string> {
     if (!file) throw new Error('Selecione uma imagem para enviar.');
+    const imageFile = await prepareImageUpload(file, { maxWidth: 1920, maxHeight: 1080 });
     const response = await fetch('/api/admin/course-images/upload-url', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         kind: 'module',
         id: moduleId,
-        contentType: file.type,
-        sizeBytes: file.size,
+        contentType: imageFile.type,
+        sizeBytes: imageFile.size,
       }),
     });
     const upload = (await response
@@ -91,9 +93,9 @@ export function AdminModuleForm({
 
     const { error: storageError } = await createSupabaseBrowserClient()
       .storage.from(bucket)
-      .uploadToSignedUrl(upload.path, upload.token, file, {
-        contentType: file.type,
-        cacheControl: '3600',
+      .uploadToSignedUrl(upload.path, upload.token, imageFile, {
+        contentType: imageFile.type,
+        cacheControl: '31536000',
         upsert: false,
       });
     if (storageError)
@@ -213,8 +215,7 @@ export function AdminModuleForm({
               alt="Prévia da capa do módulo"
               width={640}
               height={360}
-              quality={90}
-              unoptimized={Boolean(preview)}
+              unoptimized
             />
           ) : (
             <span>Nenhuma capa selecionada</span>

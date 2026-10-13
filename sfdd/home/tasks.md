@@ -190,6 +190,14 @@
 - [ ] Validar o recorte em diferentes proporções/tamanhos de viewport, a abertura
       em nova aba, URLs não permitidas, persistência e limites de publicação.
 
+## Ajuste visual da home — 13/10/2026
+
+- [x] Registrar respiro superior e proporção original 1440 × 480 (3:1) na especificação e no plano.
+- [x] Atualizar o wireframe para mostrar a margem superior e o banner 3:1.
+- [x] Ajustar a home com espaçamento antes do banner e altura fluida proporcional à largura.
+- [x] Remover alturas responsivas estreitas que cortam a arte em telas desktop ou mobile.
+- [x] Verificar tipagem, encoding e diff; a validação visual em diferentes larguras continua pendente porque o servidor local falha com `spawn EPERM`.
+
 ## Notificações — entrega funcional autorizada
 
 - [x] Definir canal apenas na plataforma, segmentação geral/curso, links
@@ -287,3 +295,51 @@
 - [x] Atualizar wireframe de baixa fidelidade para representar a hierarquia e a navegação aprovadas.
 - [x] Verificar tipagem da web, encoding UTF-8 e whitespace do diff.
 - [ ] Validar a aparência em desktop e mobile no navegador; a inicialização local falhou com `spawn EPERM` no ambiente atual.
+
+## Ajustes da busca e navegação — 13/10/2026
+
+- [x] Registrar a remoção das marcas excedentes e a nova navegação de busca e notificações na especificação.
+- [x] Atualizar o plano para a rota autenticada `/search`, reutilizando a busca existente e preservando acesso, resultados e estados.
+- [ ] Atualizar o wireframe da home e documentar a página de busca em wireframe responsivo de baixa fidelidade.
+- [x] Remover a marca TraderLab do dock, do cabeçalho e do rodapé da área de aprendizagem.
+- [x] Mover busca e notificações do cabeçalho para itens do dock que navegam a `/search` e `/notifications`.
+- [x] Exibir no item de notificações um badge com a contagem não lida já obtida pela home.
+- [x] Criar `/search` e seu componente de tela, preservando busca autenticada, limite de 120 caracteres, debounce, estados e destinos atuais sem modal.
+- [x] Garantir autenticação, perfil completo e acesso da sessão na página de busca.
+- [ ] Validar tipagem, encoding UTF-8, diff e comportamento visual/navegação em desktop e mobile.
+
+## Ajustes de marca, dock e perfil — 13/10/2026
+
+- [x] Identificar as variações de logo existentes e selecionar os assets BB e Trader Bruno Borges.
+- [x] Restaurar o ícone BB no dock compacto e a logo completa no dock expandido.
+- [x] Remover o atalho de retomada do menu sem remover a seção correspondente da home.
+- [x] Corrigir a região de hover do menu da conta para permitir mover o cursor até as ações.
+- [x] Adicionar logout à página de perfil reutilizando o componente de autenticação existente.
+- [ ] Validar tipagem, encoding, diff e interação visual do dock em desktop e mobile.
+
+## Página de cursos da plataforma — 13/10/2026
+
+- [x] Definir público, autorização, conteúdo do cartão e estados vazio/erro na especificação.
+- [x] Definir rota, consulta existente, destino dos cartões e limites de escopo no plano.
+- [x] Atualizar wireframe para representar `/courses` responsivo e seus estados.
+- [x] Alterar “Cursos” no dock para navegar a `/courses`.
+- [x] Implementar a página autenticada reutilizando a consulta de cursos existente.
+- [x] Exibir grade de todos os cursos autorizados com imagem, nome e descrição; ligar ao detalhe existente.
+- [x] Diferenciar carregamento indisponível, erro técnico, lista vazia e lista disponível.
+- [ ] Validar tipagem, encoding UTF-8, diff e comportamento visual em telas largas e estreitas.
+
+## Imagens da vitrine e capas — validação de carregamento
+
+- [x] Confirmar dimensões/alinhamento: conteúdo da home limitado a 1280 px e
+  upload de imagem até 5 MB; URLs gerenciadas são assinadas por uma hora.
+- [x] Substituir fundo CSS do banner por imagem responsiva otimizada, preservando
+  a arte inteira, a proporção 3:1 e um limite de 1440 px.
+- [x] Reduzir a qualidade de saída das capas e adicionar tentativa pela URL
+  original quando a transformação de imagem falhar, sem deixar o ícone quebrado.
+- [x] Manter o resultado otimizado em cache por uma hora, alinhado à assinatura.
+- [x] Redimensionar banners para até 1440 × 480 e capas para até 1920 × 1080,
+      codificando em WebP sem recorte antes do upload pelo admin.
+- [x] Preservar arquivo original quando o navegador não suportar conversão ou
+      a tentativa WebP falhar.
+- [ ] Validar o carregamento visual do banner e das capas no navegador; a sessão
+  atual já encontrou bloqueio de inicialização local por `spawn EPERM`.

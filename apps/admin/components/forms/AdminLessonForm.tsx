@@ -10,6 +10,7 @@ import type {
   ManagedLessonMaterialDto,
 } from '@traderlab/contracts';
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser';
+import { prepareImageUpload } from '../../lib/images/prepareImageUpload';
 import { RichTextEditor } from './RichTextEditor';
 import styles from './AdminLessonForm.module.css';
 
@@ -96,14 +97,15 @@ export function AdminLessonForm({
   }
 
   async function uploadCover(file: File, contentId: number) {
+    const imageFile = await prepareImageUpload(file, { maxWidth: 1920, maxHeight: 1080 });
     const response = await fetch('/api/admin/course-images/upload-url', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         kind: 'content',
         id: contentId,
-        contentType: file.type,
-        sizeBytes: file.size,
+        contentType: imageFile.type,
+        sizeBytes: imageFile.size,
       }),
     });
     const upload = (await response
@@ -115,9 +117,9 @@ export function AdminLessonForm({
       );
     const { error: storageError } = await createSupabaseBrowserClient()
       .storage.from(imageBucket)
-      .uploadToSignedUrl(upload.path, upload.token, file, {
-        contentType: file.type,
-        cacheControl: '3600',
+      .uploadToSignedUrl(upload.path, upload.token, imageFile, {
+        contentType: imageFile.type,
+        cacheControl: '31536000',
         upsert: false,
       });
     if (storageError)
@@ -385,7 +387,7 @@ export function AdminLessonForm({
               src={coverPreviewUrl ?? lesson!.imageUrl!}
               alt="Prévia da capa da aula"
               fill
-              unoptimized={Boolean(coverPreviewUrl)}
+              unoptimized
               sizes="380px"
             />
           ) : (

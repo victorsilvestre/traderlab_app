@@ -13,14 +13,7 @@ const client = createClient(supabaseUrl, secretKey, {
   auth: { autoRefreshToken: false, detectSessionInUrl: false, persistSession: false },
 });
 
-const signedUrlLifetimeSeconds = 60 * 60;
-const signedUrlRefreshMarginMs = 10 * 60 * 1000;
-const maximumCachedUrls = 1000;
-
 export class SupabaseCourseImageStorage implements CourseImageStorage {
-  private readonly readUrls = new Map<string, { url: string; expiresAt: number }>();
-  private readonly pendingReadUrls = new Map<string, Promise<string>>();
-
   async createUpload(path: string): Promise<{ token: string }> {
     const { data, error } = await client.storage.from(bucketName).createSignedUploadUrl(path);
     if (error || !data) throw new Error('Could not issue a course image upload token.');
@@ -28,40 +21,11 @@ export class SupabaseCourseImageStorage implements CourseImageStorage {
   }
 
   async createReadUrl(path: string): Promise<string> {
-    const now = Date.now();
-    const cached = this.readUrls.get(path);
-    if (cached && cached.expiresAt - now > signedUrlRefreshMarginMs) {
-      // Refresh insertion order so the map evicts the least recently used URL.
-      this.readUrls.delete(path);
-      this.readUrls.set(path, cached);
-      return cached.url;
-    }
-
-    const pending = this.pendingReadUrls.get(path);
-    if (pending) return pending;
-
-    const requestStartedAt = now;
-    const request = client.storage
-      .from(bucketName)
-      .createSignedUrl(path, signedUrlLifetimeSeconds)
-      .then(({ data, error }) => {
-        if (error || !data) throw new Error('Could not create a course image URL.');
-
-        if (this.readUrls.size >= maximumCachedUrls) {
-          const leastRecentlyUsedPath = this.readUrls.keys().next().value;
-          if (leastRecentlyUsedPath) this.readUrls.delete(leastRecentlyUsedPath);
-        }
-
-        this.readUrls.set(path, {
-          url: data.signedUrl,
-          expiresAt: requestStartedAt + signedUrlLifetimeSeconds * 1000,
-        });
-        return data.signedUrl;
-      })
-      .finally(() => this.pendingReadUrls.delete(path));
-
-    this.pendingReadUrls.set(path, request);
-    return request;
+    const width = path.startsWith('banners/') ? 1440 : 1600;
+    const { data } = client.storage.from(bucketName).getPublicUrl(path, {
+      transform: { width, resize: 'contain', quality: 75 },
+    });
+    return data.publicUrl;
   }
 
   async exists(path: string): Promise<boolean> {

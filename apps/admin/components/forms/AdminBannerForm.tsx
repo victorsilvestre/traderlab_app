@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import type { HomeBannerImageUploadDto, ManagedHomeBannerDto } from '@traderlab/contracts';
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser';
+import { prepareImageUpload } from '../../lib/images/prepareImageUpload';
 import { AdminBackLink } from '../navigation/AdminBackLink';
 import styles from './AdminBannerForm.module.css';
 
@@ -44,14 +45,15 @@ export function AdminBannerForm({ returnTo, activeCount, banner }: {
 
   async function uploadImage() {
     if (!file) return banner?.imagePath ?? '';
+    const imageFile = await prepareImageUpload(file, { maxWidth: 1440, maxHeight: 480 });
     const response = await fetch('/api/admin/banners/upload-url', {
       method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ contentType: file.type, sizeBytes: file.size }),
+      body: JSON.stringify({ contentType: imageFile.type, sizeBytes: imageFile.size }),
     });
     const upload = await response.json().catch(() => ({})) as HomeBannerImageUploadDto & { message?: string };
     if (!response.ok) throw new Error(upload.message ?? 'Não foi possível preparar o envio da imagem.');
-    const { error: storageError } = await createSupabaseBrowserClient().storage.from(bucket).uploadToSignedUrl(upload.path, upload.token, file, {
-      contentType: file.type, cacheControl: '3600', upsert: false,
+    const { error: storageError } = await createSupabaseBrowserClient().storage.from(bucket).uploadToSignedUrl(upload.path, upload.token, imageFile, {
+      contentType: imageFile.type, cacheControl: '31536000', upsert: false,
     });
     if (storageError) throw new Error('Não foi possível enviar a imagem. Tente novamente.');
     return upload.path;
