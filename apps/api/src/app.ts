@@ -1,6 +1,5 @@
 import cors from '@fastify/cors';
 import Fastify from 'fastify';
-import type { IncomingMessage, ServerResponse } from 'node:http';
 import { AuthenticationService } from './modules/authentication/application/AuthenticationService.js';
 import { AuthenticationError } from './modules/authentication/domain/AuthenticationError.js';
 import { PrismaUserProfileRepository } from './modules/authentication/infrastructure/PrismaUserProfileRepository.js';
@@ -187,12 +186,10 @@ export function createApp() {
   return app;
 }
 
-const app = createApp();
-
-export default async function handler(
-  request: IncomingMessage,
-  response: ServerResponse,
-) {
-  await app.ready();
-  app.server.emit('request', request, response);
+if (process.env.VERCEL) {
+  const app = createApp();
+  await app.listen({
+    host: '0.0.0.0',
+    port: Number(process.env.PORT ?? 3000),
+  });
 }
