@@ -1,5 +1,6 @@
 import cors from '@fastify/cors';
 import Fastify from 'fastify';
+import type { IncomingMessage, ServerResponse } from 'node:http';
 import { AuthenticationService } from './modules/authentication/application/AuthenticationService.js';
 import { AuthenticationError } from './modules/authentication/domain/AuthenticationError.js';
 import { PrismaUserProfileRepository } from './modules/authentication/infrastructure/PrismaUserProfileRepository.js';
