@@ -1,12 +1,12 @@
 export class AuthenticationError extends Error {
-  override readonly cause?: unknown;
+  readonly cause?: unknown;
 
   constructor(
     message: string,
     readonly statusCode: number,
     options?: { cause?: unknown },
   ) {
-    super(message, options);
+    super(message);
     this.cause = options?.cause;
     this.name = 'AuthenticationError';
   }
