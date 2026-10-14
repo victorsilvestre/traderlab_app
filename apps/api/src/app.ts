@@ -126,8 +126,8 @@ export function createApp() {
 
   app.setErrorHandler((error, request, reply) => {
     if (error instanceof AuthenticationError) {
-      if (error.cause) {
-        const cause = error.cause;
+      const cause = Reflect.get(error, 'cause') as unknown;
+      if (cause) {
         const details =
           cause instanceof Error
             ? {
