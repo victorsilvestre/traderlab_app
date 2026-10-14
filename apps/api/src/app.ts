@@ -186,3 +186,13 @@ export function createApp() {
 
   return app;
 }
+
+const app = createApp();
+
+export default async function handler(
+  request: IncomingMessage,
+  response: ServerResponse,
+) {
+  await app.ready();
+  app.server.emit('request', request, response);
+}
