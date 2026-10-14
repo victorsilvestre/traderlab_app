@@ -30,7 +30,7 @@ export class SupabaseCourseImageStorage implements CourseImageStorage {
 
   async exists(path: string): Promise<boolean> {
     const [folder, ...segments] = path.split('/');
-    const filename = segments.at(-1);
+    const filename = segments.slice(-1)[0];
     if (!folder || !filename) return false;
     const directory = segments.slice(0, -1).join('/');
     const { data, error } = await client.storage.from(bucketName).list(

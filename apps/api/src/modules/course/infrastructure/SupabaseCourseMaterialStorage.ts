@@ -35,7 +35,7 @@ export class SupabaseCourseMaterialStorage implements CourseMaterialStorage {
 
   async exists(storagePath: string): Promise<boolean> {
     const [folder, ...segments] = storagePath.split('/');
-    const filename = segments.at(-1);
+    const filename = segments.slice(-1)[0];
     if (!folder || !filename) return false;
     const directory = segments.slice(0, -1).join('/');
     const { data, error } = await client.storage

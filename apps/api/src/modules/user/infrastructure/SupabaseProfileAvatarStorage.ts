@@ -77,7 +77,7 @@ export class SupabaseProfileAvatarStorage implements ProfileAvatarStorage, Profi
 
   async exists(path: string): Promise<boolean> {
     const directory = path.split('/')[0];
-    const filename = path.split('/').at(-1);
+    const filename = path.split('/').slice(-1)[0];
     if (!directory || !filename) return false;
     const { data, error } = await client.storage.from(bucketName).list(directory, { search: filename, limit: 5 });
     return !error && Boolean(data?.some((file) => file.name === filename));
